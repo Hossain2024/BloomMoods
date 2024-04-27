@@ -3,8 +3,8 @@ package edu.tacoma.uw.bloommoods;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
-import android.widget.EditText;
 import android.widget.TextView;
+
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +12,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
+    private int plantGrowth = 0;
+
     private TextView editText;  // Declare editText here
     private TextView entriesText;
     @Override
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         });
         setEditText();
     }
+
+
     private void setEditText() {
         int days = 15;
         // Initialize EditText after setContentView
