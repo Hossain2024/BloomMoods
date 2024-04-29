@@ -16,7 +16,7 @@
         android:layout_height="90dp"
         android:inputType="textWebEmailAddress"
 
-        android:hint="@string/username_hint" />
+        android:hint="@string/email_hint" />
 
     <EditText
         android:id="@+id/pwd_edit"
@@ -28,7 +28,7 @@
         />
 
     <Button
-        android:id="@+id/register_button"
+        android:id="@+id/signin_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
