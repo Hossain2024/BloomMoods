@@ -31,12 +31,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void goToReadEntry(View view) {
-        Intent intent = new Intent(this, ReadEntryActivity.class);
-        Log.i("Read Entry", "Successfully going to Read Entry Page");
-        startActivity(intent);
-    }
-
     public void goToJournal(View view) {
         Intent intent = new Intent(this, JournalActivity.class);
         Log.i("Read Entry", "Successfully going to Journal Page");

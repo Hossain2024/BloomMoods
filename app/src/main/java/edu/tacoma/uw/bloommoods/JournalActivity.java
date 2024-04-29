@@ -1,5 +1,6 @@
 package edu.tacoma.uw.bloommoods;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -16,8 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class JournalActivity extends AppCompatActivity {
-
+public class JournalActivity extends AppCompatActivity implements RecyclerViewInterface {
     ArrayList<JournalEntry> journalEntries = new ArrayList<>();
 
     @Override
@@ -36,10 +36,9 @@ public class JournalActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.entriesRecyclerView);
         setUpEntries();
 
-        JournalEntryAdapter adapter = new JournalEntryAdapter(this, journalEntries);
+        JournalEntryAdapter adapter = new JournalEntryAdapter(this, journalEntries, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     private void setUpEntries() {
@@ -59,6 +58,12 @@ public class JournalActivity extends AppCompatActivity {
         journalEntries.add(entry1);
         journalEntries.add(entry2);
         journalEntries.add(entry3);
+        journalEntries.add(entry3);
+        journalEntries.add(entry3);
+        journalEntries.add(entry3);
+        journalEntries.add(entry3);
+        journalEntries.add(entry3);
+        journalEntries.add(entry3);
     }
 
     private void openDateDialog() {
@@ -69,5 +74,18 @@ public class JournalActivity extends AppCompatActivity {
         int year = calender.get(Calendar.YEAR);
         TextView monthYear = findViewById(R.id.monthYearTextView);
         monthYear.setText(String.format(Locale.ENGLISH, "%s %d", month, year));
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        JournalEntry clickedEntry = journalEntries.get(position);
+        Intent intent = new Intent(this, ReadEntryActivity.class);
+
+        intent.putExtra("title", clickedEntry.getTitle());
+        intent.putExtra("date", clickedEntry.getDate());
+        intent.putExtra("content", clickedEntry.getContent());
+        intent.putExtra("mood", clickedEntry.getMoodImage());
+
+        startActivity(intent);
     }
 }

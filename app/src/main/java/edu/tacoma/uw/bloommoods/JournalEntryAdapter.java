@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,19 +16,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class JournalEntryAdapter extends RecyclerView.Adapter<JournalEntryAdapter.ViewHolder> {
-
+    private final RecyclerViewInterface rvi;
     Context context;
     ArrayList<JournalEntry> journalEntries;
 
-    public JournalEntryAdapter(Context context, ArrayList<JournalEntry> journalEntries) {
+    public JournalEntryAdapter(Context context, ArrayList<JournalEntry> journalEntries, RecyclerViewInterface rvi) {
         this.context = context;
         this.journalEntries = journalEntries;
+        this.rvi = rvi;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView dayTextView, monthTextView, yearTextView, titleCardTextView, entryCardTextView;
+        ImageView moodCardImageView;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, RecyclerViewInterface rvi) {
             super(itemView);
             // Define click listener for the ViewHolder's View
 
@@ -36,6 +39,19 @@ public class JournalEntryAdapter extends RecyclerView.Adapter<JournalEntryAdapte
             yearTextView = itemView.findViewById(R.id.yearTextView);
             titleCardTextView = itemView.findViewById(R.id.titleCardTextView);
             entryCardTextView = itemView.findViewById(R.id.entryCardTextView);
+            moodCardImageView = itemView.findViewById(R.id.moodCardImageView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (rvi != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            rvi.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -46,7 +62,7 @@ public class JournalEntryAdapter extends RecyclerView.Adapter<JournalEntryAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.entry, viewGroup, false);
-        return new JournalEntryAdapter.ViewHolder(view);
+        return new JournalEntryAdapter.ViewHolder(view, rvi);
     }
 
     @Override
@@ -57,6 +73,7 @@ public class JournalEntryAdapter extends RecyclerView.Adapter<JournalEntryAdapte
         viewHolder.yearTextView.setText(journalEntries.get(position).getYear());
         viewHolder.titleCardTextView.setText(journalEntries.get(position).getTitle());
         viewHolder.entryCardTextView.setText(journalEntries.get(position).getContent());
+        viewHolder.moodCardImageView.setImageResource(journalEntries.get(position).getMoodImage());
     }
 
     @Override
