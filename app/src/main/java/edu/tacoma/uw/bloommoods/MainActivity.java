@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import android.text.SpannableString;
-import android.text.style.RelativeSizeSpan;
-import android.widget.EditText;
 import android.widget.TextView;
 
 
@@ -26,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.frame_main_fragment_container), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -75,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToJournal(View view) {
-        Intent intent = new Intent(this, JournalActivity.class);
+        Intent intent = new Intent(this, JournalFragment.class);
         Log.i("Read Entry", "Successfully going to Journal Page");
         startActivity(intent);
     }

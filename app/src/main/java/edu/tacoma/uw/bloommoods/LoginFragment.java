@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,8 +23,6 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentRegisterBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link LoginFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding mBinding;
@@ -35,7 +34,7 @@ public class LoginFragment extends Fragment {
 
     public void navigateToRegister() {
         Navigation.findNavController(getView())
-                .navigate(R.id.action_loginFragment2_to_registerFragment);
+                .navigate(R.id.action_loginFragment_to_registerFragment2);
     }
 
     @Override
@@ -56,7 +55,6 @@ public class LoginFragment extends Fragment {
         });
         mBinding.registerTextview.setOnClickListener(button -> navigateToRegister());
         mBinding.signinButton.setOnClickListener(button-> signin());
-
 
     }
 
@@ -93,9 +91,10 @@ public class LoginFragment extends Fragment {
                         // Check if the user ID is present in the response
                         if (response.has("user_id")) {
                             userId = response.getInt("user_id");
-                            // Start the HomeActivity
-                            Intent intent = new Intent(getContext(), HomeActivity.class);
-                            startActivity(intent);
+//                            // Start the HomeActivity
+//                            Intent intent = new Intent(getContext(), HomeActivity.class);
+//                            startActivity(intent);
+                            Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_homeFragment);
                         }
 
 

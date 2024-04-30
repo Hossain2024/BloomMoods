@@ -2,13 +2,13 @@ package edu.tacoma.uw.bloommoods;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,30 +17,33 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class JournalActivity extends AppCompatActivity implements RecyclerViewInterface {
+import edu.tacoma.uw.bloommoods.databinding.FragmentJournalBinding;
+
+public class JournalFragment extends Fragment implements RecyclerViewInterface {
     ArrayList<JournalEntry> journalEntries = new ArrayList<>();
     MonthYearPicker myp;
+    FragmentJournalBinding journalBinding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_journal);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.entriesList), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        myp = new MonthYearPicker(this, findViewById(R.id.monthYearTextView));
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        journalBinding = FragmentJournalBinding.inflate(inflater, container, false);
+        myp = new MonthYearPicker(getActivity(), journalBinding.monthYearTextView);
         openDateDialog();
 
-        RecyclerView recyclerView = findViewById(R.id.entriesRecyclerView);
+        RecyclerView recyclerView = journalBinding.entriesRecyclerView;
         setUpEntries();
 
-        JournalEntryAdapter adapter = new JournalEntryAdapter(this, journalEntries, this);
+        JournalEntryAdapter adapter = new JournalEntryAdapter(getActivity(), journalEntries, this);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        return journalBinding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        journalBinding = null;
     }
 
     private void setUpEntries() {
@@ -74,7 +77,7 @@ public class JournalActivity extends AppCompatActivity implements RecyclerViewIn
         Calendar calender = Calendar.getInstance();
         String month = new SimpleDateFormat("MMMM", Locale.ENGLISH).format(calender.getTime());
         int year = calender.get(Calendar.YEAR);
-        TextView monthYear = findViewById(R.id.monthYearTextView);
+        TextView monthYear = journalBinding.monthYearTextView;
         monthYear.setText(String.format(Locale.ENGLISH, "%s %d", month, year));
         monthYear.setOnClickListener(v -> {
             myp.showAsDropDown(monthYear);
@@ -84,14 +87,14 @@ public class JournalActivity extends AppCompatActivity implements RecyclerViewIn
 
     @Override
     public void onItemClick(int position) {
-        JournalEntry clickedEntry = journalEntries.get(position);
-        Intent intent = new Intent(this, ReadEntryActivity.class);
+        JournalEntry selectedEntry = journalEntries.get(position);
+        JournalFragmentDirections.ActionJournalFragmentToEntryReaderFragment directions =
+                JournalFragmentDirections.actionJournalFragmentToEntryReaderFragment(
+                        selectedEntry.getDate(),
+                        selectedEntry.getTitle(),
+                        selectedEntry.getContent(),
+                        selectedEntry.getMoodImage());
 
-        intent.putExtra("title", clickedEntry.getTitle());
-        intent.putExtra("date", clickedEntry.getDate());
-        intent.putExtra("content", clickedEntry.getContent());
-        intent.putExtra("mood", clickedEntry.getMoodImage());
-
-        startActivity(intent);
+        Navigation.findNavController(getView()).navigate(directions);
     }
 }
