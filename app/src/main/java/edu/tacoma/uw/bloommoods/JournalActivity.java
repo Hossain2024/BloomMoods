@@ -19,6 +19,7 @@ import java.util.Locale;
 
 public class JournalActivity extends AppCompatActivity implements RecyclerViewInterface {
     ArrayList<JournalEntry> journalEntries = new ArrayList<>();
+    MonthYearPicker myp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class JournalActivity extends AppCompatActivity implements RecyclerViewIn
             return insets;
         });
 
+        myp = new MonthYearPicker(this, findViewById(R.id.monthYearTextView));
         openDateDialog();
 
         RecyclerView recyclerView = findViewById(R.id.entriesRecyclerView);
@@ -74,6 +76,10 @@ public class JournalActivity extends AppCompatActivity implements RecyclerViewIn
         int year = calender.get(Calendar.YEAR);
         TextView monthYear = findViewById(R.id.monthYearTextView);
         monthYear.setText(String.format(Locale.ENGLISH, "%s %d", month, year));
+        monthYear.setOnClickListener(v -> {
+            myp.showAsDropDown(monthYear);
+        });
+
     }
 
     @Override
