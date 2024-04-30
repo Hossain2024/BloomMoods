@@ -21,7 +21,7 @@ import java.nio.charset.Charset;
 import java.util.Objects;
 
 public class UserViewModel extends AndroidViewModel {
-    private MutableLiveData<JSONObject> mResponse;
+    final private MutableLiveData<JSONObject> mResponse;
 
     public UserViewModel(@NonNull Application application) {
         super(application);
@@ -58,14 +58,14 @@ public class UserViewModel extends AndroidViewModel {
         }
     }
 
-    public void addUser( String email, String pwd, String user) {
-        //String url = "https://students.washington.edu/mhossa/register_user.php";
+    public void addUser( String email, String pwd, String name) {
+       // String url = "https://students.washington.edu/mhossa/register_user.php";
         String url = "https://students.washington.edu/nchi22/api/users/register_user.php";
         JSONObject body = new JSONObject();
         try {
             body.put("email", email);
             body.put("password", pwd);
-            body.put("user", user);
+            body.put("name", name);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -5,6 +5,8 @@
     <string name="pwd_hint">Enter your password</string>
     <string name="Signin">Signin</string>
     <string name="Signup">Signup</string>
+    <string name="nav_Signup">Signup</string>
+    <string name="nav_Signin">Signin</string>
     <string name="Welcome">Welcome</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="username_hint">Enter username</string>

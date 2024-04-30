@@ -1,5 +1,6 @@
 package edu.tacoma.uw.bloommoods;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,17 +31,16 @@ public class LoginFragment extends Fragment {
 
     private static final String TAG = "LoginFragment";
 
+    public int userId = 0;
+
     public void navigateToRegister() {
         Navigation.findNavController(getView())
                 .navigate(R.id.action_loginFragment2_to_registerFragment);
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         mUserViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
         // Inflate the layout for this fragment
         mBinding = FragmentLoginBinding.inflate(inflater, container, false);
@@ -54,49 +54,67 @@ public class LoginFragment extends Fragment {
             observeResponse(response);
 
         });
-        mBinding.signinButton.setOnClickListener(button-> signin());
         mBinding.registerTextview.setOnClickListener(button -> navigateToRegister());
+        mBinding.signinButton.setOnClickListener(button-> signin());
+
 
     }
 
     public void signin() {
         String email = String.valueOf(mBinding.emailEdit.getText());
         String pwd = String.valueOf(mBinding.pwdEdit.getText());
-        Log.i(TAG, email);
-        mUserViewModel.authenticateUser(email, pwd);
+        if(email.isEmpty() || pwd.isEmpty()){
+            //throw a toast
+            Toast.makeText(this.getContext(), "All fields are required ", Toast.LENGTH_LONG).show();
+        }else {
+            Log.i(TAG, email);
+            mUserViewModel.authenticateUser(email, pwd);
+        }
     }
 
+    public int getUserId(){
+        return userId;
+    }
 
     private void observeResponse(final JSONObject response) {
         if (response.length() > 0) {
-            if (response.has("error")) {
-                try {
-                    Toast.makeText(this.getContext(),
-                            "Error Authenticating User: " +
-                                    response.get("error"), Toast.LENGTH_LONG).show();
+            try {
+                if (response.has("result")) {
+                    String result = response.getString("result");
+                    if ("failed to login".equals(result)) {
+                        // If the result is "failed to login", display the error message to the user
+                        String errorMessage = response.optString("message", "Unknown error");
+                        Toast.makeText(getContext(), "Login failed: " + errorMessage, Toast.LENGTH_LONG).show();
+                    } else if ("success".equals(result)) {
 
-                } catch (JSONException e) {
-                    Log.e("JSON Parse Error", e.getMessage());
-                }
+                        // If the result is "success", the login is successful
+                        Toast.makeText(getContext(), "Login successful", Toast.LENGTH_LONG).show();
 
-            } else if (response.has("result")) {
-                try {
-                    String result = (String) response.get("result");
-                    if (result.equals("success")) {
-                        Toast.makeText(this.getContext(), "User logged in", Toast.LENGTH_LONG).show();
+                        // Check if the user ID is present in the response
+                        if (response.has("user_id")) {
+                            userId = response.getInt("user_id");
+                            // Start the HomeActivity
+                            Intent intent = new Intent(getContext(), HomeActivity.class);
+                            startActivity(intent);
+                        }
+
+
                     } else {
-                        Toast.makeText(this.getContext(), "User failed to authenticate", Toast.LENGTH_LONG).show();
-
+                        // If the result is neither "failed to login" nor "success", log an error
+                        Log.e("Login Response", "Unknown result: " + result);
                     }
-                } catch (JSONException e) {
-                    Log.e("JSON Parse Error", e.getMessage());
+                } else {
+                    // Log a message if the "result" key is missing from the response
+                    Log.d("Login Response", "Missing 'result' key in response");
                 }
+            } catch (JSONException e) {
+                // Log any JSON parsing errors
+                Log.e("JSON Parse Error", e.getMessage());
             }
-
-        } else {
-            Log.d("JSON Response", "No Response");
+        }else{
+            Log.e("Login Response", "email/password required");
         }
-
     }
+
 }
 

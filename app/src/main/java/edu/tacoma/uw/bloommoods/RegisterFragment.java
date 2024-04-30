@@ -30,10 +30,7 @@ public class RegisterFragment extends Fragment {
     private FragmentRegisterBinding mBinding;
     private UserViewModel mUserViewModel;
 
-    public void navigateToLogin() {
-        Navigation.findNavController(getView())
-                .navigate(R.id.action_registerFragment_to_loginFragment23);
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,8 +50,9 @@ public class RegisterFragment extends Fragment {
             observeResponse(response);
 
         });
+
+
         mBinding.registerButton.setOnClickListener(button -> signup());
-        mBinding.loginTextview.setOnClickListener(button -> navigateToLogin());
     }
     @Override
     public void onDestroyView() {
@@ -65,31 +63,36 @@ public class RegisterFragment extends Fragment {
     public void signup() {
         String email = String.valueOf(mBinding.emailEdit.getText());
         String pwd = String.valueOf(mBinding.pwdEdit.getText());
-        String user = String.valueOf(mBinding.usernameEdit.getText());
-        Log.i(TAG, email);
-        mUserViewModel.addUser(email, pwd, user);
+        String name = String.valueOf(mBinding.nameEdit.getText());
+        if(email.isEmpty() || pwd.isEmpty() || name.isEmpty()){
+            //throw a toast
+            Toast.makeText(this.getContext(), "All fields are required ", Toast.LENGTH_LONG).show();
+        }else {
+            Log.i(TAG, email);
+            mUserViewModel.addUser(email, pwd, name);
+        }
     }
 
     private void observeResponse(final JSONObject response) {
         if (response.length() > 0) {
-            if (response.has("error")) {
-                try {
-                    Toast.makeText(this.getContext(),
-                            "Error Adding User: " +
-                                    response.get("error"), Toast.LENGTH_LONG).show();
-
-                } catch (JSONException e) {
-                    Log.e("JSON Parse Error", e.getMessage());
+            try {
+                if (response.has("result")) {
+                    String result = response.getString("result");
+                    if ("failed".equals(result)) {
+                        String errorMessage = response.getString("message");
+                        Toast.makeText(this.getContext(), "Error: " + errorMessage, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(this.getContext(), "User added", Toast.LENGTH_LONG).show();
+                        Navigation.findNavController(getView()).popBackStack();
+                    }
+                } else {
+                    Log.d("JSON Response", "Missing 'result' key in response");
                 }
-
-            } else {
-                Toast.makeText(this.getContext(),"User added", Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+                Log.e("JSON Parse Error", e.getMessage());
             }
-
-        } else {
-            Log.d("JSON Response", "No Response");
         }
-
     }
-
 }
+
+
