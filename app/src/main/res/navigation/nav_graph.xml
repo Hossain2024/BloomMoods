@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="edu.tacoma.uw.bloommoods.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment2"
+            app:destination="@id/registerFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="edu.tacoma.uw.bloommoods.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_journalFragment"
+            app:destination="@id/journalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment2"
+        android:name="edu.tacoma.uw.bloommoods.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
+    <fragment
+        android:id="@+id/journalFragment"
+        android:name="edu.tacoma.uw.bloommoods.JournalFragment"
+        android:label="fragment_journal"
+        tools:layout="@layout/fragment_journal" >
+        <action
+            android:id="@+id/action_journalFragment_to_entryReaderFragment"
+            app:destination="@id/entryReaderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/entryReaderFragment"
+        android:name="edu.tacoma.uw.bloommoods.EntryReaderFragment"
+        android:label="fragment_entry_reader"
+        tools:layout="@layout/fragment_entry_reader" >
+        <argument
+            android:name="date"
+            app:argType="string" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="entry"
+            app:argType="string" />
+        <argument
+            android:name="mood"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_entryReaderFragment_to_journalFragment"
+            app:destination="@id/journalFragment" />
+    </fragment>
+</navigation>

@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    id("androidx.navigation.safeargs")
 }
 
 android {
