@@ -30,6 +30,11 @@ public class HomeActivity extends AppCompatActivity {
         setEditText();
     }
 
+    private void displayPlantGrowth() {
+
+    }
+
+
 
     private void setEditText() {
         int days = 15;
