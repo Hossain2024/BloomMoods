@@ -3,43 +3,46 @@ package edu.tacoma.uw.bloommoods;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
-public class HomeActivity extends AppCompatActivity {
+import edu.tacoma.uw.bloommoods.databinding.FragmentHomeBinding;
+
+public class HomeFragment extends Fragment {
     private int plantGrowth = 0;
 
     private TextView editText;  // Declare editText here
     private TextView entriesText;
+    private FragmentHomeBinding homeBinding;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_home);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        homeBinding = FragmentHomeBinding.inflate(inflater, container, false);
         setEditText();
+        homeBinding.navJournalBtn.setOnClickListener(button -> Navigation.findNavController(getView())
+                .navigate(R.id.action_homeFragment_to_journalFragment));
+        return homeBinding.getRoot();
     }
 
-    private void displayPlantGrowth() {
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        homeBinding = null;
     }
-
-
 
     private void setEditText() {
         int days = 15;
         // Initialize EditText after setContentView
-        editText = findViewById(R.id.textStreak);
+        editText = homeBinding.textStreak;
 
         String text = "Streak\n " + days + "  days";
         SpannableString spannableString = new SpannableString(text);
@@ -56,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         editText.setText(spannableString);
 
         int entries = 40;
-        entriesText = findViewById(R.id.textEntries);
+        entriesText = homeBinding.textEntries;
         String totalentries = "Total Entries\n " + entries + "  entries";
         SpannableString spannableStringEntries = new SpannableString(totalentries);
 

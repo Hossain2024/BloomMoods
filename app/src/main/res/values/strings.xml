@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">BloomMoods</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="email_hint">Enter your email</string>
+    <string name="pwd_hint">Enter your password</string>
+    <string name="Signin">Signin</string>
+    <string name="Signup">Signup</string>
+    <string name="nav_Signup">Signup</string>
+    <string name="nav_Signin">Signin</string>
+    <string name="Welcome">Welcome</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="username_hint">Enter username</string>
+
+
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
