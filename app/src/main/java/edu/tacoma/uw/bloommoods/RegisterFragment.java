@@ -19,17 +19,15 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.tacoma.uw.bloommoods.databinding.FragmentLoginBinding;
 import edu.tacoma.uw.bloommoods.databinding.FragmentRegisterBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link RegisterFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class RegisterFragment extends Fragment {
     private FragmentRegisterBinding mBinding;
     private UserViewModel mUserViewModel;
-
 
 
     @Override
@@ -53,6 +51,9 @@ public class RegisterFragment extends Fragment {
 
 
         mBinding.registerButton.setOnClickListener(button -> signup());
+        mBinding.navToSignInButton.setOnClickListener(button -> Navigation.findNavController(getView())
+                .navigate(R.id.action_registerFragment_to_loginFragment));
+
     }
     @Override
     public void onDestroyView() {

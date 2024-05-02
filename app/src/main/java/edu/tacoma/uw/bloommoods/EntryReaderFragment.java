@@ -42,12 +42,12 @@ public class EntryReaderFragment extends Fragment {
 
         //Get a reference to the SafeArgs object
         EntryReaderFragmentArgs args = EntryReaderFragmentArgs.fromBundle(getArguments());
-
+        JournalEntry entry = (JournalEntry) args.getEntry();
         //Set the text color of the label. NOTE no need to cast
-        titleTextView.setText(args.getTitle());
-        dateTextView.setText(args.getDate());
-        entryTextView.setText(args.getEntry());
-        moodImageView.setImageResource(args.getMood());
+        titleTextView.setText(entry.getTitle());
+        dateTextView.setText(entry.getDate());
+        entryTextView.setText(entry.getContent());
+        moodImageView.setImageResource(entry.getMoodImage());
 
         Button backButton = entryReaderBinding.exitReadEntryButton;
         backButton.setOnClickListener(button -> Navigation.findNavController(getView())
