@@ -1,5 +1,6 @@
 package edu.tacoma.uw.bloommoods;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -94,6 +95,11 @@ public class LoginFragment extends Fragment {
 //                            // Start the HomeActivity
 //                            Intent intent = new Intent(getContext(), HomeActivity.class);
 //                            startActivity(intent);
+                            Activity activity = getActivity();
+                            if (activity instanceof MainActivity) {
+                                ((MainActivity) activity).showBottomNavigation();
+                                ((MainActivity) activity).setupBottomNavigation();
+                            }
                             Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_homeFragment);
                         }
 

@@ -8,11 +8,15 @@
 
 
     <style name="Theme.BloomMoods" parent="Base.Theme.BloomMoods">
-        <item name="bottomNavigationStyle">@style/MyBottomNavigationStyle</item>
     </style>
 
-    <style name="MyBottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
-        <item name="itemIconTint">@null</item>
-        <item name="itemTextColor">@null</item>
-    </style>
+        <!-- Custom Style for BottomNavigationView -->
+        <style name="MyBottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+            <item name="android:paddingTop">0dp</item>
+            <item name="android:paddingBottom">0dp</item>
+            <item name="itemIconSize">30dp</item> <!-- Example size, adjust as necessary -->
+            <item name="itemIconPadding">0dp</item>
+            <item name="itemIconTint">@null</item>
+            <item name="itemTextColor">@null</item>
+        </style>
 </resources>

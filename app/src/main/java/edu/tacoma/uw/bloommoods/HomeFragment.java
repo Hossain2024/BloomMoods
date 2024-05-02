@@ -28,8 +28,8 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater, container, false);
         setEditText();
-        homeBinding.navJournalBtn.setOnClickListener(button -> Navigation.findNavController(getView())
-                .navigate(R.id.action_homeFragment_to_journalFragment));
+     //   homeBinding.navJournalBtn.setOnClickListener(button -> Navigation.findNavController(getView())
+     //           .navigate(R.id.action_homeFragment_to_journalFragment));
         return homeBinding.getRoot();
     }
 

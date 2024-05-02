@@ -1,4 +1,5 @@
 package edu.tacoma.uw.bloommoods;
+import edu.tacoma.uw.bloommoods.R;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +12,15 @@ import android.widget.TextView;
 
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -30,13 +34,51 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
     }
+    protected void setupBottomNavigation() {
+        BottomNavigationView navView = findViewById(R.id.navBarView);
+        navView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                return switchToFragment(item.getItemId());
+            }
+        });
+        switchToFragment(R.id.nav_home);
+    }
 
-    public void showBottomNavigation() {
+    private boolean switchToFragment(int itemId) {
+        Fragment fragment;
+        if (itemId == R.id.nav_home) {
+            fragment = new HomeFragment();
+        } else if (itemId == R.id.nav_journal) {
+            fragment = new JournalFragment();
+        } else {
+            return false;
+        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.nav_host_fragment, fragment)
+                .commit();
+        return true;
+    }
+
+
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            Log.d("LoadFragment", "Loading fragment: " + fragment.getClass().getSimpleName());
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.nav_host_fragment, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+
+    protected void showBottomNavigation() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setVisibility(View.VISIBLE);
     }
 
-    public void hideBottomNavigation() {
+    protected void hideBottomNavigation() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setVisibility(View.GONE);
     }

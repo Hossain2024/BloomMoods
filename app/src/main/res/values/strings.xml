@@ -9,6 +9,7 @@
     <string name="nav_Signup">Signup</string>
     <string name="nav_Signin">Signin</string>
     <string name="Welcome">Welcome</string>
+    <string name="Create_Account">Create Account</string>
     <string name="username_hint">Enter username</string>
     <string name="Home">Home</string>
     <string name="Water_plant">Water Plant</string>
