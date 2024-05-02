@@ -1,12 +1,13 @@
 package edu.tacoma.uw.bloommoods;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class JournalEntry {
+public class JournalEntry implements Serializable {
     private String title;
     private String date;
     private String content;
@@ -51,7 +52,7 @@ public class JournalEntry {
         this.moodImage = moodImage;
     }
 
-    private Calendar parseDate() {
+    public Calendar parseDate() {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.ENGLISH);
             Date parsedDate = sdf.parse(date);
@@ -70,10 +71,8 @@ public class JournalEntry {
 
     public String getMonth() {
         Calendar calendar = parseDate();
-        int month = calendar.get(Calendar.MONTH);
-        String[] monthAbbr  = {"Jan", "Feb", "Mar", "Apr","May", "Jun",
-                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-        return monthAbbr[month];
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM", Locale.ENGLISH);
+        return dateFormat.format(calendar.getTime());
     }
 
     public String getYear() {

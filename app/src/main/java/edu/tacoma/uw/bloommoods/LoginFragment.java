@@ -34,7 +34,7 @@ public class LoginFragment extends Fragment {
 
     public void navigateToRegister() {
         Navigation.findNavController(getView())
-                .navigate(R.id.action_loginFragment_to_registerFragment2);
+                .navigate(R.id.action_loginFragment_to_registerFragment);
     }
 
     @Override
@@ -53,8 +53,8 @@ public class LoginFragment extends Fragment {
             observeResponse(response);
 
         });
-        mBinding.registerTextview.setOnClickListener(button -> navigateToRegister());
-        mBinding.signinButton.setOnClickListener(button-> signin());
+        mBinding.navToSignUpButton.setOnClickListener(button -> navigateToRegister());
+        mBinding.logInButton.setOnClickListener(button-> signin());
 
     }
 

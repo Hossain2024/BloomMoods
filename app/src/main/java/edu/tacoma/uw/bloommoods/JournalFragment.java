@@ -2,11 +2,15 @@ package edu.tacoma.uw.bloommoods;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,7 +29,7 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
     FragmentJournalBinding journalBinding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         journalBinding = FragmentJournalBinding.inflate(inflater, container, false);
         myp = new MonthYearPicker(getActivity(), journalBinding.monthYearTextView);
@@ -83,17 +87,51 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
             myp.showAsDropDown(monthYear);
         });
 
+        // Add TextWatcher to the monthYearTextView
+        monthYear.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // When the text (month and year) changes, fetch the corresponding journal entries
+                ArrayList<JournalEntry> newEntries = getJournalEntries();
+                // Update the RecyclerView with the new entries
+                updateRecyclerView(newEntries);
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    private ArrayList<JournalEntry> getJournalEntries() {
+        ArrayList<JournalEntry> filteredEntries = new ArrayList<>();
+        String selectedMonthYear = journalBinding.monthYearTextView.getText().toString();
+        String[] parts = selectedMonthYear.split(" ");
+        String selectedMonth = parts[0];
+//        String selectedYear = parts[1];
+
+        // Filter journal entries based on selected month and year
+        for (JournalEntry entry : journalEntries) {
+            Calendar calendar = entry.parseDate();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
+            String entryMonth = dateFormat.format(calendar.getTime());
+            if (selectedMonth.equals(entryMonth)) {
+                filteredEntries.add(entry);
+            }
+        }
+        return filteredEntries;
+    }
+
+    private void updateRecyclerView(ArrayList<JournalEntry> entries) {
+        JournalEntryAdapter adapter = new JournalEntryAdapter(getActivity(), entries, this);
+        journalBinding.entriesRecyclerView.setAdapter(adapter);
     }
 
     @Override
     public void onItemClick(int position) {
         JournalEntry selectedEntry = journalEntries.get(position);
         JournalFragmentDirections.ActionJournalFragmentToEntryReaderFragment directions =
-                JournalFragmentDirections.actionJournalFragmentToEntryReaderFragment(
-                        selectedEntry.getDate(),
-                        selectedEntry.getTitle(),
-                        selectedEntry.getContent(),
-                        selectedEntry.getMoodImage());
+                JournalFragmentDirections.actionJournalFragmentToEntryReaderFragment(selectedEntry);
 
         Navigation.findNavController(getView()).navigate(directions);
     }
