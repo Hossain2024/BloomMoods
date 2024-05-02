@@ -9,8 +9,12 @@
     <string name="nav_Signup">Signup</string>
     <string name="nav_Signin">Signin</string>
     <string name="Welcome">Welcome</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="username_hint">Enter username</string>
+    <string name="Home">Home</string>
+    <string name="Water_plant">Water Plant</string>
+    <string name="Journal">Journal</string>
+    <string name="Report">Report</string>
+    <string name="Account">Account</string>
 
 
     <string-array name="months">

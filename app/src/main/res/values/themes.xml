@@ -5,5 +5,14 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.BloomMoods" parent="Base.Theme.BloomMoods" />
+
+
+    <style name="Theme.BloomMoods" parent="Base.Theme.BloomMoods">
+        <item name="bottomNavigationStyle">@style/MyBottomNavigationStyle</item>
+    </style>
+
+    <style name="MyBottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="itemIconTint">@null</item>
+        <item name="itemTextColor">@null</item>
+    </style>
 </resources>

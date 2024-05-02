@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/homeicon"
+        android:title="@string/Home"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_report"
+        android:icon="@drawable/reporticon"
+        android:title="@string/Report"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/waterPlant"
+        android:icon="@drawable/watercan3"
+        android:title="@string/Water_plant"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_user"
+        android:icon="@drawable/user_profile"
+        android:title="@string/Account"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/nav_journal"
+        android:icon="@drawable/diary"
+        android:title="@string/Journal"
+        app:showAsAction="ifRoom" />
+</menu>
+
