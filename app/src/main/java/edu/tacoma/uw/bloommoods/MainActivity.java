@@ -45,39 +45,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean switchToFragment(int itemId) {
-        // Attempt to retrieve the fragment from the fragment manager if it already exists
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(getFragmentTag(itemId));
-        if (fragment == null) {
-            // Only create a new fragment if one does not already exist
-            fragment = createFragmentByItemId(itemId);
-            if (fragment == null) return false; // If no corresponding fragment found, return false
-
-            // Replace the existing fragment with the new one, if needed
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.nav_host_fragment, fragment, getFragmentTag(itemId))
-                    .commit();
+        Fragment fragment;
+        if (itemId == R.id.nav_home) {
+            fragment = new HomeFragment();
+        } else if (itemId == R.id.nav_journal) {
+            fragment = new JournalFragment();
+        } else {
+            return false;
         }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.nav_host_fragment, fragment)
+                .commit();
         return true;
-    }
-
-    private Fragment createFragmentByItemId(int itemId) {
-        // Create a new fragment instance based on the item ID
-        if (itemId == R.id.nav_home) {
-            Log.d("FragmentManager", "Creating new HomeFragment instance");
-            return new HomeFragment();
-        } else if (itemId == R.id.nav_journal) {
-            return new JournalFragment();
-        }
-        return null;
-    }
-
-    private String getFragmentTag(int itemId) {
-        if (itemId == R.id.nav_home) {
-            return "HOME_FRAGMENT";
-        } else if (itemId == R.id.nav_journal) {
-            return "JOURNAL_FRAGMENT";
-        }
-        return null;
     }
 
 
