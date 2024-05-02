@@ -31,7 +31,7 @@ public class LoginFragment extends Fragment {
 
     private static final String TAG = "LoginFragment";
 
-    public int userId = 0;
+    private int userId = 0;
 
     public void navigateToRegister() {
         Navigation.findNavController(getView())
@@ -71,6 +71,8 @@ public class LoginFragment extends Fragment {
         }
     }
 
+
+
     public int getUserId(){
         return userId;
     }
@@ -92,6 +94,8 @@ public class LoginFragment extends Fragment {
                         // Check if the user ID is present in the response
                         if (response.has("user_id")) {
                             userId = response.getInt("user_id");
+                            mUserViewModel.setUserId(userId);
+                            Log.i("User id logged in:", String.valueOf(userId));
 //                            // Start the HomeActivity
 //                            Intent intent = new Intent(getContext(), HomeActivity.class);
 //                            startActivity(intent);
