@@ -2,15 +2,14 @@
     <string name="app_name">BloomMoods</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="email_hint">Enter your email</string>
-    <string name="pwd_hint">Enter your password</string>
-    <string name="Signin">Signin</string>
-    <string name="Signup">Signup</string>
-    <string name="nav_Signup">Signup</string>
-    <string name="nav_Signin">Signin</string>
-    <string name="Welcome">Welcome</string>
+    <string name="email_hint">Email</string>
+    <string name="pwd_hint">Password</string>
+    <string name="Signin">Sign in</string>
+    <string name="Signup">Sign up</string>
+    <string name="Welcome">Welcome Back</string>
+    <string name="Create_Account">Create Account</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="username_hint">Enter username</string>
+    <string name="username_hint">Name</string>
 
 
     <string-array name="months">
