@@ -19,7 +19,7 @@
             android:name=".EntryReaderFragment"
             android:exported="false" />
         <activity
-            android:name=".WaterPlantActivity"
+            android:name=".WaterPlantFragment"
             android:exported="false" />
         <activity
             android:name=".HomeFragment"
