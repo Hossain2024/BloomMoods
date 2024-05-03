@@ -1,8 +1,11 @@
 package edu.tacoma.uw.bloommoods;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -66,6 +70,20 @@ public class MonthYearPicker extends PopupWindow implements View.OnClickListener
         int width = Math.min(maxWidth, setWidth);
         setWidth(width);
         setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+
+
+        // Make pop-up window close when clicked outside
+        setOutsideTouchable(true);
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                    dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void createMonthMap() {
@@ -102,7 +120,7 @@ public class MonthYearPicker extends PopupWindow implements View.OnClickListener
             monthButtonsLayout.setVisibility(View.GONE);
         } else if (viewId == R.id.selectedDateButton) {
             String selectedMonthAbbr = monthSelector.getText().toString();
-            String selectedDate = monthMap.get(selectedMonthAbbr) + " 2024";
+            String selectedDate = monthMap.get(selectedMonthAbbr) + " 2024    ⓥ";
             monthYearTextView.setText(selectedDate);
             dismiss();
         } else {

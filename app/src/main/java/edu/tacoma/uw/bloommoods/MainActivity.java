@@ -59,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
-
     protected void showBottomNavigation() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setVisibility(View.VISIBLE);
@@ -70,22 +68,19 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setVisibility(View.GONE);
     }
-
-    public void goToWaterPlant(View view) {
-        Intent intent = new Intent(this, WaterPlantActivity.class);
-        Log.i("Water Plant", "Successfully going to Water Plant Page");
-        startActivity(intent);
-    }
-    public void goToHomePage(View view) {
-        Intent intent = new Intent(this, HomeFragment.class);
-        Log.i("Home Page", "Successfully going to Home Page");
-        startActivity(intent);
-    }
-
-
-    public void goToJournal(View view) {
-        Intent intent = new Intent(this, JournalFragment.class);
-        Log.i("Read Entry", "Successfully going to Journal Page");
-        startActivity(intent);
-    }
+//     public void goToWaterPlant(View view) {
+//         Intent intent = new Intent(this, WaterPlantActivity.class);
+//         Log.i("Water Plant", "Successfully going to Water Plant Page");
+//         startActivity(intent);
+//     }
+//     public void goToHomePage(View view) {
+//         Intent intent = new Intent(this, HomeFragment.class);
+//         Log.i("Home Page", "Successfully going to Home Page");
+//         startActivity(intent);
+//     }
+//     public void goToJournal(View view) {
+//         Intent intent = new Intent(this, JournalFragment.class);
+//         Log.i("Read Entry", "Successfully going to Journal Page");
+//         startActivity(intent);
+//     }
 }
