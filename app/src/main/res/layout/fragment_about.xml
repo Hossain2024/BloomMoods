@@ -62,12 +62,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/entryTextView" />
 
             <TextView
-                android:id="@+id/plantOptionsTextView"
+                android:id="@+id/developerTextView"
                 android:layout_width="324dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/playfair_display"
-                android:text="Plant Options"
+                android:text="@string/developers_title"
                 android:textAlignment="center"
                 android:textColor="@color/dark_blue"
                 android:textSize="24sp"
@@ -76,6 +76,37 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/divider" />
+
+            <TextView
+                android:id="@+id/developersTextView"
+                android:layout_width="323dp"
+                android:layout_height="85dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/developers"
+                android:textAlignment="textStart"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/developerTextView" />
+
+            <TextView
+                android:id="@+id/plantOptionsTextView"
+                android:layout_width="324dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/playfair_display"
+                android:text="@string/plant_options"
+                android:textAlignment="center"
+                android:textColor="@color/dark_blue"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/developersTextView" />
 
             <TextView
                 android:id="@+id/faqsTextView"
@@ -237,11 +268,13 @@
                 android:layout_width="323dp"
                 android:layout_height="120dp"
                 android:layout_marginTop="7dp"
+                android:layout_marginBottom="30dp"
                 android:fontFamily="sans-serif"
                 android:text="@string/faq5Answer"
                 android:textAlignment="textStart"
                 android:textColor="@color/dark_blue"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"

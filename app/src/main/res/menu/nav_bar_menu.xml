@@ -12,7 +12,6 @@
         android:menuCategory="container"
         android:title="@string/Journal"
         app:showAsAction="ifRoom" />
-
     <item
         android:id="@+id/nav_water"
         android:icon="@mipmap/watercan3"
@@ -27,7 +26,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/nav_user"
-        android:icon="@mipmap/user_profile"
+        android:icon="@mipmap/info_button"
         android:menuCategory="container"
         android:title="@string/Account"
         app:showAsAction="ifRoom" />

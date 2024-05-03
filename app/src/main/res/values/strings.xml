@@ -63,4 +63,7 @@
     <string name="journal_entry_hint">Journal entry</string>
     <string name="save_entry">Save</string>
     <string name="title_hint">Title</string>
+    <string name="plant_options">Plant Options</string>
+    <string name="developers">Rainie Chi: nchi22@uw.edu\nChelsea Dacones: chelsjd@uw.edu\nMaliha Hossain: hossainmaliha18@uw.edu\nAmanda Nguyen: amanda65@uw.edu</string>
+    <string name="developers_title">Developers</string>
 </resources>

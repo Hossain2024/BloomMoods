@@ -50,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
             fragment = new HomeFragment();
         } else if (itemId == R.id.nav_journal) {
             fragment = new JournalFragment();
+        } else if (itemId == R.id.nav_water) {
+            fragment = new WaterPlantFragment();
+        } else if (itemId == R.id.nav_user) {
+            fragment = new AboutFragment();
         } else {
             return false;
         }
