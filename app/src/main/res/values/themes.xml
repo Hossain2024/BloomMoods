@@ -5,5 +5,18 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.BloomMoods" parent="Base.Theme.BloomMoods" />
+
+
+    <style name="Theme.BloomMoods" parent="Base.Theme.BloomMoods">
+    </style>
+
+        <!-- Custom Style for BottomNavigationView -->
+        <style name="MyBottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+            <item name="android:paddingTop">0dp</item>
+            <item name="android:paddingBottom">0dp</item>
+            <item name="itemIconSize">30dp</item> <!-- Example size, adjust as necessary -->
+            <item name="itemIconPadding">0dp</item>
+            <item name="itemIconTint">@null</item>
+            <item name="itemTextColor">@null</item>
+        </style>
 </resources>
