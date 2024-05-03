@@ -28,4 +28,29 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="journal">Journal</string>
+    <string name="see_all">See All</string>
+    <string name="about">About</string>
+    <string name="journal_entry">Journal Entry</string>
+    <string name="edit_entry">Edit</string>
+    <string name="title">Title</string>
+    <string name="date">Date</string>
+    <string name="lt_previous"><![CDATA[< Previous]]></string>
+    <string name="next_gt"><![CDATA[Next >]]></string>
+    <string name="about_app">Elevate your emotional well being with our intuitive mood tracker and journaling app. Easily track your mood and journal your thoughts and experiences to gain deeper insights into your emotions. With a virtual plant to visually represent your progress, our app empowers you to understand and nurture your mental health.</string>
+    <string name="faqs">FAQs</string>
+    <string name="faq1">How do I grow my plant?</string>
+    <string name="faq2">How much does my plant grow with each mood log?</string>
+    <string name="faq1Answer">Choose a plant and start logging your mood and journal entries daily. Each entry will water your plant, contributing to its growth. The more consistent you are, the faster your plant grows.</string>
+    <string name="faq2Answer">If you’re on a streak (logging for 2 or more consecutive days), your plant grows by 5% each day. Without a streak, it grows by 2.5% per day.</string>
+    <string name="faq3">What if I miss a day of logging?</string>
+    <string name="faq3Answer">You cannot make up days. However, missing one day won\'t ruin your progress, but your plant’s growth rate will halve until you build up another streak.</string>
+    <string name="faq4">What happens when my plant reaches full growth?</string>
+    <string name="faq4Answer">Once your plant reaches 100%, it blooms, marking your achievement. You\'ll then have the option to start with a new plant or continue to maintain the current one.</string>
+    <string name="faq5">What happens if I don\'t log my mood for 7 days?</string>
+    <string name="faq5Answer">Your plant\'s growth will reset to the start of the current stage, and a wilted animation will appear to encourage you to resume journaling. For example, if your plant\'s growth was at 25%, 7 days of inactivity will result in a digress to 21%.</string>
+    <string name="plant_names">1. Tranquil Tulip\n2. Serenity Sunflower\n3. Peaceful Peony</string>
+    <string name="growth_stages">Growth Stages</string>
+    <string name="plant_stages">Stage 1 (0-20%): Initial Sprouting\nSmall green shoots just visible above the soil surface.\n\nStage 2 (21-40%): Early Growth\nA noticeable stem with a few leaves, still young.\n\nStage 3 (41-60%): Development
+        nA taller stem, more robust with a fuller arrangement of leaves, and potential bud formation.\n\nStage 4 (61-80%): Pre-Blooming\nLarger buds, some starting to show color, and a lush body of leaves.\n\nStage 5 (81-100%): Full Bloom\nFully opened flowers or a fully developed, lush plant.</string>
 </resources>

@@ -30,6 +30,8 @@ public class HomeFragment extends Fragment {
         setEditText();
         homeBinding.navJournalBtn.setOnClickListener(button -> Navigation.findNavController(getView())
                 .navigate(R.id.action_homeFragment_to_journalFragment));
+        homeBinding.navAboutBtn.setOnClickListener(button -> Navigation.findNavController(getView())
+                .navigate(R.id.action_homeFragment_to_aboutFragment));
         return homeBinding.getRoot();
     }
 
