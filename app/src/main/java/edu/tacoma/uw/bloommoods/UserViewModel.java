@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
@@ -22,11 +23,14 @@ import java.util.Objects;
 
 public class UserViewModel extends AndroidViewModel {
     final private MutableLiveData<JSONObject> mResponse;
+    final private MutableLiveData<Integer> mUserId;
 
     public UserViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
+        mUserId = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
+        mUserId.setValue(0);
     }
 
 
@@ -34,6 +38,7 @@ public class UserViewModel extends AndroidViewModel {
                                     @NonNull Observer<? super JSONObject> observer) {
         mResponse.observe(owner, observer);
     }
+
 
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
@@ -113,5 +118,34 @@ public class UserViewModel extends AndroidViewModel {
         //Instantiate the RequestQueue and add the request to the queue
         Volley.newRequestQueue(getApplication().getApplicationContext())
                 .add(request);
+    }
+
+
+
+    protected void getUserProfile(int userId) {
+        String url = "https://students.washington.edu/nchi22/api/users/get_profile.php?user_id=" + userId;
+
+        Request request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null, //no body for this get request
+                mResponse::setValue,
+                this::handleError);
+
+        Log.i("UserViewModel", request.getUrl().toString());
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        //Instantiate the RequestQueue and add the request to the queue
+        Volley.newRequestQueue(getApplication().getApplicationContext())
+                .add(request);
+    }
+
+    public LiveData<Integer> getUserId() {
+        return mUserId;
+    }
+    public void setUserId(int id) {
+        mUserId.setValue(id);
     }
 }
