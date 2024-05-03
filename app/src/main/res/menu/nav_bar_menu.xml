@@ -1,0 +1,35 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@mipmap/homeicon"
+        android:menuCategory="container"
+        android:title="@string/Home"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_journal"
+        android:icon="@mipmap/diary"
+        android:menuCategory="container"
+        android:title="@string/Journal"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/nav_water"
+        android:icon="@mipmap/watercan3"
+        android:menuCategory="container"
+        android:title="@string/Water_plant"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_report"
+        android:icon="@mipmap/reporticon"
+        android:menuCategory="container"
+        android:title="@string/Report"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/nav_user"
+        android:icon="@mipmap/user_profile"
+        android:menuCategory="container"
+        android:title="@string/Account"
+        app:showAsAction="ifRoom" />
+</menu>
+
