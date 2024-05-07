@@ -5,12 +5,33 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,11 +43,17 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding;
  * A simple {@link Fragment} subclass.
  */
 public class WaterPlantFragment extends Fragment {
+
+    private static final String ADD_ENTRY_ENDPOINT = "https://students.washington.edu/nchi22/api/log/update_mood_log.php";
+    private UserViewModel userViewModel;
+
+    FragmentWaterPlantBinding waterPlantBinding;
+    String selectedMood;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding waterPlantBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
+        waterPlantBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
         TextView date = waterPlantBinding.dateText;
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(new Date());
@@ -40,6 +67,81 @@ public class WaterPlantFragment extends Fragment {
         shapeDrawable.getPaint().setColor(color);
         plantGrowth.setBackground(shapeDrawable);
 
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
+        Button saveButton = waterPlantBinding.saveButton;
+        saveButton.setOnClickListener(v -> addEntry());
+
+        LinearLayout moodLayout = waterPlantBinding.linearLayout;
+
+        setOnMoodClicks(moodLayout);
+
         return waterPlantBinding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+
+        super.onDestroyView();
+        waterPlantBinding = null;
+    }
+
+    private void setOnMoodClicks(LinearLayout moodLayout) {
+        for (int i = 0; i < moodLayout.getChildCount(); i++) {
+            View childView = moodLayout.getChildAt(i);
+            if (childView instanceof ImageView) {
+                childView.setOnClickListener(this::onMoodClicked);
+            }
+        }
+    }
+
+    private void addEntry() {
+        EditText titleEditText = waterPlantBinding.titleEditText;
+        EditText entryEditText = waterPlantBinding.entryEditText;
+
+        String title = titleEditText.getText().toString();
+        String entry = entryEditText.getText().toString();
+
+        // Get current user ID
+        LiveData<Integer> userIdLiveData = userViewModel.getUserId();
+        Integer userId = userIdLiveData.getValue();
+
+        // Create JSON object with the entry data
+        JSONObject json = new JSONObject();
+        try {
+//            json.put("title", title);
+            json.put("user_id", userId);
+            json.put("mood", selectedMood);
+            json.put("journal_entry", entry);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        JsonObjectRequest request = getRequest(json);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+        requestQueue.add(request);
+    }
+
+    @NonNull
+    private JsonObjectRequest getRequest(JSONObject json) {
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                ADD_ENTRY_ENDPOINT,
+                json,
+                response -> Toast.makeText(getContext(), "Entry saved successfully", Toast.LENGTH_SHORT).show(),
+                Throwable::printStackTrace);
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        return request;
+    }
+
+    public void onMoodClicked(View view) {
+        selectedMood = view.getTag().toString();
+        Log.i("Selected Mood", selectedMood);
     }
 }
