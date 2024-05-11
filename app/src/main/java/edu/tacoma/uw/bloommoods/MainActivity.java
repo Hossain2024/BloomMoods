@@ -22,12 +22,22 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
-    UserViewModel mUserViewModel;
+    private NavController navController;
+
+    private UserViewModel mUserViewModel;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
          mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         setContentView(R.layout.activity_main);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.frame_main_fragment_container), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -66,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
+=======
+
+        mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
     }
 
@@ -78,33 +92,36 @@ public class MainActivity extends AppCompatActivity {
 //        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_loginFragment_to_homeFragment);
 //    }
     protected void setupBottomNavigation() {
-        BottomNavigationView navView = findViewById(R.id.navBarView);
-        navView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                return switchToFragment(item.getItemId());
-            }
-        });
+//        // Initialize NavController
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        // Set up BottomNavigationView with NavController
+        BottomNavigationView bottomNavView = findViewById(R.id.navBarView);
+        NavigationUI.setupWithNavController(bottomNavView, navController);
     }
 
-    private boolean switchToFragment(int itemId) {
-        Fragment fragment;
-        if (itemId == R.id.nav_home) {
-            fragment = new HomeFragment();
-        } else if (itemId == R.id.nav_journal) {
-            fragment = new JournalFragment();
-        } else if (itemId == R.id.nav_water) {
-            fragment = new WaterPlantFragment();
-        } else if (itemId == R.id.nav_user) {
-            fragment = new AboutFragment();
-        } else {
-            return false;
-        }
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.nav_host_fragment, fragment)
-                .commit();
-        return true;
+    public UserViewModel getUserViewModel() {
+        return mUserViewModel;
     }
+
+//    private boolean switchToFragment(int itemId) {
+//        Fragment fragment;
+//        if (itemId == R.id.nav_home) {
+//            fragment = new HomeFragment();
+//        } else if (itemId == R.id.nav_journal) {
+//            fragment = new JournalFragment();
+//        } else if (itemId == R.id.nav_water) {
+//            fragment = new WaterPlantFragment();
+//        } else if (itemId == R.id.nav_user) {
+//            fragment = new AboutFragment();
+//        } else {
+//            return false;
+//        }
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.nav_host_fragment, fragment)
+//                .commit();
+//        return true;
+//    }
 
     protected void showBottomNavigation() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
@@ -115,19 +132,4 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setVisibility(View.GONE);
     }
-//     public void goToWaterPlant(View view) {
-//         Intent intent = new Intent(this, WaterPlantActivity.class);
-//         Log.i("Water Plant", "Successfully going to Water Plant Page");
-//         startActivity(intent);
-//     }
-//     public void goToHomePage(View view) {
-//         Intent intent = new Intent(this, HomeFragment.class);
-//         Log.i("Home Page", "Successfully going to Home Page");
-//         startActivity(intent);
-//     }
-//     public void goToJournal(View view) {
-//         Intent intent = new Intent(this, JournalFragment.class);
-//         Log.i("Read Entry", "Successfully going to Journal Page");
-//         startActivity(intent);
-//     }
 }
