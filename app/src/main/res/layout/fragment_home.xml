@@ -26,7 +26,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/angryImageView"
         android:layout_width="350dp"
         android:layout_height="469dp"
         app:layout_constraintBottom_toBottomOf="parent"

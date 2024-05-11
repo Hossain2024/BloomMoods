@@ -41,14 +41,11 @@ public class JournalEntryAdapter extends RecyclerView.Adapter<JournalEntryAdapte
             entryCardTextView = itemView.findViewById(R.id.entryCardTextView);
             moodCardImageView = itemView.findViewById(R.id.moodCardImageView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (rvi != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            rvi.onItemClick(position);
-                        }
+            itemView.setOnClickListener(v -> {
+                if (rvi != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        rvi.onItemClick(position);
                     }
                 }
             });
