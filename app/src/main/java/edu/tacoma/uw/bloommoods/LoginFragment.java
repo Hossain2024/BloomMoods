@@ -1,7 +1,9 @@
 package edu.tacoma.uw.bloommoods;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -73,9 +75,7 @@ public class LoginFragment extends Fragment {
 
 
 
-    public int getUserId(){
-        return userId;
-    }
+
 
     private void observeResponse(final JSONObject response) {
         if (response.length() > 0) {
@@ -90,24 +90,25 @@ public class LoginFragment extends Fragment {
 
                         // If the result is "success", the login is successful
                         Toast.makeText(getContext(), "Login successful", Toast.LENGTH_LONG).show();
+                        //adding shared preferences
 
                         // Check if the user ID is present in the response
                         if (response.has("user_id")) {
                             userId = response.getInt("user_id");
                             mUserViewModel.setUserId(userId);
                             Log.i("User id logged in:", String.valueOf(userId));
-//                            // Start the HomeActivity
-//                            Intent intent = new Intent(getContext(), HomeActivity.class);
-//                            startActivity(intent);
                             Activity activity = getActivity();
                             if (activity instanceof MainActivity) {
                                 ((MainActivity) activity).showBottomNavigation();
                                 ((MainActivity) activity).setupBottomNavigation();
                             }
                             Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_homeFragment);
+                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.SignIN_PREFS),
+                                    Context.MODE_PRIVATE);
+                            sharedPreferences.edit().putBoolean(getString(R.string.SignedIN), true).apply();
+                            sharedPreferences.edit().putInt("userId", userId).apply();
+
                         }
-
-
                     } else {
                         // If the result is neither "failed to login" nor "success", log an error
                         Log.e("Login Response", "Unknown result: " + result);

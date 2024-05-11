@@ -103,7 +103,9 @@
         app:layout_constraintHorizontal_bias="0.441"
         app:layout_constraintStart_toStartOf="@+id/progressBar"
         app:layout_constraintTop_toTopOf="@+id/progressBar"
-        app:layout_constraintVertical_bias="0.533" />
+        app:layout_constraintVertical_bias="0.533"
+        />
+
 
     <View
         android:id="@+id/viewStreak"
@@ -151,5 +153,7 @@
         app:layout_constraintStart_toStartOf="@+id/viewStreak"
         app:layout_constraintTop_toTopOf="@+id/viewStreak"
         app:layout_constraintVertical_bias="0.18" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
