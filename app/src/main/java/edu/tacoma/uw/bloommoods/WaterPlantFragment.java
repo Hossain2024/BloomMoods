@@ -67,7 +67,7 @@ public class WaterPlantFragment extends Fragment {
         shapeDrawable.getPaint().setColor(color);
         plantGrowth.setBackground(shapeDrawable);
 
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userViewModel = ((MainActivity) requireActivity()).getUserViewModel();
 
         Button saveButton = waterPlantBinding.saveButton;
         saveButton.setOnClickListener(v -> addEntry());
@@ -81,7 +81,6 @@ public class WaterPlantFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-
         super.onDestroyView();
         waterPlantBinding = null;
     }
@@ -103,25 +102,25 @@ public class WaterPlantFragment extends Fragment {
         String entry = entryEditText.getText().toString();
 
         // Get current user ID
-        LiveData<Integer> userIdLiveData = userViewModel.getUserId();
-        Integer userId = userIdLiveData.getValue();
+        userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
+            if (userId != null) {
+                Log.i("Water, User id", String.valueOf(userId));
+                try {
+                    // Create JSON object with the entry data
+                    JSONObject json = new JSONObject();
+//                  json.put("title", title);
+                    json.put("user_id", userId);
+                    json.put("mood", selectedMood);
+                    json.put("journal_entry", entry);
 
-        // Create JSON object with the entry data
-        JSONObject json = new JSONObject();
-        try {
-//            json.put("title", title);
-            json.put("user_id", userId);
-            json.put("mood", selectedMood);
-            json.put("journal_entry", entry);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        JsonObjectRequest request = getRequest(json);
-
-        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-        requestQueue.add(request);
+                    JsonObjectRequest request = getRequest(json);
+                    RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+                    requestQueue.add(request);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @NonNull

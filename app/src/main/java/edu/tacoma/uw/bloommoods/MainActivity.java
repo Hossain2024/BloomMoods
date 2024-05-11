@@ -18,6 +18,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -31,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
     private NavController navController;
 
+    private UserViewModel mUserViewModel;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
     }
     protected void setupBottomNavigation() {
 //        // Initialize NavController
@@ -51,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
         // Set up BottomNavigationView with NavController
         BottomNavigationView bottomNavView = findViewById(R.id.navBarView);
         NavigationUI.setupWithNavController(bottomNavView, navController);
+    }
+
+    public UserViewModel getUserViewModel() {
+        return mUserViewModel;
     }
 
 //    private boolean switchToFragment(int itemId) {
