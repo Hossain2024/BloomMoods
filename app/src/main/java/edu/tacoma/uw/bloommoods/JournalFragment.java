@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,10 +33,14 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
     private MonthYearPicker myp;
     private FragmentJournalBinding journalBinding;
 
+//    private NavController navController;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         journalBinding = FragmentJournalBinding.inflate(inflater, container, false);
+//        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+
         myp = new MonthYearPicker(getActivity(), journalBinding.monthYearTextView);
         openDateDialog();
 
@@ -146,7 +151,7 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
         JournalEntry selectedEntry = journalEntries.get(position);
         JournalFragmentDirections.ActionJournalFragmentToEntryReaderFragment directions =
                 JournalFragmentDirections.actionJournalFragmentToEntryReaderFragment(selectedEntry);
-
-        Navigation.findNavController(getView()).navigate(directions);
+        Navigation.findNavController(getView())
+                .navigate(directions);
     }
 }

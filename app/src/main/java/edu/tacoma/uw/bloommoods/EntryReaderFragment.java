@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -33,25 +35,38 @@ public class EntryReaderFragment extends Fragment {
         // Inflate the layout for this fragment
         entryReaderBinding = FragmentEntryReaderBinding.inflate(inflater, container, false);
 
-
         // Initialize views
         titleTextView = entryReaderBinding.titleTextView;
         dateTextView = entryReaderBinding.dateTextView;
         entryTextView = entryReaderBinding.entryTextView;
         moodImageView = entryReaderBinding.moodImageView;
 
-        //Get a reference to the SafeArgs object
-        EntryReaderFragmentArgs args = EntryReaderFragmentArgs.fromBundle(getArguments());
-        JournalEntry entry = (JournalEntry) args.getEntry();
-        //Set the text color of the label. NOTE no need to cast
-        titleTextView.setText(entry.getTitle());
-        dateTextView.setText(entry.getDate());
-        entryTextView.setText(entry.getContent());
-        moodImageView.setImageResource(entry.getMoodImage());
 
         Button backButton = entryReaderBinding.exitReadEntryButton;
         backButton.setOnClickListener(button -> Navigation.findNavController(getView())
                 .navigate(R.id.action_entryReaderFragment_to_journalFragment));
         return entryReaderBinding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+
+        super.onDestroyView();
+        entryReaderBinding = null;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        EntryReaderFragmentArgs args = EntryReaderFragmentArgs.fromBundle(getArguments());
+
+        JournalEntry entry = (JournalEntry) args.getEntry();
+
+        titleTextView.setText(entry.getTitle());
+        dateTextView.setText(entry.getDate());
+        entryTextView.setText(entry.getContent());
+        moodImageView.setImageResource(entry.getMoodImage());
+
     }
 }

@@ -26,6 +26,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import edu.tacoma.uw.bloommoods.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -42,7 +44,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mUserViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
+        mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater, container, false);
         return homeBinding.getRoot();
@@ -54,6 +56,7 @@ public class HomeFragment extends Fragment {
             if (userId != null) {
                 // Call the method in ViewModel to perform the API operation
                 mUserViewModel.getUserProfile(userId);
+                Log.i("Home", String.valueOf(userId));
             }
         });
         mUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
