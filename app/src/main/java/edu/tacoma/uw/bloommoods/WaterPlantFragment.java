@@ -108,7 +108,7 @@ public class WaterPlantFragment extends Fragment {
                 try {
                     // Create JSON object with the entry data
                     JSONObject json = new JSONObject();
-//                  json.put("title", title);
+                    json.put("title", title);
                     json.put("user_id", userId);
                     json.put("mood", selectedMood);
                     json.put("journal_entry", entry);

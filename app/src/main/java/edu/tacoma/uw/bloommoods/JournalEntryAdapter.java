@@ -24,6 +24,9 @@ public class JournalEntryAdapter extends RecyclerView.Adapter<JournalEntryAdapte
         this.context = context;
         this.journalEntries = journalEntries;
         this.rvi = rvi;
+        for (JournalEntry entry : journalEntries) {
+            Log.i("JEA CONTENT", entry.getContent());
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
