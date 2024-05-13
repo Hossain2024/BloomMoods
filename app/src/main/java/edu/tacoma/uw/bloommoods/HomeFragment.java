@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -173,11 +174,13 @@ public class HomeFragment extends Fragment {
     Updates progress bar based on plant growth.
     Updates image of plant stage based on the current stage.
      */
-    private void setPlantDetails(String activePlantName, int plantGrowth, int stage) {
+    private void setPlantDetails(String activePlantName, double plantGrowth, int stage) {
+        ProgressBar progressBar = homeBinding.progressBar;
         ImageView plantStage = homeBinding.plantStageView;
-        TextView progressBar = homeBinding.progressLabel;
+        TextView progressLabel = homeBinding.progressLabel;
         String growth= "Plant Growth: " + plantGrowth + "%";
-        progressBar.setText(growth);
+        progressLabel.setText(growth);
+        progressBar.setProgress((int) plantGrowth);
 
         String resourceName = activePlantName.toLowerCase().replace(" ", "_") + "_stage_" + stage;
         int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
