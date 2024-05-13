@@ -49,10 +49,11 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding;
 public class WaterPlantFragment extends Fragment {
 
     private static final String ADD_ENTRY_ENDPOINT = "https://students.washington.edu/nchi22/api/log/update_mood_log.php";
-    private static final String UPDATE_PLANT_ENDPOINT = "https://students.washington.edu/nchi22/api/plants/update_current_plant_details.php";
     private UserViewModel userViewModel;
     private int streak;
     private String lastEntry;
+    private double currentGrowth;
+    private int stage;
     FragmentWaterPlantBinding waterPlantBinding;
     String selectedMood;
     @Override
@@ -199,22 +200,7 @@ public class WaterPlantFragment extends Fragment {
             // Get current user ID
             userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
                 if (userId != null) {
-                    Log.i("WaterFragment, User id", String.valueOf(userId));
-                    try {
-                        // Create JSON object with the entry data
-                        JSONObject json = new JSONObject();
-                        json.put("user_id", userId);
-                        json.put("growthLevel", increaseGrowth);
-
-                        JsonObjectRequest request = getRequest(json, UPDATE_PLANT_ENDPOINT, response -> {
-                            // Log or handle response without showing a toast
-                            Log.i("Growth Update", "Successfully updated growth: " + response.toString());
-                        });
-                        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-                        requestQueue.add(request);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    userViewModel.updateCurrentPlantDetails(userId, increaseGrowth);
                 }
             });
         }
@@ -288,7 +274,6 @@ public class WaterPlantFragment extends Fragment {
                     if (response.has("streak") && response.has("last_log_date")) {
                         streak = response.getInt("streak");
                         lastEntry = response.getString("last_log_date");
-                        Log.i("Last logged date", lastEntry);
                     }
                 }
             } catch (JSONException e) {

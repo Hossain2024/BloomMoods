@@ -44,6 +44,8 @@ public class HomeFragment extends Fragment {
     private String userName;
     private int userStreak;
     private int userEntries;
+    private String lastEntry;
+    private long hours;
     private UserViewModel mUserViewModel;
     private FragmentHomeBinding homeBinding;
 
@@ -100,27 +102,11 @@ public class HomeFragment extends Fragment {
                         userStreak = response.getInt("streak");
                         Log.i("User streak", String.valueOf(userStreak));
                         userEntries = response.getInt("total_entries");
-                        String lastEntry = response.getString("last_log_date");
+                        lastEntry = response.getString("last_log_date");
                         Log.i("Last logged entry", lastEntry);
-                        // Create a SimpleDateFormat object for parsing the date in the given format
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-                        try {
-                            // Parse the date string into a Date object
-                            Date lastLoggedDate = dateFormat.parse(lastEntry);
-
-                            // Get the current date and time
-                            Date currentDate = new Date();
-
-                            // Check if lastLoggedDate is within the last 24 hours
-                            long diff = currentDate.getTime() - lastLoggedDate.getTime();
-                            long hours = diff / (60 * 60 * 1000);
-
-                            if (!(hours <= 24)) {
-                                resetStreak();
-                            }
-                        } catch (ParseException e) {
-                            System.out.println("Error parsing the date: " + e.getMessage());
+                        calculateHours();
+                        if (!(hours <= 24)) {
+                            resetStreak();
                         }
                         setEditText();
                     }
@@ -152,11 +138,14 @@ public class HomeFragment extends Fragment {
                     }
                 } else {
                     if (response.has("stage") && response.has("growthLevel") && response.has("name")) {
-                        int plantGrowth = response.getInt("growthLevel");
+                        double plantGrowth = response.getDouble("growthLevel");
                         Log.i("Plant growth", String.valueOf(plantGrowth));
                         String activePlantName = response.getString(("name"));
                         int stage = response.getInt("stage");
                         Log.i("Plant stage", String.valueOf(stage));
+                        if (hours >= 168) {
+                            resetStage(plantGrowth, stage);
+                        }
                         setPlantDetails(activePlantName, plantGrowth, stage);
                     }
                 }
@@ -239,5 +228,47 @@ public class HomeFragment extends Fragment {
                 mUserViewModel.resetStreak(userId);
             }
         });
+    }
+
+    private void resetStage(double currentGrowth, int stage) {
+        int beginningStageProgress;
+        if (stage == 1) {
+            beginningStageProgress = 0;
+        } else if (stage == 2) {
+            beginningStageProgress = 21;
+        } else if (stage == 3) {
+            beginningStageProgress = 41;
+        } else if (stage == 4) {
+            beginningStageProgress = 61;
+        } else {
+            beginningStageProgress = 81;
+        }
+        double decreaseGrowth = beginningStageProgress - currentGrowth;
+        mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
+            if (userId != null) {
+                // Call the method in ViewModel to perform the API operation
+                mUserViewModel.updateCurrentPlantDetails(userId, decreaseGrowth);
+            }
+        });
+    }
+
+    private void calculateHours() {
+        // Create a SimpleDateFormat object for parsing the date in the given format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            // Parse the date string into a Date object
+            Date lastLoggedDate = dateFormat.parse(lastEntry);
+
+            // Get the current date and time
+            Date currentDate = new Date();
+
+            // Check if lastLoggedDate is within the last 24 hours
+            long diff = currentDate.getTime() - lastLoggedDate.getTime();
+            hours = diff / (60 * 60 * 1000);
+
+        } catch (ParseException e) {
+            System.out.println("Error parsing the date: " + e.getMessage());
+        }
     }
 }

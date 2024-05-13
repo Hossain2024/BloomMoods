@@ -192,4 +192,33 @@ public class UserViewModel extends AndroidViewModel {
         Volley.newRequestQueue(getApplication().getApplicationContext())
                 .add(request);
     }
+
+    protected void updateCurrentPlantDetails(int userId, double newGrowth) {
+        String url = "https://students.washington.edu/nchi22/api/plants/update_current_plant_details.php";
+        JSONObject body = new JSONObject();
+        try {
+            // Create JSON object with the entry data
+            JSONObject json = new JSONObject();
+            json.put("user_id", userId);
+            json.put("growthLevel", newGrowth);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Request request = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                body,
+                mResponse::setValue,
+                this::handleError);
+
+        Log.i("UserViewModel", request.getUrl().toString());
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        //Instantiate the RequestQueue and add the request to the queue
+        Volley.newRequestQueue(getApplication().getApplicationContext())
+                .add(request);
+    }
 }
