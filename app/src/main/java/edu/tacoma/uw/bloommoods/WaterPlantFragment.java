@@ -1,6 +1,8 @@
 package edu.tacoma.uw.bloommoods;
 
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
@@ -52,7 +54,8 @@ public class WaterPlantFragment extends Fragment {
     private static final String ADD_ENTRY_ENDPOINT = "https://students.washington.edu/nchi22/api/log/update_mood_log.php";
     private UserViewModel userViewModel;
     private int streak;
-    private String lastEntry;
+    private ImageView plantPhoto;
+    private boolean loggedToday;
     FragmentWaterPlantBinding waterPlantBinding;
     String selectedMood;
     @Override
@@ -81,7 +84,6 @@ public class WaterPlantFragment extends Fragment {
         });
         Button saveButton = waterPlantBinding.saveButton;
         saveButton.setOnClickListener(v -> addEntry());
-        saveButton.setOnClickListener(v -> addGrowth());
         LinearLayout moodLayout = waterPlantBinding.linearLayout;
 
         setOnMoodClicks(moodLayout);
@@ -102,12 +104,17 @@ public class WaterPlantFragment extends Fragment {
         ProgressBar progressBar = waterPlantBinding.progressBar;
         progressBar.setProgress((int) currentGrowth);
 
-        ImageView plantPhoto = waterPlantBinding.plantStage;
+        plantPhoto = waterPlantBinding.plantStage;
         String resourceName = plantName.toLowerCase().replace(" ", "_") + "_stage_" + plantStage;
         int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
 
         if (resourceId != 0) {
             Drawable drawable = ContextCompat.getDrawable(requireContext(), resourceId);
+            userViewModel.getReset().observe(getViewLifecycleOwner(), reset -> {
+                if (reset) {
+                    setSaturation(plantPhoto, 0f);
+                }
+            });
             plantPhoto.setImageDrawable(drawable);
         } else {
             Log.e("HomeFragment", "Drawable resource not found: " + resourceName);
@@ -141,19 +148,15 @@ public class WaterPlantFragment extends Fragment {
         // Get current user ID
         userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
-                Log.i("Water, User id", String.valueOf(userId));
                 try {
                     // Create JSON object with the entry data
                     JSONObject json = new JSONObject();
                     json.put("user_id", userId);
                     json.put("title", title);
-                    json.put("mood", "Testing");
+                    json.put("mood", "Testing"); // CHANGE TO MOOD SELECTED ONCE BUG IS FIXED
                     json.put("journal_entry", entry);
 
-                    JsonObjectRequest request = getRequest(json, ADD_ENTRY_ENDPOINT, response -> {
-                        Toast.makeText(getContext(), "Entry saved successfully", Toast
-                                .LENGTH_SHORT).show();
-                    });
+                    JsonObjectRequest request = getRequest(json);
                     RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
                     requestQueue.add(request);
                 } catch (JSONException e) {
@@ -161,30 +164,33 @@ public class WaterPlantFragment extends Fragment {
                 }
             }
         });
+        addGrowth();
     }
 
     private void addGrowth() {
-        boolean loggedToday = false;
-        // Create a SimpleDateFormat object for parsing the date in the given format
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        loggedToday = false;
+        userViewModel.getLastEntryLogged().observe(getViewLifecycleOwner(), entry -> {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        try {
-            // Parse the date string into a Date object
-            Date lastLoggedDate = dateFormat.parse(lastEntry);
+            try {
+                // Parse the date string into a Date object
+                Date lastLoggedDate = dateFormat.parse(entry);
 
-            // Get the current date and time
-            Date currentDate = new Date();
+                // Get the current date and time
+                Date currentDate = new Date();
 
-            // Check if lastLoggedDate is within the last 24 hours
-            long diff = currentDate.getTime() - lastLoggedDate.getTime();
-            long hours = diff / (60 * 60 * 1000);
+                // Check if lastLoggedDate is within the last 24 hours
+                long diff = currentDate.getTime() - lastLoggedDate.getTime();
+                long hours = diff / (60 * 60 * 1000);
 
-            if (hours <= 24) {
-                loggedToday = true;
+                if (hours <= 24) {
+                    loggedToday = true;
+                }
+            } catch (ParseException e) {
+                System.out.println("Error parsing the date: " + e.getMessage());
             }
-        } catch (ParseException e) {
-            System.out.println("Error parsing the date: " + e.getMessage());
-        }
+        });
+
 
         double increaseGrowth;
         if (streak >= 2) {
@@ -199,19 +205,26 @@ public class WaterPlantFragment extends Fragment {
                     userViewModel.updateCurrentPlantDetails(userId, increaseGrowth);
                 }
             });
+            userViewModel.getReset().observe(getViewLifecycleOwner(), reset -> {
+                if (reset) {
+                    setSaturation(plantPhoto, 1.0f);
+                    userViewModel.setReset(false);
+                }
+            });
         }
     }
 
 
     @NonNull
-    private JsonObjectRequest getRequest(JSONObject json, String API, Consumer<JSONObject> response) {
+    private JsonObjectRequest getRequest(JSONObject json) {
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                API,
+                ADD_ENTRY_ENDPOINT,
                 json,
-                response::accept,
+                response -> Log.i("Entry saved", response.toString()),
+                        //Toast.makeText(getContext(), "Entry saved successfully", Toast.LENGTH_SHORT).show(),
                 Throwable::printStackTrace);
-
+        Log.i("UserViewModel", request.getUrl().toString());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -269,7 +282,6 @@ public class WaterPlantFragment extends Fragment {
                 } else {
                     if (response.has("streak") && response.has("last_log_date")) {
                         streak = response.getInt("streak");
-                        lastEntry = response.getString("last_log_date");
                     }
                 }
             } catch (JSONException e) {
@@ -280,5 +292,13 @@ public class WaterPlantFragment extends Fragment {
             Log.e("User details", "Could not obtain user details");
         }
         Log.i("WaterPlantFragment", "FINISHED OBSERVE RESPONSE");
+    }
+
+    private void setSaturation(ImageView imageView, float saturation) {
+        ColorMatrix colorMatrix = new ColorMatrix();
+        colorMatrix.setSaturation(saturation);
+
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix);
+        imageView.setColorFilter(filter);
     }
 }
