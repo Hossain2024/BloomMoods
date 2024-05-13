@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +62,14 @@ public class HomeFragment extends Fragment {
         });
         mUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
             observeResponse(response);
+        });
+
+        ImageButton tooltipButton = homeBinding.tooltipButton;
+        tooltipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_aboutFragment);
+            }
         });
 
     }
