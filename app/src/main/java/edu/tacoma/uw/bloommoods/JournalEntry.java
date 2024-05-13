@@ -8,10 +8,10 @@ import java.util.Date;
 import java.util.Locale;
 
 public class JournalEntry implements Serializable {
-    private String title;
-    private String date;
-    private String content;
-    private int moodImage;
+    private final String title;
+    private final String date;
+    private final String content;
+    private final int moodImage;
 
     public JournalEntry(String entryTitle, String entryDate, String entryContent, int entryMoodImage) {
         this.title = entryTitle;
@@ -24,32 +24,16 @@ public class JournalEntry implements Serializable {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDate() {
         return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public int getMoodImage() {
         return moodImage;
-    }
-
-    public void setMoodImage(int moodImage) {
-        this.moodImage = moodImage;
     }
 
     public Calendar parseDate() {

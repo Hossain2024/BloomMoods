@@ -66,4 +66,5 @@
     <string name="plant_options">Plant Options</string>
     <string name="developers">Rainie Chi: nchi22@uw.edu\nChelsea Dacones: chelsjd@uw.edu\nMaliha Hossain: hossainmaliha18@uw.edu\nAmanda Nguyen: amanda65@uw.edu</string>
     <string name="developers_title">Developers</string>
+    <string name="no_entries">No entries found</string>
 </resources>
