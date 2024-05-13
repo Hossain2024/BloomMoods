@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,8 +53,6 @@ public class WaterPlantFragment extends Fragment {
     private UserViewModel userViewModel;
     private int streak;
     private String lastEntry;
-    private double currentGrowth;
-    private int stage;
     FragmentWaterPlantBinding waterPlantBinding;
     String selectedMood;
     @Override
@@ -88,23 +87,20 @@ public class WaterPlantFragment extends Fragment {
         setOnMoodClicks(moodLayout);
     }
 
-    private void setTextImage(int currentGrowth, int plantStage, String plantName) {
+    private void setTextImage(double currentGrowth, int plantStage, String plantName) {
         TextView date = waterPlantBinding.dateText;
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(new Date());
         date.setText(currentDate);
 
         TextView plantGrowth = waterPlantBinding.plantGrowth;
-        float[] radii = {50, 50, 50, 50, 50, 50, 50, 50};
-        RoundRectShape roundRectShape = new RoundRectShape(radii, null,null);
-        ShapeDrawable shapeDrawable = new ShapeDrawable(roundRectShape);
-        int color = Color.parseColor("#4DFFD6C7");
-        shapeDrawable.getPaint().setColor(color);
-        plantGrowth.setBackground(shapeDrawable);
 
         // Update current growth according to user's current plant details
         String growth = "Current Growth: " + currentGrowth + "%";
         plantGrowth.setText(growth);
+
+        ProgressBar progressBar = waterPlantBinding.progressBar;
+        progressBar.setProgress((int) currentGrowth);
 
         ImageView plantPhoto = waterPlantBinding.plantStage;
         String resourceName = plantName.toLowerCase().replace(" ", "_") + "_stage_" + plantStage;
@@ -242,7 +238,7 @@ public class WaterPlantFragment extends Fragment {
                     }
                 } else {
                     if (response.has("growthLevel") && response.has("name") && response.has("stage")) {
-                        int plantGrowthPercent = response.getInt("growthLevel");
+                        double plantGrowthPercent = response.getDouble("growthLevel");
                         Log.i("Plant growth", String.valueOf(plantGrowthPercent));
                         String activePlantName = response.getString(("name"));
                         int activePlantStage = response.getInt("stage");

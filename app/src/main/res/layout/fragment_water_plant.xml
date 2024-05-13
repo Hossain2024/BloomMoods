@@ -131,7 +131,7 @@
         android:layout_height="39dp"
         android:layout_marginTop="25dp"
         android:max="100"
-        android:progress="80"
+        android:progress="5"
         android:progressBackgroundTint="@color/white"
         android:progressDrawable="@drawable/progressbar"
         android:progressTint="#FAE8E4"
