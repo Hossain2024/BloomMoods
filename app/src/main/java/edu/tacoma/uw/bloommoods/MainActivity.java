@@ -43,13 +43,16 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.frame_main_fragment_container), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-       mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        findViewById(R.id.nav_host_fragment).post(() -> {
+            navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        });
+        mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SignIN_PREFS), Context.MODE_PRIVATE);
         Log.d("SharedPreferences", "SignIN_PREFS: " + getString(R.string.SignIN_PREFS)); // Log the value of SignIN_PREFS
         Log.d("SharedPreferences", "Context: " + this); // Log the context being used
@@ -57,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         if (isRemembered) {
             initUserFromPrefs(sharedPreferences);
         }
-
     }
 
     protected void initUserFromPrefs(SharedPreferences sharedPreferences) {
@@ -66,18 +68,15 @@ public class MainActivity extends AppCompatActivity {
         if (userId != 0) {
             // Set the user ID in the user view model
             mUserViewModel.setUserId(userId);
-            Fragment homeFragment = new HomeFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.nav_host_fragment, homeFragment)
-                    .commit();
+            findViewById(R.id.nav_host_fragment).post(() -> {
+                navController.navigate(R.id.nav_home);
+                setupBottomNavigation();
                 showBottomNavigation();
-                //setupBottomNavigation();
+            });
         }
     }
-    protected void setupBottomNavigation() {
-//        // Initialize NavController
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
+    protected void setupBottomNavigation() {
         // Set up BottomNavigationView with NavController
         BottomNavigationView bottomNavView = findViewById(R.id.navBarView);
         NavigationUI.setupWithNavController(bottomNavView, navController);
