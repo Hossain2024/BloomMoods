@@ -9,6 +9,8 @@
     <string name="Welcome">Welcome</string>
     <string name="Create_Account">Create Account</string>
     <string name="username_hint">Enter username</string>
+    <string name="SignIN_PREFS">edu.tacoma.uw.bloommoods.PREFS</string>
+    <string name="SignedIN">signedin</string>
     <string name="Home">Home</string>
     <string name="Water_plant">Water Plant</string>
     <string name="Journal">Journal</string>
