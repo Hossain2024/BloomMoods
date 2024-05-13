@@ -100,7 +100,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/peony"
+        android:id="@+id/plantStage"
         android:layout_width="145dp"
         android:layout_height="349dp"
         android:layout_marginTop="48dp"
@@ -139,7 +139,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/peony" />
+        app:layout_constraintTop_toBottomOf="@+id/plantStage" />
 
     <TextView
         android:id="@+id/plantGrowth"
@@ -156,23 +156,6 @@
         app:layout_constraintEnd_toEndOf="@+id/progressBar"
         app:layout_constraintStart_toStartOf="@+id/progressBar" />
 
-    <EditText
-        android:id="@+id/entryEditText"
-        android:layout_width="377dp"
-        android:layout_height="134dp"
-        android:layout_marginTop="-10dp"
-        android:backgroundTint="#00FFFFFF"
-        android:ems="10"
-        android:fontFamily="@font/catamaran"
-        android:gravity="start|top"
-        android:hint="@string/journal_entry_hint"
-        android:inputType="textMultiLine"
-        android:textColor="@color/dark_blue"
-        android:textColorHint="#B317223E"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleEditText" />
-
     <!--    <View-->
 <!--        android:id="@+id/view3"-->
 <!--        android:layout_width="95dp"-->
@@ -186,6 +169,24 @@
 <!--        app:layout_constraintStart_toStartOf="@+id/saveButton"-->
 <!--        app:layout_constraintTop_toTopOf="@+id/saveButton"-->
 <!--        app:layout_constraintVertical_bias="0" />-->
+
+    <EditText
+        android:id="@+id/entryEditText"
+        android:layout_width="377dp"
+        android:layout_height="134dp"
+        android:layout_marginTop="-10dp"
+        android:backgroundTint="#00FFFFFF"
+        android:ems="10"
+        android:fontFamily="@font/catamaran"
+        android:gravity="start|top"
+        android:hint="@string/journal_entry_hint"
+        android:inputType="textMultiLine"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:textColor="@color/dark_blue"
+        android:textColorHint="#B317223E"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleEditText" />
 
     <android.widget.Button
         android:id="@+id/saveButton"

@@ -1,12 +1,14 @@
 package edu.tacoma.uw.bloommoods;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,9 +35,11 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding;
 
@@ -45,8 +49,10 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding;
 public class WaterPlantFragment extends Fragment {
 
     private static final String ADD_ENTRY_ENDPOINT = "https://students.washington.edu/nchi22/api/log/update_mood_log.php";
+    private static final String UPDATE_PLANT_ENDPOINT = "https://students.washington.edu/nchi22/api/plants/update_current_plant_details.php";
     private UserViewModel userViewModel;
-
+    private int streak;
+    private String lastEntry;
     FragmentWaterPlantBinding waterPlantBinding;
     String selectedMood;
     @Override
@@ -54,6 +60,34 @@ public class WaterPlantFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         waterPlantBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
+        userViewModel = ((MainActivity) requireActivity()).getUserViewModel();
+
+        return waterPlantBinding.getRoot();
+    }
+
+    public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
+            if (userId != null) {
+                userViewModel.getCurrentPlantDetails(userId);
+                userViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
+                    observeResponsePlantDetails(response);
+                });
+                userViewModel.getUserProfile(userId);
+                userViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
+                    observeResponseUserProfile(response);
+                });
+            }
+        });
+        Button saveButton = waterPlantBinding.saveButton;
+        saveButton.setOnClickListener(v -> addEntry());
+        saveButton.setOnClickListener(v -> addGrowth());
+        LinearLayout moodLayout = waterPlantBinding.linearLayout;
+
+        setOnMoodClicks(moodLayout);
+    }
+
+    private void setTextImage(int currentGrowth, int plantStage, String plantName) {
         TextView date = waterPlantBinding.dateText;
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(new Date());
@@ -67,17 +101,22 @@ public class WaterPlantFragment extends Fragment {
         shapeDrawable.getPaint().setColor(color);
         plantGrowth.setBackground(shapeDrawable);
 
-        userViewModel = ((MainActivity) requireActivity()).getUserViewModel();
+        // Update current growth according to user's current plant details
+        String growth = "Current Growth: " + currentGrowth + "%";
+        plantGrowth.setText(growth);
 
-        Button saveButton = waterPlantBinding.saveButton;
-        saveButton.setOnClickListener(v -> addEntry());
+        ImageView plantPhoto = waterPlantBinding.plantStage;
+        String resourceName = plantName.toLowerCase().replace(" ", "_") + "_stage_" + plantStage;
+        int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
 
-        LinearLayout moodLayout = waterPlantBinding.linearLayout;
-
-        setOnMoodClicks(moodLayout);
-
-        return waterPlantBinding.getRoot();
+        if (resourceId != 0) {
+            Drawable drawable = ContextCompat.getDrawable(requireContext(), resourceId);
+            plantPhoto.setImageDrawable(drawable);
+        } else {
+            Log.e("HomeFragment", "Drawable resource not found: " + resourceName);
+        }
     }
+
 
     @Override
     public void onDestroyView() {
@@ -94,6 +133,7 @@ public class WaterPlantFragment extends Fragment {
         }
     }
 
+
     private void addEntry() {
         EditText titleEditText = waterPlantBinding.titleEditText;
         EditText entryEditText = waterPlantBinding.entryEditText;
@@ -108,12 +148,15 @@ public class WaterPlantFragment extends Fragment {
                 try {
                     // Create JSON object with the entry data
                     JSONObject json = new JSONObject();
-//                  json.put("title", title);
                     json.put("user_id", userId);
-                    json.put("mood", selectedMood);
+                    json.put("title", title);
+                    json.put("mood", "Testing");
                     json.put("journal_entry", entry);
 
-                    JsonObjectRequest request = getRequest(json);
+                    JsonObjectRequest request = getRequest(json, ADD_ENTRY_ENDPOINT, response -> {
+                        Toast.makeText(getContext(), "Entry saved successfully", Toast
+                                .LENGTH_SHORT).show();
+                    });
                     RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
                     requestQueue.add(request);
                 } catch (JSONException e) {
@@ -123,13 +166,68 @@ public class WaterPlantFragment extends Fragment {
         });
     }
 
+    private void addGrowth() {
+        boolean loggedToday = false;
+        // Create a SimpleDateFormat object for parsing the date in the given format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            // Parse the date string into a Date object
+            Date lastLoggedDate = dateFormat.parse(lastEntry);
+
+            // Get the current date and time
+            Date currentDate = new Date();
+
+            // Check if lastLoggedDate is within the last 24 hours
+            long diff = currentDate.getTime() - lastLoggedDate.getTime();
+            long hours = diff / (60 * 60 * 1000);
+
+            if (hours <= 24) {
+                loggedToday = true;
+            }
+        } catch (ParseException e) {
+            System.out.println("Error parsing the date: " + e.getMessage());
+        }
+
+        double increaseGrowth;
+        if (streak >= 2) {
+            increaseGrowth = 5;
+        } else {
+            increaseGrowth = 2.5;
+        }
+        if (!loggedToday) {
+            // Get current user ID
+            userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
+                if (userId != null) {
+                    Log.i("WaterFragment, User id", String.valueOf(userId));
+                    try {
+                        // Create JSON object with the entry data
+                        JSONObject json = new JSONObject();
+                        json.put("user_id", userId);
+                        json.put("growthLevel", increaseGrowth);
+
+                        JsonObjectRequest request = getRequest(json, UPDATE_PLANT_ENDPOINT, response -> {
+                            // Log or handle response without showing a toast
+                            Log.i("Growth Update", "Successfully updated growth: " + response.toString());
+                        });
+                        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+                        requestQueue.add(request);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    }
+
+
     @NonNull
-    private JsonObjectRequest getRequest(JSONObject json) {
+    private JsonObjectRequest getRequest(JSONObject json, String API, Consumer<JSONObject> response) {
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                ADD_ENTRY_ENDPOINT,
+                API,
                 json,
-                response -> Toast.makeText(getContext(), "Entry saved successfully", Toast.LENGTH_SHORT).show(),
+                response::accept,
                 Throwable::printStackTrace);
 
         request.setRetryPolicy(new DefaultRetryPolicy(
@@ -139,8 +237,67 @@ public class WaterPlantFragment extends Fragment {
         return request;
     }
 
+
+
     public void onMoodClicked(View view) {
         selectedMood = view.getTag().toString();
         Log.i("Selected Mood", selectedMood);
+    }
+
+    private void observeResponsePlantDetails(final JSONObject response) {
+        if (response.length() > 0) {
+            try {
+                if (response.has("error")) {
+                    String result = response.getString("error");
+                    if ("The user ID does not exist or is not active.".equals(result)) {
+                        // If the result is "failed to login", display the error message to the user
+                        String errorMessage = response.optString("message", "Unknown error");
+                        Log.i("Error to display plant details", errorMessage);
+                    }
+                } else {
+                    if (response.has("growthLevel") && response.has("name") && response.has("stage")) {
+                        int plantGrowthPercent = response.getInt("growthLevel");
+                        Log.i("Plant growth", String.valueOf(plantGrowthPercent));
+                        String activePlantName = response.getString(("name"));
+                        int activePlantStage = response.getInt("stage");
+                        Log.i("Plant stage", String.valueOf(activePlantStage));
+                        setTextImage(plantGrowthPercent, activePlantStage, activePlantName);
+                    }
+                }
+            } catch (JSONException e) {
+                // Log any JSON parsing errors
+                Log.e("JSON Parse Error", e.getMessage());
+            }
+        }else{
+            Log.e("Plant details response", "Could not obtain plant details");
+        }
+        Log.i("WaterPlantFragment", "FINISHED OBSERVE RESPONSE");
+    }
+
+    private void observeResponseUserProfile(final JSONObject response) {
+        if (response.length() > 0) {
+            try {
+                if (response.has("error")) {
+                    String result = response.getString("error");
+                    if ("Invalid User ID.".equals(result)) {
+                        // If the result is "failed to login", display the error message to the user
+                        String errorMessage = response.optString("message", "Unknown error");
+                        Log.i("Error to display profile", errorMessage);
+                    }
+                } else {
+                    if (response.has("streak") && response.has("last_log_date")) {
+                        streak = response.getInt("streak");
+                        lastEntry = response.getString("last_log_date");
+                        Log.i("Last logged date", lastEntry);
+                    }
+                }
+            } catch (JSONException e) {
+                // Log any JSON parsing errors
+                Log.e("JSON Parse Error", e.getMessage());
+            }
+        }else{
+            Log.e("User details", "Could not obtain user details");
+        }
+        Log.i("WaterPlantFragment", "FINISHED OBSERVE RESPONSE");
     }
 }

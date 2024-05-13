@@ -1,6 +1,7 @@
 package edu.tacoma.uw.bloommoods;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
@@ -8,12 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -26,6 +29,12 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 import edu.tacoma.uw.bloommoods.databinding.FragmentHomeBinding;
@@ -33,12 +42,8 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentHomeBinding;
 public class HomeFragment extends Fragment {
     private String userName;
     private int userStreak;
-    private int plantGrowth = 0;
     private int userEntries;
     private UserViewModel mUserViewModel;
-    private TextView editText;  // Declare editText here
-    private TextView usernameText;
-    private TextView entriesText;
     private FragmentHomeBinding homeBinding;
 
     @Override
@@ -56,13 +61,17 @@ public class HomeFragment extends Fragment {
             if (userId != null) {
                 // Call the method in ViewModel to perform the API operation
                 mUserViewModel.getUserProfile(userId);
+                mUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
+                    observeResponseUserId(response);
+                });
                 Log.i("Home", String.valueOf(userId));
+                mUserViewModel.getCurrentPlantDetails(userId);
+                mUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
+                    observeResponsePlantDetails(response);
+                });
+
             }
         });
-        mUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
-            observeResponse(response);
-        });
-
     }
 
 
@@ -73,7 +82,7 @@ public class HomeFragment extends Fragment {
         homeBinding = null;
     }
 
-    private void observeResponse(final JSONObject response) {
+    private void observeResponseUserId(final JSONObject response) {
         if (response.length() > 0) {
             try {
                 if (response.has("error")) {
@@ -84,12 +93,34 @@ public class HomeFragment extends Fragment {
                         Log.i("Error to display profile", errorMessage);
                     }
                 } else {
-                    if (response.has("name") && response.has("streak") && response.has("total_entries")) {
+                    if (response.has("name") && response.has("streak") && response.has("total_entries") && response.has("last_log_date")) {
                         userName = response.getString("name");
                         Log.i("Username", userName);
                         userStreak = response.getInt("streak");
                         Log.i("User streak", String.valueOf(userStreak));
                         userEntries = response.getInt("total_entries");
+                        String lastEntry = response.getString("last_log_date");
+                        Log.i("Last logged entry", lastEntry);
+                        // Create a SimpleDateFormat object for parsing the date in the given format
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                        try {
+                            // Parse the date string into a Date object
+                            Date lastLoggedDate = dateFormat.parse(lastEntry);
+
+                            // Get the current date and time
+                            Date currentDate = new Date();
+
+                            // Check if lastLoggedDate is within the last 24 hours
+                            long diff = currentDate.getTime() - lastLoggedDate.getTime();
+                            long hours = diff / (60 * 60 * 1000);
+
+                            if (!(hours <= 24)) {
+                                resetStreak();
+                            }
+                        } catch (ParseException e) {
+                            System.out.println("Error parsing the date: " + e.getMessage());
+                        }
                         setEditText();
                     }
                 }
@@ -103,16 +134,72 @@ public class HomeFragment extends Fragment {
         Log.i("HomeFragment", "FINISHED OBSERVE RESPONSE");
     }
 
+    /*
+    Observe response from method getCurrentPlantDetails. Method will take the plant growth,
+    stage, and name. Then call local method setPlantDetails to update the progress bar in Home page
+    and the image view.
+     */
+    private void observeResponsePlantDetails(final JSONObject response) {
+        if (response.length() > 0) {
+            try {
+                if (response.has("error")) {
+                    String result = response.getString("error");
+                    if ("The user ID does not exist or is not active.".equals(result)) {
+                        // If the result is "failed to login", display the error message to the user
+                        String errorMessage = response.optString("message", "Unknown error");
+                        Log.i("Error to display plant details", errorMessage);
+                    }
+                } else {
+                    if (response.has("stage") && response.has("growthLevel") && response.has("name")) {
+                        int plantGrowth = response.getInt("growthLevel");
+                        Log.i("Plant growth", String.valueOf(plantGrowth));
+                        String activePlantName = response.getString(("name"));
+                        int stage = response.getInt("stage");
+                        Log.i("Plant stage", String.valueOf(stage));
+                        setPlantDetails(activePlantName, plantGrowth, stage);
+                    }
+                }
+            } catch (JSONException e) {
+                // Log any JSON parsing errors
+                Log.e("JSON Parse Error", e.getMessage());
+            }
+        }else{
+            Log.e("Plant details response", "Could not obtain plant details");
+        }
+        Log.i("HomeFragment", "FINISHED OBSERVE RESPONSE");
+    }
+
+    /*
+    Updates progress bar based on plant growth.
+    Updates image of plant stage based on the current stage.
+     */
+    private void setPlantDetails(String activePlantName, int plantGrowth, int stage) {
+        ImageView plantStage = homeBinding.plantStageView;
+        TextView progressBar = homeBinding.progressLabel;
+        String growth= "Plant Growth: " + plantGrowth + "%";
+        progressBar.setText(growth);
+
+        String resourceName = activePlantName.toLowerCase().replace(" ", "_") + "_stage_" + stage;
+        int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
+
+        if (resourceId != 0) {
+            Drawable drawable = ContextCompat.getDrawable(requireContext(), resourceId);
+            plantStage.setImageDrawable(drawable);
+        } else {
+            Log.e("HomeFragment", "Drawable resource not found: " + resourceName);
+        }
+    }
+
 
 
     private void setEditText() {
-        usernameText = homeBinding.textUserName;
+        TextView usernameText = homeBinding.textUserName;
         String name = "Hey, " + userName + "!";
 
         usernameText.setText(name);
 
         // Initialize EditText after setContentView
-        editText = homeBinding.textStreak;
+        TextView editText = homeBinding.textStreak;
 
         String text = "Streak\n " + userStreak + "  days";
         SpannableString spannableString = new SpannableString(text);
@@ -128,7 +215,7 @@ public class HomeFragment extends Fragment {
 
         editText.setText(spannableString);
 
-        entriesText = homeBinding.textEntries;
+        TextView entriesText = homeBinding.textEntries;
         String totalentries = "Total Entries\n " + userEntries + "  entries";
         SpannableString spannableStringEntries = new SpannableString(totalentries);
 
@@ -140,5 +227,14 @@ public class HomeFragment extends Fragment {
         RelativeSizeSpan entSpan = new RelativeSizeSpan(0.75f); // 75% smaller size
         spannableStringEntries.setSpan(entSpan, totalentries.indexOf("entries"), totalentries.indexOf("entries") + "entries".length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
         entriesText.setText(spannableStringEntries);
+    }
+
+    private void resetStreak() {
+        mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
+            if (userId != null) {
+                // Call the method in ViewModel to perform the API operation
+                mUserViewModel.resetStreak(userId);
+            }
+        });
     }
 }

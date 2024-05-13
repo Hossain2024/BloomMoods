@@ -26,7 +26,7 @@
 
 
     <ImageView
-        android:id="@+id/angryImageView"
+        android:id="@+id/plantStageView"
         android:layout_width="350dp"
         android:layout_height="469dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +35,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.675"
-        app:srcCompat="@drawable/peony_flower_stage_1" />
+        app:srcCompat="@drawable/peaceful_peony_stage_1" />
 
     <TextView
         android:id="@+id/textUserName"
@@ -93,7 +93,7 @@
         android:shadowDx="1"
         android:shadowDy="1"
         android:shadowRadius="3"
-        android:text="Plant Growth: 50%"
+        android:text="Plant Growth: "
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#17223E"
         android:textSize="16sp"
