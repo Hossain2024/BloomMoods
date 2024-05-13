@@ -221,8 +221,8 @@ public class WaterPlantFragment extends Fragment {
                 Request.Method.POST,
                 ADD_ENTRY_ENDPOINT,
                 json,
-                response -> Log.i("Entry saved", response.toString()),
-                        //Toast.makeText(getContext(), "Entry saved successfully", Toast.LENGTH_SHORT).show(),
+                response ->
+                        Toast.makeText(getContext(), "Entry saved successfully", Toast.LENGTH_SHORT).show(),
                 Throwable::printStackTrace);
         Log.i("UserViewModel", request.getUrl().toString());
         request.setRetryPolicy(new DefaultRetryPolicy(
