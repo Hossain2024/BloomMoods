@@ -17,12 +17,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +34,7 @@ import org.json.JSONObject;
 import edu.tacoma.uw.bloommoods.databinding.FragmentAccountBinding;
 
 public class AccountFragment extends Fragment {
+
     private static final String UPDATE_PROFILE_API_URL = "https://students.washington.edu/nchi22/api/users/update_profile.php";
     private static final String FETCH_PLANT_API_URL = "https://students.washington.edu/nchi22/api/plants/get_plants_grown.php?user_id=";
     private static final int COLOR_ERROR = Color.parseColor("#610000");
@@ -38,6 +42,7 @@ public class AccountFragment extends Fragment {
 
     private UserViewModel mUserViewModel;
     private FragmentAccountBinding binding;
+    private NavController navController;
     private int userID;
 
     @Override
@@ -71,7 +76,22 @@ public class AccountFragment extends Fragment {
                 updatePassword();
             }
         });
+        binding.logoutButton.setOnClickListener(v ->{
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+            navController.navigate(R.id.loginFragment);
+            hideBottomNavigation();
+
+
+        });
     }
+
+    private void hideBottomNavigation() {
+        BottomNavigationView navBarView = requireActivity().findViewById(R.id.navBarView);
+        navBarView.setVisibility(View.GONE);
+    }
+
+
+
 
     private void switchToUpdateMode(EditText editText, ImageButton button, int iconResource) {
         editText.setEnabled(true);
