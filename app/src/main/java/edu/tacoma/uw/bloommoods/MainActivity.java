@@ -86,24 +86,6 @@ public class MainActivity extends AppCompatActivity {
         return mUserViewModel;
     }
 
-//    private boolean switchToFragment(int itemId) {
-//        Fragment fragment;
-//        if (itemId == R.id.nav_home) {
-//            fragment = new HomeFragment();
-//        } else if (itemId == R.id.nav_journal) {
-//            fragment = new JournalFragment();
-//        } else if (itemId == R.id.nav_water) {
-//            fragment = new WaterPlantFragment();
-//        } else if (itemId == R.id.nav_user) {
-//            fragment = new AboutFragment();
-//        } else {
-//            return false;
-//        }
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.nav_host_fragment, fragment)
-//                .commit();
-//        return true;
-//    }
 
     protected void showBottomNavigation() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);

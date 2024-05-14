@@ -23,6 +23,7 @@ import java.util.Objects;
 
 public class UserViewModel extends AndroidViewModel {
     final private MutableLiveData<JSONObject> mResponse;
+    final private MutableLiveData<JSONObject> plantResponse;
     final private MutableLiveData<Integer> mUserId;
     final private MutableLiveData<Boolean> resetted;
     final private MutableLiveData<String> lastEntryLogged;
@@ -30,10 +31,12 @@ public class UserViewModel extends AndroidViewModel {
     public UserViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
+        plantResponse = new MutableLiveData<>();
         mUserId = new MutableLiveData<>();
         resetted = new MutableLiveData<>();
         lastEntryLogged = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
+        plantResponse.setValue(new JSONObject());
         mUserId.setValue(0);
         resetted.setValue(false);
         lastEntryLogged.setValue("");
@@ -43,6 +46,11 @@ public class UserViewModel extends AndroidViewModel {
     public void addResponseObserver(@NonNull LifecycleOwner owner,
                                     @NonNull Observer<? super JSONObject> observer) {
         mResponse.observe(owner, observer);
+    }
+
+    public void addPlantResponseObserver(@NonNull LifecycleOwner owner,
+                                    @NonNull Observer<? super JSONObject> observer) {
+        plantResponse.observe(owner, observer);
     }
 
 
@@ -168,7 +176,7 @@ public class UserViewModel extends AndroidViewModel {
                 Request.Method.GET,
                 url,
                 null, //no body for this get request
-                mResponse::setValue,
+                plantResponse::setValue,
                 this::handleError);
 
         Log.i("UserViewModel", request.getUrl().toString());
@@ -193,7 +201,8 @@ public class UserViewModel extends AndroidViewModel {
                 Request.Method.PUT,
                 url,
                 body,
-                mResponse::setValue,
+                response ->
+                    Log.i("Streak", "Streak has been reset"),
                 this::handleError);
 
         Log.i("UserViewModel", request.getUrl().toString());

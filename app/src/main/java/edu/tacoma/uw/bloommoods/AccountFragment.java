@@ -22,6 +22,7 @@ import androidx.navigation.Navigation;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -105,10 +106,10 @@ public class AccountFragment extends Fragment {
                 this.userID = userId;
                 fetchUserPlants();
                 mUserViewModel.getUserProfile(userId);
+                mUserViewModel.addResponseObserver(getViewLifecycleOwner(), this::updateUIWithUserProfile);
+
             }
         });
-
-        mUserViewModel.addResponseObserver(getViewLifecycleOwner(), this::updateUIWithUserProfile);
     }
 
     private void updateUIWithUserProfile(JSONObject response) {

@@ -75,14 +75,11 @@ public class HomeFragment extends Fragment {
                     observeResponseUserId(response, userId);
                 });
                 mUserViewModel.getCurrentPlantDetails(userId);
-                mUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
+                mUserViewModel.addPlantResponseObserver(getViewLifecycleOwner(), response -> {
                     observeResponsePlantDetails(response, userId);
                 });
             }
         });
-
-
-
         ImageButton tooltipButton = homeBinding.tooltipButton;
         tooltipButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +132,6 @@ public class HomeFragment extends Fragment {
         }else{
             Log.e("User profile response", "Could not obtain profile data");
         }
-        Log.i("HomeFragment", "FINISHED OBSERVE USER PROFILE RESPONSE");
     }
 
     /*
@@ -172,8 +168,7 @@ public class HomeFragment extends Fragment {
             }
         }else{
             Log.e("Plant details response", "Could not obtain plant details");
-        }Log.i("HomeFragment", "FINISHED OBSERVE PLANT DETAILS RESPONSE");
-
+        }
     }
 
     /*
@@ -198,8 +193,6 @@ public class HomeFragment extends Fragment {
         progressBar.setProgress((int) plantGrowth);
 
         }
-
-
 
     private void setEditText() {
         TextView usernameText = homeBinding.textUserName;
