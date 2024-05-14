@@ -98,9 +98,6 @@ public class LoginFragment extends Fragment {
                             userId = response.getInt("user_id");
                             mUserViewModel.setUserId(userId);
                             Log.i("User id logged in:", String.valueOf(userId));
-//                            // Start the HomeActivity
-//                            Intent intent = new Intent(getContext(), HomeActivity.class);
-//                            startActivity(intent);
                             Activity activity = getActivity();
                             if (activity instanceof MainActivity) {
                                 ((MainActivity) activity).showBottomNavigation();
