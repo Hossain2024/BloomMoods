@@ -1,5 +1,6 @@
 package edu.tacoma.uw.bloommoods;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,8 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentAccountBinding;
 
 public class AccountFragment extends Fragment {
 
+
+
     private static final String UPDATE_PROFILE_API_URL = "https://students.washington.edu/nchi22/api/users/update_profile.php";
     private static final String FETCH_PLANT_API_URL = "https://students.washington.edu/nchi22/api/plants/get_plants_grown.php?user_id=";
     private static final int COLOR_ERROR = Color.parseColor("#610000");
@@ -60,7 +63,7 @@ public class AccountFragment extends Fragment {
         setUpListeners();
         observeUserProfile();
     }
-
+    MainActivity ac = new MainActivity();
     private void setUpListeners() {
         binding.editNameButton.setOnClickListener(v -> {
             if ("edit".equals(binding.editNameButton.getTag())) {
@@ -78,10 +81,11 @@ public class AccountFragment extends Fragment {
             }
         });
         binding.logoutButton.setOnClickListener(v ->{
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
-            navController.navigate(R.id.loginFragment);
-            hideBottomNavigation();
-
+            Activity activity = getActivity();
+            if(activity instanceof MainActivity){
+                ((MainActivity) activity).hideBottomNavigation();
+            }
+            Navigation.findNavController(getView()).navigate(R.id.loginFragment);
 
         });
     }
