@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
 
     private UserViewModel mUserViewModel;
+    private JournalViewModel mJournalViewModel;
+    private BottomNavigationView bottomNavView;
 
 
     @Override
@@ -48,14 +50,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        mJournalViewModel = new ViewModelProvider(this).get(JournalViewModel.class);
 
     }
     protected void setupBottomNavigation() {
 //        // Initialize NavController
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-
         // Set up BottomNavigationView with NavController
-        BottomNavigationView bottomNavView = findViewById(R.id.navBarView);
+        bottomNavView = findViewById(R.id.navBarView);
         NavigationUI.setupWithNavController(bottomNavView, navController);
     }
 
