@@ -25,8 +25,8 @@
         android:title="@string/Report"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/nav_about"
-        android:icon="@mipmap/info_button"
+        android:id="@+id/nav_account"
+        android:icon="@mipmap/user_profile"
         android:menuCategory="container"
         android:title="@string/Account"
         app:showAsAction="ifRoom" />
