@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/waterPlant"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    android:scrollbars="vertical"
     tools:context=".WaterPlantFragment">
 
     <LinearLayout
@@ -89,14 +92,14 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/playfair_display"
         android:text="@string/water_your_plant"
         android:textColor="@color/dark_blue"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -172,8 +175,8 @@
 
     <EditText
         android:id="@+id/entryEditText"
-        android:layout_width="377dp"
-        android:layout_height="134dp"
+        android:layout_width="368dp"
+        android:layout_height="265dp"
         android:layout_marginTop="-10dp"
         android:backgroundTint="#00FFFFFF"
         android:ems="10"
@@ -181,7 +184,6 @@
         android:gravity="start|top"
         android:hint="@string/journal_entry_hint"
         android:inputType="textMultiLine"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
         android:textColor="@color/dark_blue"
         android:textColorHint="#B317223E"
         app:layout_constraintEnd_toEndOf="parent"
@@ -192,21 +194,22 @@
         android:id="@+id/saveButton"
         android:layout_width="88dp"
         android:layout_height="42dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="76dp"
         android:background="@drawable/rounded_rect"
         android:fontFamily="@font/playfair_display"
         android:text="@string/save_entry"
         android:textColor="@color/dark_blue"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.897"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/titleEditText"
         android:layout_width="375dp"
         android:layout_height="60dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="4dp"
         android:backgroundTint="#00FFFFFF"
         android:ems="10"
         android:fontFamily="@font/alatsi"
@@ -220,3 +223,4 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -73,7 +73,7 @@ public class WaterPlantFragment extends Fragment {
         userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
                 userViewModel.getCurrentPlantDetails(userId);
-                userViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
+                userViewModel.addPlantResponseObserver(getViewLifecycleOwner(), response -> {
                     observeResponsePlantDetails(response);
                 });
                 userViewModel.getUserProfile(userId);

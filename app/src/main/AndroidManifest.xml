@@ -20,6 +20,7 @@
             android:exported="false" />
         <activity
             android:name=".WaterPlantFragment"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".HomeFragment"
