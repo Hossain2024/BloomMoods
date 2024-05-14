@@ -1,7 +1,9 @@
 package edu.tacoma.uw.bloommoods;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -102,10 +104,14 @@ public class LoginFragment extends Fragment {
                             Activity activity = getActivity();
                             if (activity instanceof MainActivity) {
                                 ((MainActivity) activity).showBottomNavigation();
-                                ((MainActivity) activity).setupBottomNavigation();
                             }
                             Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_homeFragment);
+
                         }
+                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.SignIN_PREFS),
+                                Context.MODE_PRIVATE);
+                        sharedPreferences.edit().putBoolean(getString(R.string.SignedIN), true).apply();
+                        sharedPreferences.edit().putInt("userId", userId).apply();
 
 
                     } else {

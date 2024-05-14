@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
+    android:scrollbars="vertical"
     tools:context=".WaterPlantFragment">
 
     <LinearLayout
@@ -100,14 +101,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/peony"
+        android:id="@+id/plantStage"
         android:layout_width="145dp"
         android:layout_height="349dp"
-        android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dateText"
         app:srcCompat="@mipmap/peony70" />
 
     <View
@@ -131,7 +131,7 @@
         android:layout_height="39dp"
         android:layout_marginTop="25dp"
         android:max="100"
-        android:progress="80"
+        android:progress="5"
         android:progressBackgroundTint="@color/white"
         android:progressDrawable="@drawable/progressbar"
         android:progressTint="#FAE8E4"
@@ -139,7 +139,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/peony" />
+        app:layout_constraintTop_toBottomOf="@+id/plantStage" />
 
     <TextView
         android:id="@+id/plantGrowth"
@@ -156,6 +156,20 @@
         app:layout_constraintEnd_toEndOf="@+id/progressBar"
         app:layout_constraintStart_toStartOf="@+id/progressBar" />
 
+    <!--    <View-->
+    <!--        android:id="@+id/view3"-->
+    <!--        android:layout_width="95dp"-->
+    <!--        android:layout_height="58dp"-->
+    <!--        android:background="@drawable/progressbar_shadow"-->
+    <!--        android:backgroundTint="#F0CFC3"-->
+    <!--        android:backgroundTintMode="src_in"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/saveButton"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/saveButton"-->
+    <!--        app:layout_constraintHorizontal_bias="0.2"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/saveButton"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/saveButton"-->
+    <!--        app:layout_constraintVertical_bias="0" />-->
+
     <EditText
         android:id="@+id/entryEditText"
         android:layout_width="377dp"
@@ -167,25 +181,12 @@
         android:gravity="start|top"
         android:hint="@string/journal_entry_hint"
         android:inputType="textMultiLine"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
         android:textColor="@color/dark_blue"
         android:textColorHint="#B317223E"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleEditText" />
-
-    <!--    <View-->
-<!--        android:id="@+id/view3"-->
-<!--        android:layout_width="95dp"-->
-<!--        android:layout_height="58dp"-->
-<!--        android:background="@drawable/progressbar_shadow"-->
-<!--        android:backgroundTint="#F0CFC3"-->
-<!--        android:backgroundTintMode="src_in"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/saveButton"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/saveButton"-->
-<!--        app:layout_constraintHorizontal_bias="0.2"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/saveButton"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/saveButton"-->
-<!--        app:layout_constraintVertical_bias="0" />-->
 
     <android.widget.Button
         android:id="@+id/saveButton"
