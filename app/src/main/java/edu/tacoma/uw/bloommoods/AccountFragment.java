@@ -63,7 +63,7 @@ public class AccountFragment extends Fragment {
         setUpListeners();
         observeUserProfile();
     }
-    MainActivity ac = new MainActivity();
+
     private void setUpListeners() {
         binding.editNameButton.setOnClickListener(v -> {
             if ("edit".equals(binding.editNameButton.getTag())) {
@@ -90,10 +90,7 @@ public class AccountFragment extends Fragment {
         });
     }
 
-    private void hideBottomNavigation() {
-        BottomNavigationView navBarView = requireActivity().findViewById(R.id.navBarView);
-        navBarView.setVisibility(View.GONE);
-    }
+
 
 
 
