@@ -102,7 +102,8 @@ public class JournalViewModel extends AndroidViewModel {
                 response -> {
                     Log.i("RESPONSE", String.valueOf(response));
                     if (!response.has("message")) {
-                        mEntry.postValue(parseJsonObject(response));
+//                        mEntry.postValue(parseJsonObject(response));
+                        setEntry(parseJsonObject(response));
                     }
                 },
                 this::handleError);
@@ -118,6 +119,10 @@ public class JournalViewModel extends AndroidViewModel {
 
     public LiveData<JournalEntry> getEntry() {
         return mEntry;
+    }
+
+    public void setEntry(JournalEntry newEntry) {
+        mEntry.setValue(newEntry);
     }
 
     // Method to parse JSON object and create JournalEntry object

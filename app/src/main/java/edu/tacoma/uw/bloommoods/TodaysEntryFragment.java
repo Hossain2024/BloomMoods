@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,20 +63,40 @@ public class TodaysEntryFragment extends Fragment {
         mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
                 currentUser = userId;
+                mJournalViewModel.getTodaysEntry(userId); // Fetch today's entry
             }
         });
 
-        TodaysEntryFragmentArgs args = TodaysEntryFragmentArgs.fromBundle(getArguments());
-        JournalEntry entry = (JournalEntry) args.getEntry();
-        mSelectedMood = moodMap.get(entry.getMoodImage());
-        mTodaysEntryBinding.todaysDate.setText(entry.getDate());
-        mTodaysEntryBinding.todaysTitleEditText.setText(entry.getTitle());
-        mTodaysEntryBinding.todaysEntryEditText.setText(entry.getContent());
-        mTodaysEntryBinding.todaysMoodImageView.setImageResource(entry.getMoodImage());
-        mTodaysEntryBinding.editButton.setOnClickListener(button -> setEditable(true));
-        mTodaysEntryBinding.updateButton.setOnClickListener(button -> {updateEntry(currentUser); setEditable(false);});
+        // Observe the entry LiveData
+        mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), this::updateUI);
 
-//        mJournalViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
+//        TodaysEntryFragmentArgs args = TodaysEntryFragmentArgs.fromBundle(getArguments());
+//        JournalEntry entry = args.getEntry();
+//        updateUI(entry);
+
+        mTodaysEntryBinding.editButton.setOnClickListener(button -> setEditable(true));
+        mTodaysEntryBinding.updateButton.setOnClickListener(button -> {
+            updateEntry(currentUser);
+            setEditable(false);
+        });
+
+//        // Observe userId from UserViewModel
+//        mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
+//            if (userId != null) {
+//                currentUser = userId;
+//            }
+//        });
+//
+//        TodaysEntryFragmentArgs args = TodaysEntryFragmentArgs.fromBundle(getArguments());
+//        JournalEntry entry = (JournalEntry) args.getEntry();
+//        mSelectedMood = moodMap.get(entry.getMoodImage());
+//        mTodaysEntryBinding.todaysDate.setText(entry.getDate());
+//        mTodaysEntryBinding.todaysTitleEditText.setText(entry.getTitle());
+//        mTodaysEntryBinding.todaysEntryEditText.setText(entry.getContent());
+//        mTodaysEntryBinding.todaysMoodImageView.setImageResource(entry.getMoodImage());
+//        mTodaysEntryBinding.editButton.setOnClickListener(button -> setEditable(true));
+//        mTodaysEntryBinding.updateButton.setOnClickListener(button -> {updateEntry(currentUser); setEditable(false);});
+
 //
         LinearLayout moodLayout = mTodaysEntryBinding.linearLayout;
         setOnMoodClicks(moodLayout);
@@ -100,6 +125,15 @@ public class TodaysEntryFragment extends Fragment {
         String title = mTodaysEntryBinding.todaysTitleEditText.getText().toString();
         String entry = mTodaysEntryBinding.todaysEntryEditText.getText().toString();
         mJournalViewModel.addEntry(userId, title, mSelectedMood, entry);
+        mJournalViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
+    }
+
+    private void updateUI(JournalEntry entry) {
+        mSelectedMood = moodMap.get(entry.getMoodImage());
+        mTodaysEntryBinding.todaysDate.setText(entry.getDate());
+        mTodaysEntryBinding.todaysTitleEditText.setText(entry.getTitle());
+        mTodaysEntryBinding.todaysEntryEditText.setText(entry.getContent());
+        mTodaysEntryBinding.todaysMoodImageView.setImageResource(entry.getMoodImage());
     }
 
     private void setOnMoodClicks(LinearLayout moodLayout) {
@@ -114,5 +148,28 @@ public class TodaysEntryFragment extends Fragment {
     private void onMoodClicked(View view) {
         mSelectedMood = view.getTag().toString();
         Log.i("Selected Mood", mSelectedMood);
+    }
+
+    private void observeResponse(final JSONObject response) {
+        if (response.length() > 0) {
+            if (response.has("error")) {
+                try {
+                    Toast.makeText(this.getContext(),
+                            "Error updating entry: " +
+                                    response.get("error"), Toast.LENGTH_LONG).show();
+
+                } catch (JSONException e) {
+                    Log.e("JSON Parse Error", e.getMessage());
+                }
+
+            } else {
+                Toast.makeText(this.getContext(),"Entry updated", Toast.LENGTH_LONG).show();
+                mJournalViewModel.getTodaysEntry(currentUser); // Fetch today's entry
+//                mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), this::updateUI);
+            }
+
+        } else {
+            Log.d("JSON Response", "No Response");
+        }
     }
 }
