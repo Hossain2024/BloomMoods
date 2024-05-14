@@ -81,9 +81,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        mUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
-            observeResponse(response);
-        });
+
 
         ImageButton tooltipButton = homeBinding.tooltipButton;
         tooltipButton.setOnClickListener(new View.OnClickListener() {
