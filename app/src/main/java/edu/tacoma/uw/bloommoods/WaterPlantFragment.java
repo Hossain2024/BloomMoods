@@ -6,24 +6,19 @@ import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,23 +33,22 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding;
  * A simple {@link Fragment} subclass.
  */
 public class WaterPlantFragment extends Fragment {
+    private JournalViewModel mJournalViewModel;
+    FragmentWaterPlantBinding mWaterPlantBinding;
+    String mSelectedMood;
+    int currentUser;
 
-    private static final String ADD_ENTRY_ENDPOINT = "https://students.washington.edu/nchi22/api/log/update_mood_log.php";
-    private UserViewModel userViewModel;
-
-    FragmentWaterPlantBinding waterPlantBinding;
-    String selectedMood;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        waterPlantBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
-        TextView date = waterPlantBinding.dateText;
+        mWaterPlantBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
+        TextView date = mWaterPlantBinding.dateText;
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(new Date());
         date.setText(currentDate);
 
-        TextView plantGrowth = waterPlantBinding.plantGrowth;
+        TextView plantGrowth = mWaterPlantBinding.plantGrowth;
         float[] radii = {50, 50, 50, 50, 50, 50, 50, 50};
         RoundRectShape roundRectShape = new RoundRectShape(radii, null,null);
         ShapeDrawable shapeDrawable = new ShapeDrawable(roundRectShape);
@@ -62,22 +56,87 @@ public class WaterPlantFragment extends Fragment {
         shapeDrawable.getPaint().setColor(color);
         plantGrowth.setBackground(shapeDrawable);
 
-        userViewModel = ((MainActivity) requireActivity()).getUserViewModel();
+//        Button saveButton = waterPlantBinding.saveButton;
+//        saveButton.setOnClickListener(v -> addEntry());
 
-        Button saveButton = waterPlantBinding.saveButton;
-        saveButton.setOnClickListener(v -> addEntry());
+        return mWaterPlantBinding.getRoot();
+    }
 
-        LinearLayout moodLayout = waterPlantBinding.linearLayout;
+    @Override
+    public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        UserViewModel mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
+        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
 
+        // Observe userId from UserViewModel
+        mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
+            if (userId != null) {
+                mJournalViewModel.getTodaysEntry(userId); // Fetch today's entry using the userId
+                currentUser = userId;
+                mWaterPlantBinding.saveButton.setOnClickListener(button -> addOrUpdateEntry(userId, mWaterPlantBinding.titleEditText, mWaterPlantBinding.entryEditText));
+            }
+        });
+
+        mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), moodEntry -> {
+            updateLayoutVisibility(moodEntry != null);
+            if (moodEntry != null) {
+                EditText title = mWaterPlantBinding.todaysTitleEditText;
+                EditText entry = mWaterPlantBinding.todaysEntryEditText;
+                title.setText(moodEntry.getTitle());
+                entry.setText(moodEntry.getContent());
+                mWaterPlantBinding.todaysDate.setText(moodEntry.getDate());
+                mWaterPlantBinding.editButton.setOnClickListener(button -> setEditable());
+                mWaterPlantBinding.updateButton.setOnClickListener(button -> addOrUpdateEntry(currentUser, title, entry));
+            }
+        });
+
+        mJournalViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
+
+        LinearLayout moodLayout = mWaterPlantBinding.linearLayout;
         setOnMoodClicks(moodLayout);
-
-        return waterPlantBinding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        waterPlantBinding = null;
+        mWaterPlantBinding = null;
+    }
+
+    private void addOrUpdateEntry(int userId, EditText titleEditText, EditText entryEditText) {
+        String title = titleEditText.getText().toString();
+        String entry = entryEditText.getText().toString();
+//        String mood = mSelectedMood != null ? mSelectedMood :
+        mJournalViewModel.addEntry(userId, title, mSelectedMood, entry);
+    }
+
+    private void observeResponse(final JSONObject response) {
+        if (response.length() > 0) {
+            if (response.has("error")) {
+                try {
+                    Toast.makeText(this.getContext(),
+                            "Error Adding/Updating entry: " +
+                                    response.get("error"), Toast.LENGTH_LONG).show();
+
+                } catch (JSONException e) {
+                    Log.e("JSON Parse Error", e.getMessage());
+                }
+
+            } else {
+                Toast.makeText(this.getContext(),"Entry added/updated", Toast.LENGTH_LONG).show();
+                mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), moodEntry -> {
+                    updateLayoutVisibility(moodEntry != null);
+                    if (moodEntry != null) {
+                        mWaterPlantBinding.todaysTitleEditText.setText(moodEntry.getTitle());
+                        mWaterPlantBinding.todaysEntryEditText.setText(moodEntry.getContent());
+                        mWaterPlantBinding.todaysDate.setText(moodEntry.getDate());
+                        mWaterPlantBinding.editButton.setOnClickListener(button -> setEditable());
+                    }
+                });
+            }
+
+        } else {
+            Log.d("JSON Response", "No Response");
+        }
     }
 
     private void setOnMoodClicks(LinearLayout moodLayout) {
@@ -89,53 +148,25 @@ public class WaterPlantFragment extends Fragment {
         }
     }
 
-    private void addEntry() {
-        EditText titleEditText = waterPlantBinding.titleEditText;
-        EditText entryEditText = waterPlantBinding.entryEditText;
-
-        String title = titleEditText.getText().toString();
-        String entry = entryEditText.getText().toString();
-
-        // Get current user ID
-        userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
-            if (userId != null) {
-                Log.i("Water, User id", String.valueOf(userId));
-                try {
-                    // Create JSON object with the entry data
-                    JSONObject json = new JSONObject();
-                    json.put("title", title);
-                    json.put("user_id", userId);
-                    json.put("mood", selectedMood);
-                    json.put("journal_entry", entry);
-
-                    JsonObjectRequest request = getRequest(json);
-                    RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-                    requestQueue.add(request);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    private void onMoodClicked(View view) {
+        mSelectedMood = view.getTag().toString();
+        Log.i("Selected Mood", mSelectedMood);
     }
 
-    @NonNull
-    private JsonObjectRequest getRequest(JSONObject json) {
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST,
-                ADD_ENTRY_ENDPOINT,
-                json,
-                response -> Toast.makeText(getContext(), "Entry saved successfully", Toast.LENGTH_SHORT).show(),
-                Throwable::printStackTrace);
-
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10_000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        return request;
+    private void updateLayoutVisibility(boolean hasEntry) {
+        int newEntryVisibility = hasEntry ? View.GONE : View.VISIBLE;
+        int hasEntryVisibility = hasEntry ? View.VISIBLE : View.GONE;
+        mWaterPlantBinding.newEntryConstraintLayout.setVisibility(newEntryVisibility);
+        mWaterPlantBinding.hasEntryConstraintLayout.setVisibility(hasEntryVisibility);
+        Log.i("WaterPlantFragment", hasEntry ? "Entry exists for today." : "No entry found for today.");
     }
 
-    public void onMoodClicked(View view) {
-        selectedMood = view.getTag().toString();
-        Log.i("Selected Mood", selectedMood);
+    private void setEditable() {
+        mWaterPlantBinding.todaysTitleEditText.setLongClickable(true);
+        mWaterPlantBinding.todaysTitleEditText.setClickable(true);
+        mWaterPlantBinding.todaysEntryEditText.setLongClickable(true);
+        mWaterPlantBinding.todaysEntryEditText.setClickable(true);
+        mWaterPlantBinding.editButton.setVisibility(View.GONE);
+        mWaterPlantBinding.updateButton.setVisibility(View.VISIBLE);
     }
 }
