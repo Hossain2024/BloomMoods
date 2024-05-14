@@ -86,11 +86,7 @@ public class AccountFragment extends Fragment {
                 this.userID = userId;
                 fetchUserPlants();
                 mUserViewModel.getUserProfile(userId);
-                Log.i("GET USER PROFILE API", "FINISHED");
-                mUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
-                    Log.i("RESPONSE", response.toString());
-                    updateUIWithUserProfile(response);
-                });
+                mUserViewModel.addResponseObserver(getViewLifecycleOwner(), this::updateUIWithUserProfile);
 
             }
         });
