@@ -38,13 +38,11 @@ public class MainActivity extends AppCompatActivity {
     private JournalViewModel mJournalViewModel;
     private BottomNavigationView bottomNavView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.frame_main_fragment_container), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -54,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.nav_host_fragment).post(() -> {
             navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         });
+
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mJournalViewModel = new ViewModelProvider(this).get(JournalViewModel.class);
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SignIN_PREFS), Context.MODE_PRIVATE);

@@ -66,13 +66,14 @@ public class JournalViewModel extends AndroidViewModel {
 
     protected void addEntry(int userId, String title, String mood, String entry) {
         String url = "https://students.washington.edu/nchi22/api/log/update_mood_log.php";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDate = sdf.format(new Date());
         JSONObject body = new JSONObject();
         try {
             body.put("user_id", userId);
             body.put("title", title);
             body.put("mood", mood);
             body.put("journal_entry", entry);
-            Log.i("ENTRY BODY", String.valueOf(body));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -80,7 +81,10 @@ public class JournalViewModel extends AndroidViewModel {
                 Request.Method.POST,
                 url,
                 body,
-                mResponse::setValue,
+                response -> {
+                    mResponse.setValue(response);
+                    mEntry.postValue(new JournalEntry(title, currentDate, entry, getMipMapForMood(mood)));
+                },
                 this::handleError);
 
         Log.i("JournalViewModel", request.getUrl().toString());
@@ -94,6 +98,7 @@ public class JournalViewModel extends AndroidViewModel {
     }
 
     protected void getTodaysEntry(int userId) {
+        Log.i("JournalViewModel", "getTodaysEntry called with userId: " + userId); // Add this log
         String url = "https://students.washington.edu/nchi22/api/log/get_todays_mood_log.php?user_id=" + userId;
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -102,8 +107,10 @@ public class JournalViewModel extends AndroidViewModel {
                 response -> {
                     Log.i("RESPONSE", String.valueOf(response));
                     if (!response.has("message")) {
-//                        mEntry.postValue(parseJsonObject(response));
-                        setEntry(parseJsonObject(response));
+                        mEntry.postValue(parseJsonObject(response));
+//                        setEntry(parseJsonObject(response));
+                    } else {
+                        mEntry.postValue(null);
                     }
                 },
                 this::handleError);
