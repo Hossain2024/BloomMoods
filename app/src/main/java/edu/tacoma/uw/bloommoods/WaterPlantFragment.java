@@ -3,6 +3,7 @@ package edu.tacoma.uw.bloommoods;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
@@ -19,11 +20,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,6 +90,7 @@ public class WaterPlantFragment extends Fragment {
         LinearLayout moodLayout = waterPlantBinding.linearLayout;
 
         setOnMoodClicks(moodLayout);
+        adjustToKeyboard();
     }
 
     private void setTextImage(double currentGrowth, int plantStage, String plantName) {
@@ -166,6 +170,24 @@ public class WaterPlantFragment extends Fragment {
         });
         addGrowth();
     }
+
+    public void adjustToKeyboard () {
+        ScrollView scroll = waterPlantBinding.waterPlantScrollView;
+        scroll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                scroll.getWindowVisibleDisplayFrame(r);
+                int screenHeight = scroll.getRootView().getHeight();
+                int keypadHeight = screenHeight - r.bottom;
+
+                // Adjust the bottom padding of the scroll view
+                scroll.setPadding(0, 0, 0, keypadHeight);
+            }
+        });
+
+    }
+
 
     private void addGrowth() {
         loggedToday = false;
