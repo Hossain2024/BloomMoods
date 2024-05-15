@@ -29,14 +29,17 @@
             android:id="@+id/action_homeFragment_to_journalFragment"
             app:destination="@id/nav_journal" />
         <action
-            android:id="@+id/action_homeFragment_to_aboutFragment"
-            app:destination="@id/nav_about" />
-        <action
             android:id="@+id/action_nav_home_to_nav_water"
             app:destination="@id/nav_water" />
         <action
             android:id="@+id/action_nav_home_to_todaysEntryFragment"
             app:destination="@id/todaysEntryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_accountFragment"
+            app:destination="@id/nav_account" />
+        <action
+            android:id="@+id/action_homeFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment2"
@@ -59,8 +62,8 @@
             android:id="@+id/action_nav_journal_to_nav_home"
             app:destination="@id/nav_home" />
         <action
-            android:id="@+id/action_nav_journal_to_nav_about"
-            app:destination="@id/nav_about" />
+            android:id="@+id/action_nav_journal_to_nav_account"
+            app:destination="@id/nav_account" />
         <action
             android:id="@+id/action_nav_journal_to_nav_water"
             app:destination="@id/nav_water" />
@@ -81,18 +84,18 @@
             app:argType="edu.tacoma.uw.bloommoods.JournalEntry" />
     </fragment>
     <fragment
-        android:id="@+id/nav_about"
-        android:name="edu.tacoma.uw.bloommoods.AboutFragment"
-        android:label="About"
-        tools:layout="@layout/fragment_about" >
+        android:id="@+id/nav_account"
+        android:name="edu.tacoma.uw.bloommoods.AccountFragment"
+        android:label="Account"
+        tools:layout="@layout/fragment_account" >
         <action
-            android:id="@+id/action_nav_about_to_nav_water"
+            android:id="@+id/action_nav_account_to_nav_water"
             app:destination="@id/nav_water" />
         <action
-            android:id="@+id/action_nav_about_to_nav_home"
+            android:id="@+id/action_nav_account_to_nav_home"
             app:destination="@id/nav_home" />
         <action
-            android:id="@+id/action_nav_about_to_nav_journal"
+            android:id="@+id/action_nav_account_to_nav_journal"
             app:destination="@id/nav_journal" />
     </fragment>
     <fragment
@@ -101,8 +104,8 @@
         android:label="fragment_water_plant"
         tools:layout="@layout/fragment_water_plant" >
         <action
-            android:id="@+id/action_nav_water_to_nav_about"
-            app:destination="@id/nav_about" />
+            android:id="@+id/action_nav_water_to_nav_account"
+            app:destination="@id/nav_account" />
         <action
             android:id="@+id/action_nav_water_to_nav_journal"
             app:destination="@id/nav_journal" />
@@ -141,4 +144,16 @@
             android:id="@+id/action_newEntryFragment_to_todaysEntryFragment"
             app:destination="@id/todaysEntryFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="edu.tacoma.uw.bloommoods.AboutFragment"
+        android:label="About"
+        tools:layout="@layout/fragment_about">
+    </fragment>
+
+
+
+
+
 </navigation>

@@ -1,7 +1,9 @@
 package edu.tacoma.uw.bloommoods;
 import edu.tacoma.uw.bloommoods.R;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -43,16 +45,40 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.frame_main_fragment_container), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        findViewById(R.id.nav_host_fragment).post(() -> {
+            navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        });
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mJournalViewModel = new ViewModelProvider(this).get(JournalViewModel.class);
-
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SignIN_PREFS), Context.MODE_PRIVATE);
+        Log.d("SharedPreferences", "SignIN_PREFS: " + getString(R.string.SignIN_PREFS)); // Log the value of SignIN_PREFS
+        Log.d("SharedPreferences", "Context: " + this); // Log the context being used
+        boolean isRemembered = sharedPreferences.getBoolean(getString(R.string.SignedIN), false);
+        if (isRemembered) {
+            initUserFromPrefs(sharedPreferences);
+        }
     }
+
+    protected void initUserFromPrefs(SharedPreferences sharedPreferences) {
+        //navigateToHomeFragment();
+        int userId = sharedPreferences.getInt("userId", 0); // Retrieve user ID from shared preferences
+        if (userId != 0) {
+            // Set the user ID in the user view model
+            mUserViewModel.setUserId(userId);
+            findViewById(R.id.nav_host_fragment).post(() -> {
+                navController.navigate(R.id.nav_home);
+                setupBottomNavigation();
+                showBottomNavigation();
+            });
+        }
+    }
+
     protected void setupBottomNavigation() {
 //        // Initialize NavController
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
