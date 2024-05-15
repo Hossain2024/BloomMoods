@@ -2,13 +2,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/waterPlantScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/waterPlant"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/background"
     tools:context=".WaterPlantFragment">
 
@@ -175,8 +176,8 @@
 
     <EditText
         android:id="@+id/entryEditText"
-        android:layout_width="368dp"
-        android:layout_height="265dp"
+        android:layout_width="371dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="-10dp"
         android:backgroundTint="#00FFFFFF"
         android:ems="10"
@@ -194,15 +195,14 @@
         android:id="@+id/saveButton"
         android:layout_width="88dp"
         android:layout_height="42dp"
-        android:layout_marginBottom="76dp"
         android:background="@drawable/rounded_rect"
         android:fontFamily="@font/playfair_display"
         android:text="@string/save_entry"
         android:textColor="@color/dark_blue"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/journalSpace"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.897"
+        app:layout_constraintHorizontal_bias="0.92"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -221,6 +221,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <Space
+        android:id="@+id/journalSpace"
+        android:layout_width="375dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/entryEditText"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/entryEditText"
+        app:layout_constraintTop_toBottomOf="@+id/entryEditText"
+        app:layout_constraintVertical_bias="1.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
