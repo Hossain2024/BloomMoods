@@ -157,10 +157,10 @@
 
     <!-- Plants Grown -->
     <TextView
-        android:id="@+id/plantsGrownLabel"
+        android:id="@+id/plantsUnlockedLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Plants Grown"
+        android:text="Plants Unlocked"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/playfair_display"
         android:textSize="18sp"
@@ -177,8 +177,8 @@
         android:visibility="gone"
         android:layout_marginTop="15dp"
         android:fontFamily="@font/playfair_display"
-        app:layout_constraintTop_toBottomOf="@+id/plantsGrownLabel"
-        app:layout_constraintStart_toStartOf="@+id/plantsGrownLabel"
+        app:layout_constraintTop_toBottomOf="@+id/plantsUnlockedLabel"
+        app:layout_constraintStart_toStartOf="@+id/plantsUnlockedLabel"
          />
 
     <LinearLayout
@@ -207,7 +207,7 @@
         android:textAllCaps="false"
         android:fontFamily="@font/playfair_display"
         android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/plantsGrownLabel"
+        app:layout_constraintTop_toBottomOf="@+id/plantsUnlockedLabel"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

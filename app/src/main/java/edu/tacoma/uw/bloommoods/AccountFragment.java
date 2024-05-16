@@ -23,11 +23,9 @@ import androidx.navigation.Navigation;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,13 +38,12 @@ public class AccountFragment extends Fragment {
 
 
     private static final String UPDATE_PROFILE_API_URL = "https://students.washington.edu/nchi22/api/users/update_profile.php";
-    private static final String FETCH_PLANT_API_URL = "https://students.washington.edu/nchi22/api/plants/get_plants_grown.php?user_id=";
+    private static final String FETCH_PLANT_API_URL = "https://students.washington.edu/nchi22/api/plants/get_plants_unlocked.php?user_id=";
     private static final int COLOR_ERROR = Color.parseColor("#610000");
     private static final int COLOR_SUCCESS = Color.parseColor("#8fb38f");
 
     private UserViewModel mUserViewModel;
     private FragmentAccountBinding binding;
-    private NavController navController;
     private int userID;
 
     @Override
