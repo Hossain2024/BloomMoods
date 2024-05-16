@@ -85,13 +85,9 @@ public class NewEntryFragment extends Fragment {
                 mJournalViewModel.getTodaysEntry(userId); // Fetch today's entry using the userId
                 mNewEntryBinding.saveButton.setOnClickListener(button -> addEntry(userId));
                 mUserViewModel.getCurrentPlantDetails(userId);
-                mUserViewModel.addPlantResponseObserver(getViewLifecycleOwner(), response -> {
-                    observeResponsePlantDetails(response);
-                });
+                mUserViewModel.addPlantResponseObserver(getViewLifecycleOwner(), this::observeResponsePlantDetails);
                 mUserViewModel.getUserProfile(userId);
-                mUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
-                    observeResponseUserProfile(response);
-                });
+                mUserViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponseUserProfile);
             }
         });
 
@@ -129,12 +125,17 @@ public class NewEntryFragment extends Fragment {
 
             } else {
                 Toast.makeText(this.getContext(),"Entry added", Toast.LENGTH_LONG).show();
+                Log.i("NewEntryFragment", "Response received, now observing mEntry");
                 mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), moodEntry -> {
-                    Log.i("NewEntryFragment", String.valueOf(moodEntry));
-                    NewEntryFragmentDirections.ActionNewEntryFragmentToTodaysEntryFragment directions =
-                            NewEntryFragmentDirections.actionNewEntryFragmentToTodaysEntryFragment(moodEntry);
-                    Navigation.findNavController(getView())
-                            .navigate(directions);
+                    if (moodEntry != null) {
+                        // Navigate to TodaysEntryFragment with the moodEntry
+                        NewEntryFragmentDirections.ActionNewEntryFragmentToTodaysEntryFragment directions =
+                                NewEntryFragmentDirections.actionNewEntryFragmentToTodaysEntryFragment(moodEntry);
+                        Navigation.findNavController(getView()).navigate(directions);
+                    } else {
+                        // Log if moodEntry is null
+                        Log.e("NewEntryFragment", "Mood entry is null");
+                    }
                 });
             }
 
@@ -143,6 +144,26 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+
+    private void setOnMoodClicks(LinearLayout moodLayout) {
+        for (int i = 0; i < moodLayout.getChildCount(); i++) {
+            View childView = moodLayout.getChildAt(i);
+            if (childView instanceof ImageView) {
+                childView.setOnClickListener(this::onMoodClicked);
+            }
+        }
+    }
+
+    private void onMoodClicked(View view) {
+        if (mNewEntryBinding.moodTextView.getVisibility() == View.GONE) {
+            mNewEntryBinding.moodTextView.setVisibility(View.VISIBLE);
+        }
+        mSelectedMood = view.getTag().toString();
+        mNewEntryBinding.moodTextView.setText(mSelectedMood);
+    }
+
+    /** All methods below were written by Amanda, due to conflicts Chelsea had to manually cut and paste the code here,
+     * resulting in Git showing Chelsea as the author.*/
     private void setTextImage(double currentGrowth, int plantStage, String plantName) {
         TextView date = mNewEntryBinding.dateText;
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
@@ -177,17 +198,14 @@ public class NewEntryFragment extends Fragment {
 
     public void adjustToKeyboard () {
         ScrollView scroll = mNewEntryBinding.waterPlantScrollView;
-        scroll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-                scroll.getWindowVisibleDisplayFrame(r);
-                int screenHeight = scroll.getRootView().getHeight();
-                int keypadHeight = screenHeight - r.bottom;
+        scroll.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Rect r = new Rect();
+            scroll.getWindowVisibleDisplayFrame(r);
+            int screenHeight = scroll.getRootView().getHeight();
+            int keypadHeight = screenHeight - r.bottom;
 
-                // Adjust the bottom padding of the scroll view
-                scroll.setPadding(0, 0, 0, keypadHeight);
-            }
+            // Adjust the bottom padding of the scroll view
+            scroll.setPadding(0, 0, 0, keypadHeight);
         });
 
     }
@@ -198,10 +216,7 @@ public class NewEntryFragment extends Fragment {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
             try {
-                // Parse the date string into a Date object
                 Date lastLoggedDate = dateFormat.parse(entry);
-
-                // Get the current date and time
                 Date currentDate = new Date();
 
                 // Check if lastLoggedDate is within the last 24 hours
@@ -299,20 +314,5 @@ public class NewEntryFragment extends Fragment {
 
         ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix);
         imageView.setColorFilter(filter);
-    }
-
-
-    private void setOnMoodClicks(LinearLayout moodLayout) {
-        for (int i = 0; i < moodLayout.getChildCount(); i++) {
-            View childView = moodLayout.getChildAt(i);
-            if (childView instanceof ImageView) {
-                childView.setOnClickListener(this::onMoodClicked);
-            }
-        }
-    }
-
-    private void onMoodClicked(View view) {
-        mSelectedMood = view.getTag().toString();
-        Log.i("Selected Mood", mSelectedMood);
     }
 }

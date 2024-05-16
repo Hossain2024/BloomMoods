@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/waterPlant"
         android:layout_width="match_parent"
@@ -209,7 +210,7 @@
             android:id="@+id/titleEditText"
             android:layout_width="375dp"
             android:layout_height="60dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="24dp"
             android:backgroundTint="#00FFFFFF"
             android:ems="10"
             android:fontFamily="@font/alatsi"
@@ -233,6 +234,19 @@
             app:layout_constraintStart_toStartOf="@+id/entryEditText"
             app:layout_constraintTop_toBottomOf="@+id/entryEditText"
             app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/moodTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/catamaran"
+            android:text="Mood"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

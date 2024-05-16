@@ -27,11 +27,11 @@
         android:id="@+id/entriesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="511dp"
-        android:layout_marginTop="184dp"
+        android:layout_marginTop="33dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/allEntriesButton" />
 
     <TextView
         android:id="@+id/monthYearTextView"
@@ -65,12 +65,13 @@
         android:id="@+id/noEntriesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
         android:fontFamily="@font/alatsi"
         android:text="@string/no_entries"
         android:textColor="@color/medium_blue"
         android:textSize="24sp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/monthYearTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -83,7 +83,9 @@ public class JournalViewModel extends AndroidViewModel {
                 body,
                 response -> {
                     mResponse.setValue(response);
-                    mEntry.postValue(new JournalEntry(title, currentDate, entry, getMipMapForMood(mood)));
+                    JournalEntry newEntry = new JournalEntry(title, currentDate, entry, getMipMapForMood(mood));
+                    Log.i("JournalViewModel", "Setting mEntry: " + newEntry);
+                    mEntry.postValue(newEntry);
                 },
                 this::handleError);
 

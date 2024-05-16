@@ -1,9 +1,11 @@
 package edu.tacoma.uw.bloommoods;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -80,6 +82,29 @@ public class TodaysEntryFragment extends Fragment {
             setEditable(false);
         });
 
+        mUserViewModel.getCurrentPlantDetails(currentUser);
+        mUserViewModel.addPlantResponseObserver(getViewLifecycleOwner(), response -> {
+            if (response.has("stage") && response.has("growthLevel") && response.has("name")) {
+                int stage;
+                ImageView plantStage = mTodaysEntryBinding.plantImageView;
+                String activePlantName = null;
+                try {
+                    activePlantName = response.getString(("name"));
+                    stage = response.getInt("stage");
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                String resourceName = activePlantName.toLowerCase().replace(" ", "_") + "_stage_" + stage;
+                int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
+                if (resourceId != 0) {
+                    Drawable drawable = ContextCompat.getDrawable(requireContext(), resourceId);
+                    plantStage.setImageDrawable(drawable);
+                } else {
+                    Log.e("TodaysEntryFragment", "Drawable resource not found: " + resourceName);
+                }
+            }
+        });
+
 //        // Observe userId from UserViewModel
 //        mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
 //            if (userId != null) {
@@ -119,6 +144,7 @@ public class TodaysEntryFragment extends Fragment {
         mTodaysEntryBinding.updateButton.setVisibility(updateButtonVisibility);
         mTodaysEntryBinding.todaysMoodImageView.setVisibility(editButtonVisibility);
         mTodaysEntryBinding.linearLayout.setVisibility(updateButtonVisibility);
+        mTodaysEntryBinding.moodTextView.setVisibility(updateButtonVisibility);
     }
 
     private void updateEntry(int userId) {
@@ -147,7 +173,7 @@ public class TodaysEntryFragment extends Fragment {
 
     private void onMoodClicked(View view) {
         mSelectedMood = view.getTag().toString();
-        Log.i("Selected Mood", mSelectedMood);
+        mTodaysEntryBinding.moodTextView.setText(mSelectedMood);
     }
 
     private void observeResponse(final JSONObject response) {
