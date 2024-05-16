@@ -36,6 +36,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import edu.tacoma.uw.bloommoods.databinding.FragmentNewEntryBinding;
 import edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding;
@@ -107,8 +108,14 @@ public class NewEntryFragment extends Fragment {
     private void addEntry(int userId) {
         String title = mNewEntryBinding.titleEditText.getText().toString();
         String entry = mNewEntryBinding.entryEditText.getText().toString();
-        mJournalViewModel.addEntry(userId, title, mSelectedMood, entry);
-        addGrowth();
+        if (mSelectedMood == null) {
+            Toast.makeText(this.getContext(),"Please select a mood", Toast.LENGTH_LONG).show();
+        } else if (title.isEmpty() || entry.isEmpty()) {
+            Toast.makeText(this.getContext(),"Please enter a title and entry", Toast.LENGTH_LONG).show();
+        } else {
+            mJournalViewModel.addEntry(userId, title, mSelectedMood, entry);
+            addGrowth();
+        }
     }
 
     private void observeResponse(final JSONObject response) {

@@ -156,6 +156,7 @@ public class TodaysEntryFragment extends Fragment {
 
     private void updateUI(JournalEntry entry) {
         mSelectedMood = moodMap.get(entry.getMoodImage());
+        mTodaysEntryBinding.moodTextView.setText(mSelectedMood);
         mTodaysEntryBinding.todaysDate.setText(entry.getDate());
         mTodaysEntryBinding.todaysTitleEditText.setText(entry.getTitle());
         mTodaysEntryBinding.todaysEntryEditText.setText(entry.getContent());
