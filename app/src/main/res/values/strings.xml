@@ -57,8 +57,8 @@
     <string name="faq5Answer">Your plant\'s growth will reset to the start of the current stage, and a wilted animation will appear to encourage you to resume journaling. For example, if your plant\'s growth was at 25%, 7 days of inactivity will result in a digress to 21%.</string>
     <string name="plant_names">1. Tranquil Tulip\n2. Serenity Sunflower\n3. Peaceful Peony</string>
     <string name="growth_stages">Growth Stages</string>
-    <string name="plant_stages">Stage 1 (0-20%): Initial Sprouting\nSmall green shoots just visible above the soil surface.\n\nStage 2 (21-40%): Early Growth\nA noticeable stem with a few leaves, still young.\n\nStage 3 (41-60%): Development
-        nA taller stem, more robust with a fuller arrangement of leaves, and potential bud formation.\n\nStage 4 (61-80%): Pre-Blooming\nLarger buds, some starting to show color, and a lush body of leaves.\n\nStage 5 (81-100%): Full Bloom\nFully opened flowers or a fully developed, lush plant.</string>
+    <string name="plant_stages">Stage 1 (0-24%): Initial Sprouting\nSmall green shoots just visible above the soil surface.\n\nStage 2 (25-49%): Early Growth\nA noticeable stem with a few leaves, still young.\n\nStage 3 (50-74%): Development
+        nA taller stem, more robust with a fuller arrangement of leaves, and potential bud formation.\n\nStage 4 (75-99%): Pre-Blooming\nLarger buds, some starting to show color, and a lush body of leaves.\n\nStage 5 (100%): Full Bloom\nFully opened flowers or a fully developed, lush plant.</string>
     <string name="today_s_date">Today\'s Date</string>
     <string name="water_your_plant">Water Your Plant</string>
     <string name="current_growth">Current Growth: 80%</string>
@@ -71,4 +71,15 @@
     <string name="no_entries">No entries found</string>
     <string name="todays_entry">Today\'s Entry</string>
     <string name="water_tmrw">Come back tomorrow to water your plant!</string>
+    <string name="account">Account</string>
+    <string name="email">Email</string>
+    <string name="sample_email">flora@gmail.com</string>
+    <string name="name">Name</string>
+    <string name="name_sample">Flora</string>
+    <string name="password">Password</string>
+    <string name="sample_password">*********</string>
+    <string name="plants_unlocked">Plants Unlocked</string>
+    <string name="nothing_yet">Nothing yet...</string>
+    <string name="logout">Logout</string>
+    <string name="refer_a_friend">Refer A Friend</string>
 </resources>
