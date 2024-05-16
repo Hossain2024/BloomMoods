@@ -60,12 +60,12 @@ public class RegisterViewModel extends AndroidViewModel {
         }
     }
 
-    public void addUser( String email, String pwd, String name) {
+    public void addUser( Account account, String name) {
         String url = "https://students.washington.edu/nchi22/api/users/register_user.php";
         JSONObject body = new JSONObject();
         try {
-            body.put("email", email);
-            body.put("password", pwd);
+            body.put("email", account.getEmail());
+            body.put("password", account.getPassword());
             body.put("name", name);
         } catch (JSONException e) {
             e.printStackTrace();
