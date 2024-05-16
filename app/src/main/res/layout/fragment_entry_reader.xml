@@ -8,36 +8,6 @@
     android:background="@drawable/background"
     tools:context=".EntryReaderFragment">
 
-    <Button
-        android:id="@+id/nextEntryButton"
-        android:layout_width="115dp"
-        android:layout_height="42dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="28dp"
-        android:background="#00FFFFFF"
-        android:fontFamily="@font/alatsi"
-        android:text="@string/next_gt"
-        android:textAlignment="center"
-        android:textColor="@color/medium_blue"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/prevEntryButton"
-        android:layout_width="124dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="28dp"
-        android:background="#00FFFFFF"
-        android:fontFamily="@font/alatsi"
-        android:text="@string/lt_previous"
-        android:textAlignment="center"
-        android:textColor="@color/medium_blue"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <TextView
         android:id="@+id/dateTextView"
         android:layout_width="wrap_content"
@@ -117,6 +87,7 @@
         android:text="@string/edit_entry"
         android:textColor="@color/medium_blue"
         android:textSize="20sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
