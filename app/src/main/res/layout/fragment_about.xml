@@ -38,7 +38,7 @@
             <TextView
                 android:id="@+id/entryTextView"
                 android:layout_width="324dp"
-                android:layout_height="133dp"
+                android:layout_height="153dp"
                 android:layout_marginTop="13dp"
                 android:fontFamily="sans-serif"
                 android:text="@string/about_app"
