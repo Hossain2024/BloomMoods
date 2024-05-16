@@ -26,14 +26,16 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentRegisterBinding;
  */
 public class RegisterFragment extends Fragment {
     private FragmentRegisterBinding mBinding;
-    private UserViewModel mUserViewModel;
+    private RegisterViewModel mRegisterUserViewModel;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mUserViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
+
+        //chaged to use registerviewmodl
+        mRegisterUserViewModel = new ViewModelProvider(getActivity()).get(RegisterViewModel.class);
         // Instantiate the Binding object and Inflate the layout for this fragment
         mBinding = FragmentRegisterBinding.inflate(inflater, container, false);
         return mBinding.getRoot();
@@ -43,7 +45,7 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
+        mRegisterUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
             observeResponse(response);
 
         });
@@ -69,7 +71,7 @@ public class RegisterFragment extends Fragment {
             Toast.makeText(this.getContext(), "All fields are required ", Toast.LENGTH_LONG).show();
         }else {
             Log.i(TAG, email);
-            mUserViewModel.addUser(email, pwd, name);
+            mRegisterUserViewModel.addUser(email, pwd, name);
         }
     }
 
