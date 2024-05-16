@@ -1,20 +1,16 @@
 package edu.tacoma.uw.bloommoods;
 
-import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RoundRectShape;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -33,19 +30,18 @@ import android.widget.Toast;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.function.Consumer;
 
 import edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding;
 
@@ -56,9 +52,28 @@ public class WaterPlantFragment extends Fragment {
 
     private static final String ADD_ENTRY_ENDPOINT = "https://students.washington.edu/nchi22/api/log/update_mood_log.php";
     private UserViewModel userViewModel;
+    private PlantViewModel plantViewModel;
     private int streak;
     private ImageView plantPhoto;
     private boolean loggedToday;
+    private String activePlantName;
+    private ImageView leftArrow;
+    private ImageView rightArrow;
+    private double plantGrowthPercent;
+    private int numberOfUnlocked;
+    private int activePlantId;
+    private String currentPlantSwitch;
+    private int activePlantStage;
+    private ProgressBar progressBar;
+    private TextView plantGrowth;
+    private TextView selectPlantText;
+    private ImageButton selectPlantButton;
+    private ImageView switchedPlant;
+    private EditText titleEditText;
+    private EditText entryEditText;
+    private Button saveButton;
+    private LinearLayout moodLayout;
+    private int userId;
     FragmentWaterPlantBinding waterPlantBinding;
     String selectedMood;
     @Override
@@ -67,6 +82,7 @@ public class WaterPlantFragment extends Fragment {
 
         waterPlantBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
         userViewModel = ((MainActivity) requireActivity()).getUserViewModel();
+        plantViewModel = ((MainActivity) requireActivity()).getPlantViewModel();
 
         return waterPlantBinding.getRoot();
     }
@@ -75,40 +91,66 @@ public class WaterPlantFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
-                userViewModel.getCurrentPlantDetails(userId);
-                userViewModel.addPlantResponseObserver(getViewLifecycleOwner(), response -> {
-                    observeResponsePlantDetails(response);
-                });
+                this.userId = userId;
+                getPlantDetails(userId);
                 userViewModel.getUserProfile(userId);
-                userViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
-                    observeResponseUserProfile(response);
+                userViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponseUserProfile);
+                plantViewModel.getUnlockedPlants(userId);
+                plantViewModel.addUnlockedPlantResponseObserver(getViewLifecycleOwner(), response -> {
+                    if (response.length() > 0) {
+                        observeUnlockedPlants(response);
+                    }
                 });
             }
         });
-        Button saveButton = waterPlantBinding.saveButton;
+        listeners();
+    }
+
+    private void listeners() {
+        moodLayout = waterPlantBinding.linearLayout;
+        titleEditText = waterPlantBinding.titleEditText;
+        entryEditText = waterPlantBinding.entryEditText;
+        switchedPlant = waterPlantBinding.plantStageSwitch;
+        selectPlantText = waterPlantBinding.selectPlantText;
+        selectPlantButton = waterPlantBinding.selectPlantButton;
+        plantPhoto = waterPlantBinding.plantStage;
+        saveButton = waterPlantBinding.saveButton;
+
+        ImageView switchButton = waterPlantBinding.switchButton;
+        switchButton.setOnClickListener(v -> toggleSwitchPlant());
+
         saveButton.setOnClickListener(v -> addEntry());
+
+        leftArrow = waterPlantBinding.leftArrow;
+        rightArrow = waterPlantBinding.rightArrow;
+
+        rightArrow.setOnClickListener(v -> switchArrows("right"));
+        leftArrow.setOnClickListener(v -> switchArrows("left"));
         LinearLayout moodLayout = waterPlantBinding.linearLayout;
 
         setOnMoodClicks(moodLayout);
         adjustToKeyboard();
     }
 
-    private void setTextImage(double currentGrowth, int plantStage, String plantName) {
+
+    private void setTextImage() {
         TextView date = waterPlantBinding.dateText;
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(new Date());
         date.setText(currentDate);
 
-        TextView plantGrowth = waterPlantBinding.plantGrowth;
+        plantGrowth = waterPlantBinding.plantGrowth;
 
         // Update current growth according to user's current plant details
-        String growth = "Current Growth: " + currentGrowth + "%";
+        String growth = "Current Growth: " + plantGrowthPercent + "%";
         plantGrowth.setText(growth);
 
-        ProgressBar progressBar = waterPlantBinding.progressBar;
-        progressBar.setProgress((int) currentGrowth);
+        progressBar = waterPlantBinding.progressBar;
+        progressBar.setProgress((int) plantGrowthPercent);
 
-        plantPhoto = waterPlantBinding.plantStage;
+    }
+
+    private void setPlantImage(ImageView view, int plantStage, String plantName) {
         String resourceName = plantName.toLowerCase().replace(" ", "_") + "_stage_" + plantStage;
         int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
 
@@ -116,12 +158,12 @@ public class WaterPlantFragment extends Fragment {
             Drawable drawable = ContextCompat.getDrawable(requireContext(), resourceId);
             userViewModel.getReset().observe(getViewLifecycleOwner(), reset -> {
                 if (reset) {
-                    setSaturation(plantPhoto, 0f);
+                    setSaturation(view, 0f);
                 }
             });
-            plantPhoto.setImageDrawable(drawable);
+            view.setImageDrawable(drawable);
         } else {
-            Log.e("HomeFragment", "Drawable resource not found: " + resourceName);
+            Log.e("WaterPlantFragment", "Drawable resource not found: " + resourceName);
         }
     }
 
@@ -143,32 +185,29 @@ public class WaterPlantFragment extends Fragment {
 
 
     private void addEntry() {
-        EditText titleEditText = waterPlantBinding.titleEditText;
-        EditText entryEditText = waterPlantBinding.entryEditText;
+            String title = titleEditText.getText().toString();
+            String entry = entryEditText.getText().toString();
 
-        String title = titleEditText.getText().toString();
-        String entry = entryEditText.getText().toString();
+            // Get current user ID
+            userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
+                if (userId != null) {
+                    try {
+                        // Create JSON object with the entry data
+                        JSONObject json = new JSONObject();
+                        json.put("user_id", userId);
+                        json.put("title", title);
+                        json.put("mood", selectedMood); // CHANGE TO MOOD SELECTED ONCE BUG IS FIXED
+                        json.put("journal_entry", entry);
 
-        // Get current user ID
-        userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
-            if (userId != null) {
-                try {
-                    // Create JSON object with the entry data
-                    JSONObject json = new JSONObject();
-                    json.put("user_id", userId);
-                    json.put("title", title);
-                    json.put("mood", "Testing"); // CHANGE TO MOOD SELECTED ONCE BUG IS FIXED
-                    json.put("journal_entry", entry);
-
-                    JsonObjectRequest request = getRequest(json);
-                    RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-                    requestQueue.add(request);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                        JsonObjectRequest request = getRequest(json);
+                        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+                        requestQueue.add(request);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
-        addGrowth();
+            });
+            addGrowth();
     }
 
     public void adjustToKeyboard () {
@@ -224,7 +263,12 @@ public class WaterPlantFragment extends Fragment {
             // Get current user ID
             userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
                 if (userId != null) {
-                    userViewModel.updateCurrentPlantDetails(userId, increaseGrowth);
+                    plantViewModel.updateCurrentPlantDetails(userId, increaseGrowth);
+                    plantGrowthPercent = 100;
+                    if (plantGrowthPercent + increaseGrowth >= 100) {
+                        unlockNewPlant(activePlantId);
+                        isUnlockedPlant();
+                    }
                 }
             });
             userViewModel.getReset().observe(getViewLifecycleOwner(), reset -> {
@@ -267,28 +311,33 @@ public class WaterPlantFragment extends Fragment {
                 if (response.has("error")) {
                     String result = response.getString("error");
                     if ("The user ID does not exist or is not active.".equals(result)) {
-                        // If the result is "failed to login", display the error message to the user
                         String errorMessage = response.optString("message", "Unknown error");
                         Log.i("Error to display plant details", errorMessage);
                     }
                 } else {
-                    if (response.has("growthLevel") && response.has("name") && response.has("stage")) {
-                        double plantGrowthPercent = response.getDouble("growthLevel");
-                        Log.i("Plant growth", String.valueOf(plantGrowthPercent));
-                        String activePlantName = response.getString(("name"));
-                        int activePlantStage = response.getInt("stage");
-                        Log.i("Plant stage", String.valueOf(activePlantStage));
-                        setTextImage(plantGrowthPercent, activePlantStage, activePlantName);
-                    }
+                        plantGrowthPercent = response.getDouble("growthLevel");
+                        activePlantName = response.getString(("name"));
+                        currentPlantSwitch = activePlantName;
+                        activePlantId = response.getInt(("plant_option_id"));
+                        activePlantStage = response.getInt("stage");
+                        setTextImage();
+                        setPlantImage(plantPhoto, activePlantStage, activePlantName);
                 }
             } catch (JSONException e) {
-                // Log any JSON parsing errors
                 Log.e("JSON Parse Error", e.getMessage());
             }
         }else{
-            Log.e("Plant details response", "Could not obtain plant details");
+            Log.e("Plant details response", "Could not obtain plant details OBSERVE");
         }
-        Log.i("WaterPlantFragment", "FINISHED OBSERVE RESPONSE");
+    }
+
+    private void observeUnlockedPlants(final JSONArray response) {
+        if (response.length() > 0) {
+                    numberOfUnlocked = response.length();
+                    Log.i("UNLOCKED PLANTS", String.valueOf(numberOfUnlocked));
+        }else{
+            Log.e("Plant details response", "Could not obtain UNLOCKED plant details");
+        }
     }
 
     private void observeResponseUserProfile(final JSONObject response) {
@@ -297,7 +346,6 @@ public class WaterPlantFragment extends Fragment {
                 if (response.has("error")) {
                     String result = response.getString("error");
                     if ("Invalid User ID.".equals(result)) {
-                        // If the result is "failed to login", display the error message to the user
                         String errorMessage = response.optString("message", "Unknown error");
                         Log.i("Error to display profile", errorMessage);
                     }
@@ -307,13 +355,11 @@ public class WaterPlantFragment extends Fragment {
                     }
                 }
             } catch (JSONException e) {
-                // Log any JSON parsing errors
                 Log.e("JSON Parse Error", e.getMessage());
             }
         }else{
             Log.e("User details", "Could not obtain user details");
         }
-        Log.i("WaterPlantFragment", "FINISHED OBSERVE RESPONSE");
     }
 
     private void setSaturation(ImageView imageView, float saturation) {
@@ -323,4 +369,141 @@ public class WaterPlantFragment extends Fragment {
         ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix);
         imageView.setColorFilter(filter);
     }
+
+    private void toggleSwitchPlant() {
+        if (rightArrow.getVisibility() == View.VISIBLE || leftArrow.getVisibility() == View.VISIBLE) {
+            toggleSwitchPlantOff();
+        } else {
+            updateArrows(activePlantName);
+            entryEditText.setVisibility(View.GONE);
+            titleEditText.setVisibility(View.GONE);
+            saveButton.setVisibility(View.GONE);
+            moodLayout.setVisibility(View.GONE);
+        }
+    }
+    private void toggleSwitchPlantOff() {
+        getPlantDetails(userId);
+        rightArrow.setVisibility(View.GONE);
+        leftArrow.setVisibility(View.GONE);
+        toggleSelectPlant(false);
+        moodLayout.setVisibility(View.VISIBLE);
+        entryEditText.setVisibility(View.VISIBLE);
+        titleEditText.setVisibility(View.VISIBLE);
+        saveButton.setVisibility(View.VISIBLE);
+        currentPlantSwitch = activePlantName;
+
+    }
+
+    private void updateArrows(String plantName) {
+        if (plantName.equals("Tranquil Tulip")) {
+            rightArrow.setVisibility(View.VISIBLE);
+            leftArrow.setVisibility(View.GONE);
+        } else if (plantName.equals("Serenity Sunflower")) {
+            leftArrow.setVisibility(View.VISIBLE);
+            rightArrow.setVisibility(View.VISIBLE);
+        } else if (plantName.equals("Peaceful Peony")) {
+            leftArrow.setVisibility(View.VISIBLE);
+            rightArrow.setVisibility(View.GONE);
+        }
+    }
+
+    private void selectPlant(String plantName, int plantOptionId) {
+        toggleSelectPlant(true);
+
+        String resourceName = "select_plant_locked";
+        String selected = "Not yet unlocked";
+        selectPlantText.setVisibility(View.VISIBLE);
+        int color = ContextCompat.getColor(getContext(), R.color.black);
+
+        updateArrows(plantName);
+
+        switchedPlant.setVisibility(View.VISIBLE);
+
+
+        if (numberOfUnlocked < plantOptionId && plantOptionId != activePlantId) {
+            setPlantImage(switchedPlant, 1, plantName);
+            setSaturation(switchedPlant, 0f);
+        } else if (!(numberOfUnlocked < plantOptionId) && plantOptionId != activePlantId) {
+            selected = "Select Plant";
+            resourceName = "select_plant_unlocked";
+            color = ContextCompat.getColor(getContext(), R.color.dark_green);
+            selectPlantButton.setOnClickListener(v -> updatePlant(userId, plantOptionId));
+            if (plantOptionId == 1) {
+                setPlantImage(switchedPlant, 5, plantName);
+            } else {
+                setPlantImage(switchedPlant, activePlantStage, plantName);
+            }
+            setSaturation(switchedPlant, 1.0f);
+        }
+        else {
+            toggleSelectPlant(false);
+        }
+        int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
+
+        if (resourceId != 0) {
+            Drawable drawable = ContextCompat.getDrawable(requireContext(), resourceId);
+            selectPlantButton.setImageDrawable(drawable);
+        }
+        selectPlantText.setTextColor(color);
+        selectPlantText.setText(selected);
+
+    }
+
+    private void switchArrows(String direction) {
+        plantPhoto.setVisibility(View.INVISIBLE);
+        Log.i("CURRENT PLANT SWITCH", currentPlantSwitch);
+        Log.i("DIRECTIONS", direction);
+
+        if (direction.equals("right") && currentPlantSwitch.equals("Tranquil Tulip")) {
+            selectPlant("Serenity Sunflower", 2);
+            currentPlantSwitch = "Serenity Sunflower";
+        }
+        else if (direction.equals("right") && currentPlantSwitch.equals("Serenity Sunflower")) {
+            selectPlant("Peaceful Peony", 3);
+            currentPlantSwitch = "Peaceful Peony";
+        }
+        else if (direction.equals("left") && currentPlantSwitch.equals("Serenity Sunflower")) {
+            selectPlant("Tranquil Tulip", 1);
+            currentPlantSwitch = "Tranquil Tulip";
+        }
+        else if (direction.equals("left") && currentPlantSwitch.equals("Peaceful Peony")) {
+            selectPlant("Serenity Sunflower", 2);
+            currentPlantSwitch = "Serenity Sunflower";
+        }
+
+    }
+
+    private void unlockNewPlant(int currentPlantId) {
+      plantViewModel.updateCurrentPlant(userId, currentPlantId + 1);
+        Toast.makeText(getContext(), "NEW PLANT UNLOCKED", Toast.LENGTH_LONG).show();
+    }
+    private void isUnlockedPlant() {
+        plantViewModel.getUnlockedPlants(userId);
+        plantViewModel.addUnlockedPlantResponseObserver(getViewLifecycleOwner(), this::observeUnlockedPlants);
+    }
+    private void updatePlant(int userId, int plantId){
+        plantViewModel.updateCurrentPlant(userId, plantId);
+        Toast.makeText(getContext(), "SWITCHED PLANT", Toast.LENGTH_LONG).show();
+        toggleSwitchPlantOff();
+    }
+    private void getPlantDetails(int userId) {
+        plantViewModel.getCurrentPlantDetails(userId);
+        plantViewModel.addPlantResponseObserver(getViewLifecycleOwner(), this::observeResponsePlantDetails);
+    }
+
+    private void toggleSelectPlant(Boolean on) {
+        if (on) {
+            progressBar.setVisibility(View.INVISIBLE);
+            plantGrowth.setVisibility(View.INVISIBLE);
+            selectPlantButton.setVisibility(View.VISIBLE);
+        } else {
+            selectPlantButton.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+            plantGrowth.setVisibility(View.VISIBLE);
+            selectPlantText.setVisibility(View.INVISIBLE);
+            switchedPlant.setVisibility(View.GONE);
+            plantPhoto.setVisibility(View.VISIBLE);
+        }
+    }
+
 }

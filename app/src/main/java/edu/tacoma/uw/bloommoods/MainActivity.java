@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
 
     private UserViewModel mUserViewModel;
+    private PlantViewModel mPlantViewModel;
 
 
     @Override
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         });
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        mPlantViewModel = new ViewModelProvider(this).get(PlantViewModel.class);
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SignIN_PREFS), Context.MODE_PRIVATE);
         Log.d("SharedPreferences", "SignIN_PREFS: " + getString(R.string.SignIN_PREFS)); // Log the value of SignIN_PREFS
         Log.d("SharedPreferences", "Context: " + this); // Log the context being used
@@ -84,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
 
     public UserViewModel getUserViewModel() {
         return mUserViewModel;
+    }
+    public PlantViewModel getPlantViewModel() {
+        return mPlantViewModel;
     }
 
 
