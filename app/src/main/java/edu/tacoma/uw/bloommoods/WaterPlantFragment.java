@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +42,7 @@ import org.w3c.dom.Text;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding;
@@ -74,6 +76,9 @@ public class WaterPlantFragment extends Fragment {
     private Button saveButton;
     private LinearLayout moodLayout;
     private int userId;
+    private int tulipStage;
+    private int sunflowerStage;
+    private int peonyStage;
     FragmentWaterPlantBinding waterPlantBinding;
     String selectedMood;
     @Override
@@ -92,15 +97,15 @@ public class WaterPlantFragment extends Fragment {
         userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
                 this.userId = userId;
-                getPlantDetails(userId);
-                userViewModel.getUserProfile(userId);
-                userViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponseUserProfile);
-                plantViewModel.getUnlockedPlants(userId);
-                plantViewModel.addUnlockedPlantResponseObserver(getViewLifecycleOwner(), response -> {
+                plantViewModel.getCurrentPlantDetails(userId);
+                plantViewModel.addPlantResponseObserver(getViewLifecycleOwner() , response -> {
                     if (response.length() > 0) {
-                        observeUnlockedPlants(response);
+                        observeResponsePlantDetails(response);
                     }
                 });
+                userViewModel.getUserProfile(userId);
+                userViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponseUserProfile);
+                isUnlockedPlant();
             }
         });
         listeners();
@@ -232,26 +237,26 @@ public class WaterPlantFragment extends Fragment {
         loggedToday = false;
         userViewModel.getLastEntryLogged().observe(getViewLifecycleOwner(), entry -> {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            if (!entry.equals("null")) {
+                try {
+                    // Parse the date string into a Date object
+                    Date lastLoggedDate = dateFormat.parse(entry);
 
-            try {
-                // Parse the date string into a Date object
-                Date lastLoggedDate = dateFormat.parse(entry);
+                    // Get the current date and time
+                    Date currentDate = new Date();
 
-                // Get the current date and time
-                Date currentDate = new Date();
+                    // Check if lastLoggedDate is within the last 24 hours
+                    long diff = currentDate.getTime() - lastLoggedDate.getTime();
+                    long hours = diff / (60 * 60 * 1000);
 
-                // Check if lastLoggedDate is within the last 24 hours
-                long diff = currentDate.getTime() - lastLoggedDate.getTime();
-                long hours = diff / (60 * 60 * 1000);
-
-                if (hours <= 24) {
-                    loggedToday = true;
+                    if (hours <= 24) {
+                        loggedToday = true;
+                    }
+                } catch (ParseException e) {
+                    System.out.println("Error parsing the date: " + e.getMessage());
                 }
-            } catch (ParseException e) {
-                System.out.println("Error parsing the date: " + e.getMessage());
             }
-        });
-
+            });
 
         double increaseGrowth;
         if (streak >= 2) {
@@ -259,16 +264,17 @@ public class WaterPlantFragment extends Fragment {
         } else {
             increaseGrowth = 2.5;
         }
+
         if (!loggedToday) {
             // Get current user ID
             userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
                 if (userId != null) {
                     plantViewModel.updateCurrentPlantDetails(userId, increaseGrowth);
-                    plantGrowthPercent = 100;
-                    if (plantGrowthPercent + increaseGrowth >= 100) {
+                    if (plantGrowthPercent == 100) {
                         unlockNewPlant(activePlantId);
-                        isUnlockedPlant();
+                        plantViewModel.getUnlockedPlants(userId);
                     }
+                    plantViewModel.getCurrentPlantDetails(userId);
                 }
             });
             userViewModel.getReset().observe(getViewLifecycleOwner(), reset -> {
@@ -330,13 +336,25 @@ public class WaterPlantFragment extends Fragment {
             Log.e("Plant details response", "Could not obtain plant details OBSERVE");
         }
     }
-
     private void observeUnlockedPlants(final JSONArray response) {
         if (response.length() > 0) {
-                    numberOfUnlocked = response.length();
-                    Log.i("UNLOCKED PLANTS", String.valueOf(numberOfUnlocked));
+            numberOfUnlocked = response.length();
+            try {
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject jsonObject = response.getJSONObject(i);
+                    if (i == 0) {
+                        tulipStage = jsonObject.getInt("stage");
+                    } else if (i == 1) {
+                        sunflowerStage = jsonObject.getInt("stage");
+                    } else {
+                        peonyStage = jsonObject.getInt("stage");
+                    }
+                }
+            } catch (JSONException e) {
+                Log.e("Unlocked Plants response", "Could not obtain UPDATED plant details");
+            }
         }else{
-            Log.e("Plant details response", "Could not obtain UNLOCKED plant details");
+            Log.e("Plant details response", "Could not obtain UPDATED plant details");
         }
     }
 
@@ -382,7 +400,6 @@ public class WaterPlantFragment extends Fragment {
         }
     }
     private void toggleSwitchPlantOff() {
-        getPlantDetails(userId);
         rightArrow.setVisibility(View.GONE);
         leftArrow.setVisibility(View.GONE);
         toggleSelectPlant(false);
@@ -429,9 +446,11 @@ public class WaterPlantFragment extends Fragment {
             color = ContextCompat.getColor(getContext(), R.color.dark_green);
             selectPlantButton.setOnClickListener(v -> updatePlant(userId, plantOptionId));
             if (plantOptionId == 1) {
-                setPlantImage(switchedPlant, 5, plantName);
+                setPlantImage(switchedPlant, tulipStage, plantName);
+            } else if (plantOptionId == 2) {
+                setPlantImage(switchedPlant, sunflowerStage, plantName);
             } else {
-                setPlantImage(switchedPlant, activePlantStage, plantName);
+                setPlantImage(switchedPlant, peonyStage, plantName);
             }
             setSaturation(switchedPlant, 1.0f);
         }
@@ -474,21 +493,31 @@ public class WaterPlantFragment extends Fragment {
     }
 
     private void unlockNewPlant(int currentPlantId) {
-      plantViewModel.updateCurrentPlant(userId, currentPlantId + 1);
-        Toast.makeText(getContext(), "NEW PLANT UNLOCKED", Toast.LENGTH_LONG).show();
+        if (currentPlantId != 3 && numberOfUnlocked < 3 && !(currentPlantId > numberOfUnlocked)) {
+            int finalCurrentPlantId = currentPlantId + 1;
+            updatePlant(userId, finalCurrentPlantId);
+            Toast.makeText(getContext(), "NEW PLANT UNLOCKED", Toast.LENGTH_LONG).show();
+        }
     }
     private void isUnlockedPlant() {
         plantViewModel.getUnlockedPlants(userId);
-        plantViewModel.addUnlockedPlantResponseObserver(getViewLifecycleOwner(), this::observeUnlockedPlants);
+        plantViewModel.addUnlockedPlantResponseObserver(getViewLifecycleOwner(), response -> {
+            if (response.length() > 0) {
+                observeUnlockedPlants(response);
+            }
+        });
     }
     private void updatePlant(int userId, int plantId){
+        Log.i("UPDATED PLANT()", "START");
         plantViewModel.updateCurrentPlant(userId, plantId);
+        plantViewModel.addUpdatedPlantResponseObserver(getViewLifecycleOwner(), response -> {
+            if (response.length() > 0) {
+                plantViewModel.getCurrentPlantDetails(userId);
+            }
+        });
         Toast.makeText(getContext(), "SWITCHED PLANT", Toast.LENGTH_LONG).show();
         toggleSwitchPlantOff();
-    }
-    private void getPlantDetails(int userId) {
-        plantViewModel.getCurrentPlantDetails(userId);
-        plantViewModel.addPlantResponseObserver(getViewLifecycleOwner(), this::observeResponsePlantDetails);
+        Log.i("UPDATED PLANT()", "FINISHED");
     }
 
     private void toggleSelectPlant(Boolean on) {

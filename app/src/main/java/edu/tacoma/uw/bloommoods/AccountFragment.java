@@ -1,5 +1,6 @@
 package edu.tacoma.uw.bloommoods;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -33,7 +35,7 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentAccountBinding;
 
 public class AccountFragment extends Fragment {
     private static final String UPDATE_PROFILE_API_URL = "https://students.washington.edu/nchi22/api/users/update_profile.php";
-    private static final String FETCH_PLANT_API_URL = "https://students.washington.edu/nchi22/api/plants/get_plants_grown.php?user_id=";
+    private static final String FETCH_PLANT_API_URL = "https://students.washington.edu/nchi22/api/plants/get_plants_unlocked.php?user_id=";
     private static final int COLOR_ERROR = Color.parseColor("#610000");
     private static final int COLOR_SUCCESS = Color.parseColor("#8fb38f");
 
@@ -71,6 +73,13 @@ public class AccountFragment extends Fragment {
             } else {
                 updatePassword();
             }
+        });
+        binding.logoutButton.setOnClickListener(v ->{
+            Activity activity = getActivity();
+            if(activity instanceof MainActivity){
+                ((MainActivity) activity).hideBottomNavigation();
+            }
+            Navigation.findNavController(getView()).navigate(R.id.loginFragment);
         });
     }
 

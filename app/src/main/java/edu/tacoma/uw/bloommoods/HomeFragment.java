@@ -39,7 +39,6 @@ public class HomeFragment extends Fragment {
     private double plantGrowth;
     private int stage;
     private long hours;
-    private int userId;
     private ImageView plantStage;
     private UserViewModel userViewModel;
     private PlantViewModel plantViewModel;
@@ -61,7 +60,6 @@ public class HomeFragment extends Fragment {
         plantStage = homeBinding.plantStageView;
         userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
-                this.userId = userId;
                 // Call the method in ViewModel to perform the API operation
                 userViewModel.getUserProfile(userId);
                 userViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {

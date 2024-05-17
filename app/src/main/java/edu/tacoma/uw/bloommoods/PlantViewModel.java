@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
@@ -25,13 +26,15 @@ import java.util.Objects;
 
 public class PlantViewModel extends AndroidViewModel {
     final private MutableLiveData<JSONObject> plantResponse;
+    final private MutableLiveData<JSONObject> updatePlantResponse;
     final private MutableLiveData<JSONArray> unlockedPlantResponse;
 
     public PlantViewModel(@NonNull Application application) {
         super(application);
         plantResponse = new MutableLiveData<>();
         unlockedPlantResponse = new MutableLiveData<>();
-
+        updatePlantResponse = new MutableLiveData<>();
+        updatePlantResponse.setValue(new JSONObject());
         plantResponse.setValue(new JSONObject());
         unlockedPlantResponse.setValue(new JSONArray());
     }
@@ -45,6 +48,20 @@ public class PlantViewModel extends AndroidViewModel {
                                                  @NonNull Observer<? super JSONArray> observer) {
         unlockedPlantResponse.observe(owner, observer);
     }
+    private Observer<? super JSONObject> currentObserver;
+
+    public void addUpdatedPlantResponseObserver(@NonNull LifecycleOwner owner,
+                                                @NonNull Observer<? super JSONObject> observer) {
+        // Remove the current observer if it exists
+        if (currentObserver != null) {
+            updatePlantResponse.removeObserver(currentObserver);
+        }
+
+        // Add the new observer and update the current observer reference
+        updatePlantResponse.observe(owner, observer);
+        currentObserver = observer;
+    }
+
 
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
@@ -129,8 +146,7 @@ public class PlantViewModel extends AndroidViewModel {
                 Request.Method.POST,
                 url,
                 body,
-                response ->
-                        Log.i("Active Plant Updated", response.toString()),
+                updatePlantResponse::setValue,
                 this::handleError);
 
         Log.i("PlantViewModel", request.getUrl().toString());
