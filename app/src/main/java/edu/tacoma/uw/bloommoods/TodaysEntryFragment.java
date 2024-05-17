@@ -33,6 +33,7 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentTodaysEntryBinding;
 public class TodaysEntryFragment extends Fragment {
 
     private JournalViewModel mJournalViewModel;
+    private PlantViewModel mPlantViewModel;
     FragmentTodaysEntryBinding mTodaysEntryBinding;
     private String mSelectedMood;
     private int currentUser;
@@ -59,6 +60,7 @@ public class TodaysEntryFragment extends Fragment {
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         UserViewModel mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
+        mPlantViewModel = ((MainActivity) requireActivity()).getPlantViewModel();
         mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
 
         // Observe userId from UserViewModel
@@ -82,8 +84,8 @@ public class TodaysEntryFragment extends Fragment {
             setEditable(false);
         });
 
-        mUserViewModel.getCurrentPlantDetails(currentUser);
-        mUserViewModel.addPlantResponseObserver(getViewLifecycleOwner(), response -> {
+        mPlantViewModel.getCurrentPlantDetails(currentUser);
+        mPlantViewModel.addPlantResponseObserver(getViewLifecycleOwner(), response -> {
             if (response.has("stage") && response.has("growthLevel") && response.has("name")) {
                 int stage;
                 ImageView plantStage = mTodaysEntryBinding.plantImageView;

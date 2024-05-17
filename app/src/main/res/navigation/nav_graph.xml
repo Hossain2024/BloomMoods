@@ -100,9 +100,9 @@
     </fragment>
     <fragment
         android:id="@+id/nav_water"
-        android:name="edu.tacoma.uw.bloommoods.NewEntryFragment2"
+        android:name="edu.tacoma.uw.bloommoods.WaterPlantFragment"
         android:label="fragment_water_plant"
-        tools:layout="@layout/fragment_new_entry_2" >
+        tools:layout="@layout/fragment_water_plant" >
         <action
             android:id="@+id/action_nav_water_to_nav_account"
             app:destination="@id/nav_account" />
@@ -137,7 +137,7 @@
     </fragment>
     <fragment
         android:id="@+id/newEntryFragment"
-        android:name="edu.tacoma.uw.bloommoods.WaterPlantFragment"
+        android:name="edu.tacoma.uw.bloommoods.NewEntryFragment"
         android:label="fragment_new_entry"
         tools:layout="@layout/fragment_water_plant" >
         <action
