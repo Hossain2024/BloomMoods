@@ -13,9 +13,11 @@ import androidx.lifecycle.Observer;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.nio.charset.Charset;
@@ -23,7 +25,6 @@ import java.util.Objects;
 
 public class UserViewModel extends AndroidViewModel {
     final private MutableLiveData<JSONObject> mResponse;
-    final private MutableLiveData<JSONObject> plantResponse;
     final private MutableLiveData<Integer> mUserId;
     final private MutableLiveData<Boolean> resetted;
     final private MutableLiveData<String> lastEntryLogged;
@@ -31,12 +32,10 @@ public class UserViewModel extends AndroidViewModel {
     public UserViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
-        plantResponse = new MutableLiveData<>();
         mUserId = new MutableLiveData<>();
         resetted = new MutableLiveData<>();
         lastEntryLogged = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
-        plantResponse.setValue(new JSONObject());
         mUserId.setValue(0);
         resetted.setValue(false);
         lastEntryLogged.setValue("");
@@ -46,11 +45,6 @@ public class UserViewModel extends AndroidViewModel {
     public void addResponseObserver(@NonNull LifecycleOwner owner,
                                     @NonNull Observer<? super JSONObject> observer) {
         mResponse.observe(owner, observer);
-    }
-
-    public void addPlantResponseObserver(@NonNull LifecycleOwner owner,
-                                    @NonNull Observer<? super JSONObject> observer) {
-        plantResponse.observe(owner, observer);
     }
 
 
@@ -155,39 +149,6 @@ public class UserViewModel extends AndroidViewModel {
                 .add(request);
     }
 
-    public LiveData<Integer> getUserId() {
-        return mUserId;
-    }
-    public void setUserId(int id) {
-        mUserId.setValue(id);
-    }
-
-    public LiveData<Boolean> getReset() {
-        return resetted;
-    }
-    public void setReset(boolean reset) {
-        resetted.setValue(reset);
-    }
-
-    protected void getCurrentPlantDetails(int userId) {
-        String url = "https://students.washington.edu/nchi22/api/plants/get_current_plant_details.php?user_id=" + userId;
-
-        Request request = new JsonObjectRequest(
-                Request.Method.GET,
-                url,
-                null, //no body for this get request
-                plantResponse::setValue,
-                this::handleError);
-
-        Log.i("UserViewModel", request.getUrl().toString());
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10_000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        //Instantiate the RequestQueue and add the request to the queue
-        Volley.newRequestQueue(getApplication().getApplicationContext())
-                .add(request);
-    }
 
     protected void resetStreak(int userId) {
         String url = "https://students.washington.edu/nchi22/api/users/reset_streak.php";
@@ -215,57 +176,19 @@ public class UserViewModel extends AndroidViewModel {
                 .add(request);
     }
 
-    protected void updateCurrentPlantDetails(int userId, double newGrowth) {
-        String url = "https://students.washington.edu/nchi22/api/plants/update_current_plant_details.php";
-        JSONObject body = new JSONObject();
-        try {
-            body.put("user_id", userId);
-            body.put("growthLevel", newGrowth);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Request request = new JsonObjectRequest(
-                Request.Method.POST,
-                url,
-                body,
-                response ->
-                        Log.i("Growth Level Updated", response.toString()),
-                this::handleError);
 
-        Log.i("UserViewModel", request.getUrl().toString());
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10_000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        //Instantiate the RequestQueue and add the request to the queue
-        Volley.newRequestQueue(getApplication().getApplicationContext())
-                .add(request);
+    public LiveData<Integer> getUserId() {
+        return mUserId;
+    }
+    public void setUserId(int id) {
+        mUserId.setValue(id);
     }
 
-    protected void resetCurrentPlantStage(int userId) {
-        String url = "https://students.washington.edu/nchi22/api/plants/reset_current_plant_stage.php";
-        JSONObject body = new JSONObject();
-        try {
-            body.put("user_id", userId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Request request = new JsonObjectRequest(
-                Request.Method.POST,
-                url,
-                body,
-                response ->
-                        Log.i("Growth Level Updated", response.toString()),
-                this::handleError);
-
-        Log.i("UserViewModel", request.getUrl().toString());
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10_000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        //Instantiate the RequestQueue and add the request to the queue
-        Volley.newRequestQueue(getApplication().getApplicationContext())
-                .add(request);
+    public LiveData<Boolean> getReset() {
+        return resetted;
+    }
+    public void setReset(boolean reset) {
+        resetted.setValue(reset);
     }
 
     public MutableLiveData<String> getLastEntryLogged() {
@@ -275,4 +198,6 @@ public class UserViewModel extends AndroidViewModel {
     public void setLastEntryLogged(String entry) {
         lastEntryLogged.setValue(entry);
     }
+
+
 }
