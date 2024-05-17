@@ -35,7 +35,11 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
 
     private UserViewModel mUserViewModel;
+
     private PlantViewModel mPlantViewModel;
+
+    private JournalViewModel mJournalViewModel;
+    private BottomNavigationView bottomNavView;
 
 
     @Override
@@ -43,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.frame_main_fragment_container), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -53,8 +56,11 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.nav_host_fragment).post(() -> {
             navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         });
+
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mPlantViewModel = new ViewModelProvider(this).get(PlantViewModel.class);
+        mJournalViewModel = new ViewModelProvider(this).get(JournalViewModel.class);
+
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SignIN_PREFS), Context.MODE_PRIVATE);
         Log.d("SharedPreferences", "SignIN_PREFS: " + getString(R.string.SignIN_PREFS)); // Log the value of SignIN_PREFS
         Log.d("SharedPreferences", "Context: " + this); // Log the context being used
@@ -79,8 +85,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void setupBottomNavigation() {
+//        // Initialize NavController
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         // Set up BottomNavigationView with NavController
-        BottomNavigationView bottomNavView = findViewById(R.id.navBarView);
+        bottomNavView = findViewById(R.id.navBarView);
         NavigationUI.setupWithNavController(bottomNavView, navController);
     }
 

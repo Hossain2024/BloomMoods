@@ -1,6 +1,7 @@
 package edu.tacoma.uw.bloommoods;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +23,6 @@ import androidx.navigation.Navigation;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -31,9 +31,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.tacoma.uw.bloommoods.databinding.FragmentAccountBinding;
 
 public class AccountFragment extends Fragment {
+
+
+
     private static final String UPDATE_PROFILE_API_URL = "https://students.washington.edu/nchi22/api/users/update_profile.php";
     private static final String FETCH_PLANT_API_URL = "https://students.washington.edu/nchi22/api/plants/get_plants_unlocked.php?user_id=";
     private static final int COLOR_ERROR = Color.parseColor("#610000");
@@ -42,12 +48,14 @@ public class AccountFragment extends Fragment {
     private UserViewModel mUserViewModel;
     private FragmentAccountBinding binding;
     private int userID;
+    private List<String> unlockedPlants;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mUserViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         binding = FragmentAccountBinding.inflate(inflater, container, false);
+        unlockedPlants = new ArrayList<>();
         return binding.getRoot();
     }
 
@@ -81,7 +89,14 @@ public class AccountFragment extends Fragment {
             }
             Navigation.findNavController(getView()).navigate(R.id.loginFragment);
         });
+        binding.referButton.setOnClickListener(v -> shareAppLink());
+
     }
+
+
+
+
+
 
     private void switchToUpdateMode(EditText editText, ImageButton button, int iconResource) {
         editText.setEnabled(true);
@@ -99,6 +114,27 @@ public class AccountFragment extends Fragment {
 
             }
         });
+    }
+
+    private void shareAppLink() {
+        StringBuilder plantsMessage = new StringBuilder();
+        if (!unlockedPlants.isEmpty()) {
+            plantsMessage.append("I've unlocked ");
+            for (int i = 0; i < unlockedPlants.size(); i++) {
+                plantsMessage.append(unlockedPlants.get(i));
+                if (i < unlockedPlants.size() - 1) {
+                    plantsMessage.append(" and ");
+                }
+            }
+            plantsMessage.append("! ");
+        }
+
+        String shareMessage = plantsMessage.toString() + "\nDownload BloomMoods now \uD83C\uDF31 ✨ \nhttps://drive.google.com/file/d/1Atew0-wJrSMIuFRnNVtlPKeCM24weni8/view?usp=drive_link";
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+        startActivity(Intent.createChooser(shareIntent, "Share via"));
     }
 
     private void updateUIWithUserProfile(JSONObject response) {
@@ -205,34 +241,34 @@ public class AccountFragment extends Fragment {
     private void updatePlantsUI(JSONArray plants) throws JSONException {
         LinearLayout plantsContainer = binding.plantsContainer;
         plantsContainer.removeAllViews();
-
-        boolean isFirstImage = true;
+        unlockedPlants.clear();
 
         for (int i = 0; i < plants.length(); i++) {
             JSONObject plant = plants.getJSONObject(i);
             int plantOptionId = plant.getInt("plant_option_id");
+            String plantName = null;
             ImageView imageView = null;
 
             switch (plantOptionId) {
                 case 1:
+                    plantName = "Tranquil Tulip";
                     imageView = createImageView(R.mipmap.tulip_icon);
                     break;
                 case 2:
+                    plantName = "Serenity Sunflower";
                     imageView = createImageView(R.mipmap.sunflower_icon);
                     break;
                 case 3:
+                    plantName = "Peaceful Peony";
                     imageView = createImageView(R.mipmap.peony_icon);
                     break;
             }
 
+            if (plantName != null) {
+                unlockedPlants.add(plantName);
+            }
+
             if (imageView != null) {
-                if (isFirstImage) {
-                    // Remove left margin for the first image
-                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) imageView.getLayoutParams();
-                    layoutParams.leftMargin = 0;
-                    imageView.setLayoutParams(layoutParams);
-                    isFirstImage = false;
-                }
                 plantsContainer.addView(imageView);
             }
         }
