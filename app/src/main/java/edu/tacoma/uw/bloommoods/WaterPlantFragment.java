@@ -57,8 +57,6 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding;
  */
 public class WaterPlantFragment extends Fragment {
     private JournalViewModel mJournalViewModel;
-    FragmentWaterPlantBinding mWaterPlantBinding;
-    private UserViewModel mUserViewModel;
 
     private static final String ADD_ENTRY_ENDPOINT = "https://students.washington.edu/nchi22/api/log/update_mood_log.php";
     private UserViewModel userViewModel;
@@ -94,7 +92,6 @@ public class WaterPlantFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i("WaterPlantFragment", "CREATED VIEW");
-        mWaterPlantBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
         mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
 
         waterPlantBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
@@ -110,6 +107,7 @@ public class WaterPlantFragment extends Fragment {
             if (userId != null) {
                 this.userId = userId;
                 mJournalViewModel.getTodaysEntry(userId); // Fetch today's entry using the userId
+                waterPlantBinding.saveButton.setOnClickListener(v -> addEntry(userId));
                 plantViewModel.getCurrentPlantDetails(userId);
                 plantViewModel.addPlantResponseObserver(getViewLifecycleOwner() , response -> {
                     if (response.length() > 0) {
@@ -126,6 +124,7 @@ public class WaterPlantFragment extends Fragment {
                 isUnlockedPlant();
             }
         });
+        mJournalViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
         listeners();
     }
 
@@ -137,12 +136,10 @@ public class WaterPlantFragment extends Fragment {
         selectPlantText = waterPlantBinding.selectPlantText;
         selectPlantButton = waterPlantBinding.selectPlantButton;
         plantPhoto = waterPlantBinding.plantStage;
-        saveButton = waterPlantBinding.saveButton;
 
         ImageView switchButton = waterPlantBinding.switchButton;
         switchButton.setOnClickListener(v -> toggleSwitchPlant());
 
-        saveButton.setOnClickListener(v -> addEntry());
 
         leftArrow = waterPlantBinding.leftArrow;
         rightArrow = waterPlantBinding.rightArrow;
@@ -207,49 +204,35 @@ public class WaterPlantFragment extends Fragment {
     }
 
 
-    private void addEntry() {
-            String title = titleEditText.getText().toString();
-            String entry = entryEditText.getText().toString();
-
-            // Get current user ID
-            userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
-                if (userId != null) {
-                    try {
-                        // Create JSON object with the entry data
-                        JSONObject json = new JSONObject();
-                        json.put("user_id", userId);
-                        json.put("title", title);
-                        json.put("mood", selectedMood); // CHANGE TO MOOD SELECTED ONCE BUG IS FIXED
-                        json.put("journal_entry", entry);
-
-                        JsonObjectRequest request = getRequest(json);
-                        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-                        requestQueue.add(request);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            addGrowth();
+    private void addEntry(int userId) {
+        String title = waterPlantBinding.titleEditText.getText().toString();
+        String entry = waterPlantBinding.entryEditText.getText().toString();
+        mJournalViewModel.addEntry(userId, title, selectedMood, entry);
+        addGrowth();
     }
 
-        mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), moodEntry -> {
-            Log.i("WaterPlantFragment", "OBSERVING ENTRY");
-            Log.i("WaterPlantFragment", String.valueOf(moodEntry));
-            if (moodEntry != null) {
-                Log.i("WaterPlantFragment", "GOING TO TODAYS ENTRY");
-                WaterPlantFragmentDirections.ActionNavWaterToTodaysEntryFragment directions =
-                        WaterPlantFragmentDirections.actionNavWaterToTodaysEntryFragment(moodEntry);
-                Navigation.findNavController(getView())
-                        .navigate(directions);
+    private void observeResponse(final JSONObject response) {
+        if (response.length() > 0) {
+            if (response.has("error")) {
+                try {
+                    Toast.makeText(this.getContext(),
+                            "Error Adding entry: " +
+                                    response.get("error"), Toast.LENGTH_LONG).show();
+
+                } catch (JSONException e) {
+                    Log.e("JSON Parse Error", e.getMessage());
+                }
 
             } else {
-                Log.i("WaterPlantFragment", "GOING TO NEW ENTRY");
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_nav_water_to_newEntryFragment);
-
+                Toast.makeText(this.getContext(),"Entry added", Toast.LENGTH_LONG).show();
+                mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), moodEntry -> {
+                    Log.i("NewEntryFragment", String.valueOf(moodEntry));
+                });
             }
-        });
+
+        } else {
+            Log.d("JSON Response", "No Response");
+        }
     }
 
 
@@ -404,6 +387,7 @@ public class WaterPlantFragment extends Fragment {
 
         ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix);
         imageView.setColorFilter(filter);
+    }
 
 
     private void toggleSwitchPlant() {
@@ -552,6 +536,23 @@ public class WaterPlantFragment extends Fragment {
             switchedPlant.setVisibility(View.GONE);
             plantPhoto.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void adjustToKeyboard () {
+        ScrollView scroll = waterPlantBinding.waterPlantScrollView;
+        scroll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                scroll.getWindowVisibleDisplayFrame(r);
+                int screenHeight = scroll.getRootView().getHeight();
+                int keypadHeight = screenHeight - r.bottom;
+
+                // Adjust the bottom padding of the scroll view
+                scroll.setPadding(0, 0, 0, keypadHeight);
+            }
+        });
+
     }
 
 }
