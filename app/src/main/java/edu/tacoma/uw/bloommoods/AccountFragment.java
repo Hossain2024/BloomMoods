@@ -88,9 +88,9 @@ public class AccountFragment extends Fragment {
                 ((MainActivity) activity).hideBottomNavigation();
             }
             Navigation.findNavController(getView()).navigate(R.id.loginFragment);
-
         });
         binding.referButton.setOnClickListener(v -> shareAppLink());
+
     }
 
 

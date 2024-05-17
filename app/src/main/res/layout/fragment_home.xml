@@ -31,18 +31,15 @@
         android:layout_height="469dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.64"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.675"
-        app:srcCompat="@drawable/peaceful_peony_stage_1" />
+        app:layout_constraintVertical_bias="0.68" />
 
     <TextView
         android:id="@+id/textUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/playfair_display_bold"
-        android:text="Hey, Amanda!"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -139,7 +136,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/playfair_display"
         android:lineSpacingMultiplier="0.4"
-        android:text="TextView"
+        android:text="Total Entries"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/viewEntries"
@@ -155,7 +152,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/playfair_display"
         android:lineSpacingMultiplier="0.4"
-        android:text="TextView"
+        android:text="Streak"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/viewStreak"
