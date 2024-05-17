@@ -18,6 +18,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import edu.tacoma.uw.bloommoods.databinding.FragmentEntryReaderBinding;
 
 public class EntryReaderFragment extends Fragment {
@@ -45,6 +50,7 @@ public class EntryReaderFragment extends Fragment {
         Button backButton = entryReaderBinding.exitReadEntryButton;
         backButton.setOnClickListener(button -> Navigation.findNavController(getView())
                 .navigate(R.id.action_entryReaderFragment_to_journalFragment));
+
         return entryReaderBinding.getRoot();
     }
 
@@ -68,5 +74,11 @@ public class EntryReaderFragment extends Fragment {
         entryTextView.setText(entry.getContent());
         moodImageView.setImageResource(entry.getMoodImage());
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.ENGLISH);
+        String currentDate = dateFormat.format(new Date());
+
+        if (currentDate.equals(entry.getDate())) {
+            entryReaderBinding.editEntryButton.setVisibility(View.VISIBLE);
+        }
     }
 }

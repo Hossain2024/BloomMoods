@@ -1,5 +1,7 @@
 package edu.tacoma.uw.bloommoods;
 
+import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Rect;
@@ -12,6 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,6 +56,9 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding;
  * A simple {@link Fragment} subclass.
  */
 public class WaterPlantFragment extends Fragment {
+    private JournalViewModel mJournalViewModel;
+    FragmentWaterPlantBinding mWaterPlantBinding;
+    private UserViewModel mUserViewModel;
 
     private static final String ADD_ENTRY_ENDPOINT = "https://students.washington.edu/nchi22/api/log/update_mood_log.php";
     private UserViewModel userViewModel;
@@ -81,9 +89,13 @@ public class WaterPlantFragment extends Fragment {
     private int peonyStage;
     FragmentWaterPlantBinding waterPlantBinding;
     String selectedMood;
+  
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i("WaterPlantFragment", "CREATED VIEW");
+        mWaterPlantBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
+        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
 
         waterPlantBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
         userViewModel = ((MainActivity) requireActivity()).getUserViewModel();
@@ -97,6 +109,7 @@ public class WaterPlantFragment extends Fragment {
         userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
                 this.userId = userId;
+                mJournalViewModel.getTodaysEntry(userId); // Fetch today's entry using the userId
                 plantViewModel.getCurrentPlantDetails(userId);
                 plantViewModel.addPlantResponseObserver(getViewLifecycleOwner() , response -> {
                     if (response.length() > 0) {
@@ -220,21 +233,23 @@ public class WaterPlantFragment extends Fragment {
             addGrowth();
     }
 
-    public void adjustToKeyboard () {
-        ScrollView scroll = waterPlantBinding.waterPlantScrollView;
-        scroll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-                scroll.getWindowVisibleDisplayFrame(r);
-                int screenHeight = scroll.getRootView().getHeight();
-                int keypadHeight = screenHeight - r.bottom;
+        mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), moodEntry -> {
+            Log.i("WaterPlantFragment", "OBSERVING ENTRY");
+            Log.i("WaterPlantFragment", String.valueOf(moodEntry));
+            if (moodEntry != null) {
+                Log.i("WaterPlantFragment", "GOING TO TODAYS ENTRY");
+                WaterPlantFragmentDirections.ActionNavWaterToTodaysEntryFragment directions =
+                        WaterPlantFragmentDirections.actionNavWaterToTodaysEntryFragment(moodEntry);
+                Navigation.findNavController(getView())
+                        .navigate(directions);
 
-                // Adjust the bottom padding of the scroll view
-                scroll.setPadding(0, 0, 0, keypadHeight);
+            } else {
+                Log.i("WaterPlantFragment", "GOING TO NEW ENTRY");
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_nav_water_to_newEntryFragment);
+
             }
         });
-
     }
 
 
@@ -389,7 +404,7 @@ public class WaterPlantFragment extends Fragment {
 
         ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix);
         imageView.setColorFilter(filter);
-    }
+
 
     private void toggleSwitchPlant() {
         if (rightArrow.getVisibility() == View.VISIBLE || leftArrow.getVisibility() == View.VISIBLE) {

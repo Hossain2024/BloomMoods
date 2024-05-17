@@ -19,7 +19,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.tacoma.uw.bloommoods.databinding.FragmentLoginBinding;
 import edu.tacoma.uw.bloommoods.databinding.FragmentRegisterBinding;
 
 /**
