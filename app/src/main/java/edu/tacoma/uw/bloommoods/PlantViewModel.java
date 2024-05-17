@@ -27,6 +27,7 @@ import java.util.Objects;
 public class PlantViewModel extends AndroidViewModel {
     final private MutableLiveData<JSONObject> plantResponse;
     final private MutableLiveData<JSONObject> updatePlantResponse;
+    final private MutableLiveData<JSONObject> updatePlantDetailsResponse;
     final private MutableLiveData<JSONArray> unlockedPlantResponse;
 
     public PlantViewModel(@NonNull Application application) {
@@ -35,6 +36,8 @@ public class PlantViewModel extends AndroidViewModel {
         unlockedPlantResponse = new MutableLiveData<>();
         updatePlantResponse = new MutableLiveData<>();
         updatePlantResponse.setValue(new JSONObject());
+        updatePlantDetailsResponse = new MutableLiveData<>();
+        updatePlantDetailsResponse.setValue(new JSONObject());
         plantResponse.setValue(new JSONObject());
         unlockedPlantResponse.setValue(new JSONArray());
     }
@@ -48,6 +51,11 @@ public class PlantViewModel extends AndroidViewModel {
                                                  @NonNull Observer<? super JSONArray> observer) {
         unlockedPlantResponse.observe(owner, observer);
     }
+    public void addPlantDetailResponseObserver(@NonNull LifecycleOwner owner,
+                                                 @NonNull Observer<? super JSONObject> observer) {
+        updatePlantDetailsResponse.observe(owner, observer);
+    }
+
     private Observer<? super JSONObject> currentObserver;
 
     public void addUpdatedPlantResponseObserver(@NonNull LifecycleOwner owner,
@@ -119,8 +127,7 @@ public class PlantViewModel extends AndroidViewModel {
                 Request.Method.POST,
                 url,
                 body,
-                response ->
-                        Log.i("Growth Level Updated", response.toString()),
+                updatePlantDetailsResponse::setValue,
                 this::handleError);
 
         Log.i("PlantViewModel", request.getUrl().toString());

@@ -103,6 +103,11 @@ public class WaterPlantFragment extends Fragment {
                         observeResponsePlantDetails(response);
                     }
                 });
+                plantViewModel.addPlantDetailResponseObserver(getViewLifecycleOwner() , response -> {
+                    if (response.length() > 0) {
+                        plantViewModel.getCurrentPlantDetails(userId);
+                    }
+                });
                 userViewModel.getUserProfile(userId);
                 userViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponseUserProfile);
                 isUnlockedPlant();
@@ -262,7 +267,7 @@ public class WaterPlantFragment extends Fragment {
         if (streak >= 2) {
             increaseGrowth = 5;
         } else {
-            increaseGrowth = 2.5;
+            increaseGrowth = 10;
         }
 
         if (!loggedToday) {
@@ -270,11 +275,9 @@ public class WaterPlantFragment extends Fragment {
             userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
                 if (userId != null) {
                     plantViewModel.updateCurrentPlantDetails(userId, increaseGrowth);
-                    if (plantGrowthPercent == 100) {
+                    if (plantGrowthPercent + increaseGrowth >= 100) {
                         unlockNewPlant(activePlantId);
-                        plantViewModel.getUnlockedPlants(userId);
                     }
-                    plantViewModel.getCurrentPlantDetails(userId);
                 }
             });
             userViewModel.getReset().observe(getViewLifecycleOwner(), reset -> {
@@ -496,6 +499,7 @@ public class WaterPlantFragment extends Fragment {
         if (currentPlantId != 3 && numberOfUnlocked < 3 && !(currentPlantId > numberOfUnlocked)) {
             int finalCurrentPlantId = currentPlantId + 1;
             updatePlant(userId, finalCurrentPlantId);
+            plantViewModel.getUnlockedPlants(userId);
             Toast.makeText(getContext(), "NEW PLANT UNLOCKED", Toast.LENGTH_LONG).show();
         }
     }
