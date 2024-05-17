@@ -1,23 +1,18 @@
 package edu.tacoma.uw.bloommoods;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -26,18 +21,13 @@ import java.util.Map;
 
 public class MonthYearPicker extends PopupWindow implements View.OnClickListener{
 
-    private TextView headerTextView;
-    private Button monthSelector, yearSelector;
+    private final Button monthSelector;
     private final ConstraintLayout monthButtonsLayout;
-    private TextView monthYearTextView;
-    private Spinner yearSpinner;
-    private boolean isShowingMonth;
-    private String selectedMonth;
-    private final Button submitDate;
-    private Button selectedMonthButton, prevSelectedMonthButton;
+    private final TextView monthYearTextView;
+    private Button prevSelectedMonthButton;
 
     // Map of month abbreviations to full month names
-    Map<String, String> monthMap = new HashMap<>();
+    final Map<String, String> monthMap = new HashMap<>();
 
     public MonthYearPicker(Context context, TextView monthYear) {
         super(context);
@@ -50,12 +40,12 @@ public class MonthYearPicker extends PopupWindow implements View.OnClickListener
 
         // Initialize buttons and set click listeners
         monthSelector = view.findViewById(R.id.monthSelectionButton);
-        yearSelector = view.findViewById(R.id.yearSelectionButton);
-        submitDate = view.findViewById(R.id.selectedDateButton);
+//        yearSelector = view.findViewById(R.id.yearSelectionButton);
+        TextView yearText = view.findViewById(R.id.yearDateTextView);
+        Button submitDate = view.findViewById(R.id.selectedDateButton);
         monthButtonsLayout = view.findViewById(R.id.monthsLayout);
 
         monthSelector.setOnClickListener(this);
-        yearSelector.setOnClickListener(this);
         submitDate.setOnClickListener(this);
         setOnClickListenerForMonthButtons();
 
@@ -63,14 +53,13 @@ public class MonthYearPicker extends PopupWindow implements View.OnClickListener
         SimpleDateFormat monthFormat = new SimpleDateFormat("MMM", Locale.ENGLISH);
         String monthAbbr = monthFormat.format(calendar.getTime());
         monthSelector.setText(monthAbbr);
-        yearSelector.setText(String.valueOf(calendar.get(Calendar.YEAR)));
+        yearText.setText(String.valueOf(calendar.get(Calendar.YEAR)));
 
         int maxWidth = 1170;
         int setWidth = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.9);
         int width = Math.min(maxWidth, setWidth);
         setWidth(width);
         setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-
 
         // Make pop-up window close when clicked outside
         setOutsideTouchable(true);
@@ -116,23 +105,21 @@ public class MonthYearPicker extends PopupWindow implements View.OnClickListener
         int viewId = view.getId();
         if (viewId == R.id.monthSelectionButton) {
             monthButtonsLayout.setVisibility(View.VISIBLE);
-        } else if (viewId == R.id.yearSelectionButton) {
-            monthButtonsLayout.setVisibility(View.GONE);
         } else if (viewId == R.id.selectedDateButton) {
             String selectedMonthAbbr = monthSelector.getText().toString();
-            String selectedDate = monthMap.get(selectedMonthAbbr) + " 2024    ⓥ";
+            String selectedDate = monthMap.get(selectedMonthAbbr) + "2024    ⓥ";
             monthYearTextView.setText(selectedDate);
             dismiss();
         } else {
             // Handle click for month buttons
-            selectedMonthButton = ((Button) view);
+            Button selectedMonthButton = ((Button) view);
             selectedMonthButton.setSelected(true);
             if (prevSelectedMonthButton != null) {
                 prevSelectedMonthButton.setSelected(false);
             }
             prevSelectedMonthButton = selectedMonthButton;
 
-            selectedMonth = selectedMonthButton.getText().toString();
+            String selectedMonth = selectedMonthButton.getText().toString();
             monthSelector.setText(selectedMonth);
         }
     }

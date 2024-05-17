@@ -16,16 +16,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/yearSelectionButton"
-        android:layout_width="115dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="83dp"
-        android:backgroundTint="@color/medium_blue"
+    <!--    <Button-->
+<!--        android:id="@+id/yearSelectionButton"-->
+<!--        android:layout_width="115dp"-->
+<!--        android:layout_height="55dp"-->
+<!--        android:layout_marginTop="4dp"-->
+<!--        android:layout_marginEnd="83dp"-->
+<!--        android:backgroundTint="@color/medium_blue"-->
+<!--        android:enabled="false"-->
+<!--        android:fontFamily="@font/alatsi"-->
+<!--        android:text="Year"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="24sp"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/view"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/view" />-->
+
+    <TextView
+        android:id="@+id/yearDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="116dp"
         android:fontFamily="@font/alatsi"
         android:text="Year"
-        android:textAlignment="center"
+        android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/view"
         app:layout_constraintTop_toTopOf="@+id/view" />
