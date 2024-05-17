@@ -267,7 +267,7 @@ public class WaterPlantFragment extends Fragment {
         if (streak >= 2) {
             increaseGrowth = 5;
         } else {
-            increaseGrowth = 10;
+            increaseGrowth = 2.5;
         }
 
         if (!loggedToday) {
