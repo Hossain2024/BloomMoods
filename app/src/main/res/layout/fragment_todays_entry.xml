@@ -23,7 +23,7 @@
     app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/plantImageView"
         android:layout_width="109dp"
         android:layout_height="257dp"
         android:layout_marginTop="64dp"
@@ -57,7 +57,7 @@
         android:tag="Excited"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/plantImageView"
         app:srcCompat="@mipmap/excited" />
 
     <LinearLayout
@@ -69,7 +69,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintTop_toBottomOf="@+id/plantImageView">
 
         <ImageView
             android:id="@+id/excitedImageView"
@@ -121,11 +121,24 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/moodTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:fontFamily="@font/catamaran"
+        android:text="Mood"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
     <EditText
         android:id="@+id/todaysTitleEditText"
         android:layout_width="346dp"
         android:layout_height="65dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="72dp"
         android:backgroundTint="#00FFFFFF"
         android:clickable="false"
         android:editable="false"
@@ -140,7 +153,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/plantImageView" />
 
     <EditText
         android:id="@+id/todaysEntryEditText"

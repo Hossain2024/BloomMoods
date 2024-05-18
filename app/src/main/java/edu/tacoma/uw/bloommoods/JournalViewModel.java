@@ -2,6 +2,7 @@ package edu.tacoma.uw.bloommoods;
 
 import android.app.Application;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -14,8 +15,10 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,11 +31,14 @@ import java.util.Objects;
 
 public class JournalViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mResponse;
-    private final MutableLiveData<JournalEntry> mEntry = new MutableLiveData<>();
+    private final MutableLiveData<JournalEntry> mEntry;
+    private final MutableLiveData<String> mDateEntries;
 
     public JournalViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
+        mEntry = new MutableLiveData<>();
+        mDateEntries = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
     }
 
@@ -83,7 +89,9 @@ public class JournalViewModel extends AndroidViewModel {
                 body,
                 response -> {
                     mResponse.setValue(response);
-                    mEntry.postValue(new JournalEntry(title, currentDate, entry, getMipMapForMood(mood)));
+                    JournalEntry newEntry = new JournalEntry(title, currentDate, entry, getMipMapForMood(mood));
+                    Log.i("JournalViewModel", "Setting mEntry: " + newEntry);
+                    mEntry.postValue(newEntry);
                 },
                 this::handleError);
 
@@ -128,8 +136,44 @@ public class JournalViewModel extends AndroidViewModel {
         return mEntry;
     }
 
-    public void setEntry(JournalEntry newEntry) {
-        mEntry.setValue(newEntry);
+    public LiveData<String> getDateEntries() {
+        return mDateEntries;
+    }
+
+    public void getEntriesByDate(int userId, int month, int year) {
+//        journalEntries.clear();
+        Log.i("SELECTED MONTH", String.valueOf(month));
+        Log.i("USER", String.valueOf(userId));
+        String url = "https://students.washington.edu/nchi22/api/log/get_mood_logs_by_month.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+            mDateEntries::postValue,
+            error -> {
+                if (error.networkResponse != null && error.networkResponse.statusCode == 404) {
+                    mDateEntries.postValue("No entries found");
+                }
+            }) {
+
+            @Override
+            public byte[] getBody() {
+                // Create the request body JSON object
+                JSONObject requestBodyJson = new JSONObject();
+                try {
+                    requestBodyJson.put("user_id", userId);
+                    requestBodyJson.put("year", year);
+                    requestBodyJson.put("month", month);
+                } catch (JSONException e) {
+                }
+                return requestBodyJson.toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+        Volley.newRequestQueue(getApplication().getApplicationContext())
+                .add(stringRequest);
     }
 
     // Method to parse JSON object and create JournalEntry object

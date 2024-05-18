@@ -1,9 +1,11 @@
 package edu.tacoma.uw.bloommoods;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -31,6 +33,7 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentTodaysEntryBinding;
 public class TodaysEntryFragment extends Fragment {
 
     private JournalViewModel mJournalViewModel;
+    private PlantViewModel mPlantViewModel;
     FragmentTodaysEntryBinding mTodaysEntryBinding;
     private String mSelectedMood;
     private int currentUser;
@@ -57,6 +60,7 @@ public class TodaysEntryFragment extends Fragment {
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         UserViewModel mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
+        mPlantViewModel = ((MainActivity) requireActivity()).getPlantViewModel();
         mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
 
         // Observe userId from UserViewModel
@@ -78,6 +82,29 @@ public class TodaysEntryFragment extends Fragment {
         mTodaysEntryBinding.updateButton.setOnClickListener(button -> {
             updateEntry(currentUser);
             setEditable(false);
+        });
+
+        mPlantViewModel.getCurrentPlantDetails(currentUser);
+        mPlantViewModel.addPlantResponseObserver(getViewLifecycleOwner(), response -> {
+            if (response.has("stage") && response.has("growthLevel") && response.has("name")) {
+                int stage;
+                ImageView plantStage = mTodaysEntryBinding.plantImageView;
+                String activePlantName = null;
+                try {
+                    activePlantName = response.getString(("name"));
+                    stage = response.getInt("stage");
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                String resourceName = activePlantName.toLowerCase().replace(" ", "_") + "_stage_" + stage;
+                int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
+                if (resourceId != 0) {
+                    Drawable drawable = ContextCompat.getDrawable(requireContext(), resourceId);
+                    plantStage.setImageDrawable(drawable);
+                } else {
+                    Log.e("TodaysEntryFragment", "Drawable resource not found: " + resourceName);
+                }
+            }
         });
 
 //        // Observe userId from UserViewModel
@@ -119,6 +146,7 @@ public class TodaysEntryFragment extends Fragment {
         mTodaysEntryBinding.updateButton.setVisibility(updateButtonVisibility);
         mTodaysEntryBinding.todaysMoodImageView.setVisibility(editButtonVisibility);
         mTodaysEntryBinding.linearLayout.setVisibility(updateButtonVisibility);
+        mTodaysEntryBinding.moodTextView.setVisibility(updateButtonVisibility);
     }
 
     private void updateEntry(int userId) {
@@ -129,11 +157,14 @@ public class TodaysEntryFragment extends Fragment {
     }
 
     private void updateUI(JournalEntry entry) {
-        mSelectedMood = moodMap.get(entry.getMoodImage());
-        mTodaysEntryBinding.todaysDate.setText(entry.getDate());
-        mTodaysEntryBinding.todaysTitleEditText.setText(entry.getTitle());
-        mTodaysEntryBinding.todaysEntryEditText.setText(entry.getContent());
-        mTodaysEntryBinding.todaysMoodImageView.setImageResource(entry.getMoodImage());
+        if (entry != null) {
+            mSelectedMood = moodMap.get(entry.getMoodImage());
+            mTodaysEntryBinding.moodTextView.setText(mSelectedMood);
+            mTodaysEntryBinding.todaysDate.setText(entry.getDate());
+            mTodaysEntryBinding.todaysTitleEditText.setText(entry.getTitle());
+            mTodaysEntryBinding.todaysEntryEditText.setText(entry.getContent());
+            mTodaysEntryBinding.todaysMoodImageView.setImageResource(entry.getMoodImage());
+        }
     }
 
     private void setOnMoodClicks(LinearLayout moodLayout) {
@@ -147,7 +178,7 @@ public class TodaysEntryFragment extends Fragment {
 
     private void onMoodClicked(View view) {
         mSelectedMood = view.getTag().toString();
-        Log.i("Selected Mood", mSelectedMood);
+        mTodaysEntryBinding.moodTextView.setText(mSelectedMood);
     }
 
     private void observeResponse(final JSONObject response) {

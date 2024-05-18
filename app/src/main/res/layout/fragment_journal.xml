@@ -26,12 +26,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/entriesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="463dp"
-        android:layout_marginTop="272dp"
+        android:layout_height="511dp"
+        android:layout_marginTop="33dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/allEntriesButton" />
 
     <TextView
         android:id="@+id/monthYearTextView"
@@ -44,21 +44,6 @@
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/journalTextView" />
-
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="378dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="36dp"
-        android:background="@drawable/search_rounded"
-        android:focusable="false"
-        android:iconifiedByDefault="false"
-        android:queryBackground="@android:color/transparent"
-        android:queryHint="Search Entries"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/monthYearTextView" />
 
     <Button
         android:id="@+id/allEntriesButton"
@@ -80,14 +65,13 @@
         android:id="@+id/noEntriesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="41dp"
+        android:layout_marginTop="45dp"
         android:fontFamily="@font/alatsi"
         android:text="@string/no_entries"
         android:textColor="@color/medium_blue"
         android:textSize="24sp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+        app:layout_constraintTop_toBottomOf="@+id/monthYearTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

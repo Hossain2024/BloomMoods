@@ -29,6 +29,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import edu.tacoma.uw.bloommoods.databinding.FragmentHomeBinding;
 
@@ -38,7 +39,7 @@ public class HomeFragment extends Fragment {
     private int userEntries;
     private double plantGrowth;
     private int stage;
-    private long hours;
+    private long days;
     private ImageView plantStage;
     private UserViewModel userViewModel;
     private PlantViewModel plantViewModel;
@@ -105,7 +106,7 @@ public class HomeFragment extends Fragment {
                         String lastEntry = response.getString("last_log_date");
                         userViewModel.setLastEntryLogged(lastEntry);
                         calculateHours();
-                        if (!(hours <= 24)) {
+                        if (days > 1) {
                             resetStreak(userId);
                         }
                         setEditText();
@@ -136,7 +137,7 @@ public class HomeFragment extends Fragment {
                         plantGrowth = response.getDouble("growthLevel");
                         String activePlantName = response.getString(("name"));
                         stage = response.getInt("stage");
-                        if (hours >= 168) {
+                        if (days > 7) {
                             resetStage(userId);
                         }
                         setPlantDetails(activePlantName);
@@ -218,7 +219,7 @@ public class HomeFragment extends Fragment {
         userViewModel.getLastEntryLogged().observe(getViewLifecycleOwner(), lastEntry -> {
             if (!Objects.equals(lastEntry, "null")) {
                 // Create a SimpleDateFormat object for parsing the date in the given format
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 try {
                     // Parse the date string into a Date object
                     Date lastLoggedDate = dateFormat.parse(lastEntry);
@@ -226,9 +227,9 @@ public class HomeFragment extends Fragment {
                     // Get the current date and time
                     Date currentDate = new Date();
 
-                    // Check if lastLoggedDate is within the last 24 hours
-                    long diff = currentDate.getTime() - lastLoggedDate.getTime();
-                    hours = diff / (60 * 60 * 1000);
+                    // Get difference between current date and last logged date in hours.
+                    long differenceInMillis = currentDate.getTime() - lastLoggedDate.getTime();
+                    days = TimeUnit.MILLISECONDS.toDays(differenceInMillis);
 
                 } catch (ParseException e) {
                     System.out.println("Error parsing the date: " + e.getMessage());

@@ -139,7 +139,7 @@
         android:id="@+id/newEntryFragment"
         android:name="edu.tacoma.uw.bloommoods.NewEntryFragment"
         android:label="fragment_new_entry"
-        tools:layout="@layout/fragment_new_entry" >
+        tools:layout="@layout/fragment_water_plant" >
         <action
             android:id="@+id/action_newEntryFragment_to_todaysEntryFragment"
             app:destination="@id/todaysEntryFragment" />
@@ -151,9 +151,10 @@
         android:label="About"
         tools:layout="@layout/fragment_about">
     </fragment>
-
-
-
+    <fragment
+        android:id="@+id/nav_report"
+        android:name="edu.tacoma.uw.bloommoods.ReportFragment"
+        android:label="ReportFragment" />
 
 
 </navigation>

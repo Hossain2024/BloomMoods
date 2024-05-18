@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,6 +49,8 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
     private final int currentMonth = calender.get(Calendar.MONTH) + 1; // Jan starts at 0
     // --Commented out by Inspection (5/11/24, 10:18 PM):private final ArrayList<JournalEntry> monthJournalEntries = new ArrayList<>();
     private MonthYearPicker myp;
+    private JournalViewModel mJournalViewModel;
+    private UserViewModel mUserViewModel;
     private FragmentJournalBinding journalBinding;
     private RecyclerView recyclerView;
     private Integer userId;
@@ -54,14 +58,11 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i("JournalFragment", "In onCreateView");
         journalBinding = FragmentJournalBinding.inflate(inflater, container, false);
-        UserViewModel mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
-        mUserViewModel.getUserId().observe(getViewLifecycleOwner(), currentUser -> {
-            if (currentUser != null) {
-               userId = currentUser;
-               getEntries(userId, currentMonth);
-            }
-        });
+        mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
+        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
+
         myp = new MonthYearPicker(getActivity(), journalBinding.monthYearTextView);
         openDateDialog();
 
@@ -70,74 +71,56 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
 //
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-
-        journalBinding.allEntriesButton.setOnClickListener(button -> updateRecyclerView(journalEntries));
-
         return journalBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.i("JournalFragment", "In onViewCreated");
+        mUserViewModel.getUserId().observe(getViewLifecycleOwner(), currentUser -> {
+            if (currentUser != null) {
+                userId = currentUser;
+                mJournalViewModel.getEntriesByDate(currentUser, currentMonth, 2024);
+                Log.i("JournalFragment", "Got current user" + currentUser);
+            }
+        });
+
+        mJournalViewModel.getDateEntries().observe(getViewLifecycleOwner(), string -> {
+            journalEntries.clear();
+            Log.i("JournalFragment", "Observing entries" + string);
+            if (!Objects.equals(string, "No entries found")) {
+                Log.i("JournalFragment", "Entries found");
+                try {
+                    JSONArray jsonArray = new JSONArray(string);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        JournalEntry entry = parseJsonObject(jsonObject);
+                        journalEntries.add(entry);
+                    }
+                    journalBinding.noEntriesTextView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    JournalEntryAdapter adapter = new JournalEntryAdapter(getActivity(), journalEntries, JournalFragment.this);
+                    recyclerView.setAdapter(adapter);
+                    journalBinding.allEntriesButton.setOnClickListener(button -> updateRecyclerView(journalEntries));
+                } catch (JSONException | ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                Log.i("JournalFragment", "Error" + string);
+                journalEntries.clear();
+                JournalEntryAdapter adapter = new JournalEntryAdapter(getActivity(), journalEntries, JournalFragment.this);
+                recyclerView.setAdapter(adapter);
+                journalBinding.noEntriesTextView.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         journalBinding = null;
-    }
-
-
-    private void getEntries(int userId, int month) {
-        journalEntries.clear();
-        Log.i("SELECTED MONTH", String.valueOf(month));
-        Log.i("USER", String.valueOf(userId));
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, GET_MONTH_ENTRIES_ENDPOINT,
-                response -> {
-                    try {
-                        JSONArray jsonArray = new JSONArray(response);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            JournalEntry entry = parseJsonObject(jsonObject);
-                            journalEntries.add(entry);
-                        }
-                        journalBinding.noEntriesTextView.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
-                        JournalEntryAdapter adapter = new JournalEntryAdapter(getActivity(), journalEntries, JournalFragment.this);
-                        recyclerView.setAdapter(adapter);
-                    } catch (JSONException | ParseException e) {
-                        // Handle JSON exception
-                    }
-                },
-                error -> {
-                    if (error.networkResponse != null && error.networkResponse.statusCode == 404) {
-                        journalEntries.clear();
-                        JournalEntryAdapter adapter = new JournalEntryAdapter(getActivity(), journalEntries, JournalFragment.this);
-                        recyclerView.setAdapter(adapter);
-                        journalBinding.noEntriesTextView.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
-                    }
-                }) {
-
-            @Override
-            public byte[] getBody() {
-                // Create the request body JSON object
-                JSONObject requestBodyJson = new JSONObject();
-                try {
-                    requestBodyJson.put("user_id", userId);
-                    requestBodyJson.put("year", 2024);
-                    requestBodyJson.put("month", month);
-                } catch (JSONException e) {
-                }
-                return requestBodyJson.toString().getBytes();
-            }
-
-            @Override
-            public String getBodyContentType() {
-                return "application/json";
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(stringRequest);
-
-//         Sort entries by most to least recent
-        journalEntries.sort(Comparator.comparing(JournalEntry::parseDate));
     }
 
 
@@ -200,7 +183,7 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
                 String[] parts = selectedMonthYear.split(" ");
                 String selectedMonth = parts[0];
                 int monthInt = getMonthInt(selectedMonth);
-                getEntries(userId, monthInt);
+                mJournalViewModel.getEntriesByDate(userId, monthInt, 2024);
                 // Update the RecyclerView with the new entries
 //                updateRecyclerView(monthJournalEntries);
             }

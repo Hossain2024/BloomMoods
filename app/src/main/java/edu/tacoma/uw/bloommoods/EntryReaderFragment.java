@@ -76,9 +76,5 @@ public class EntryReaderFragment extends Fragment {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.ENGLISH);
         String currentDate = dateFormat.format(new Date());
-
-        if (currentDate.equals(entry.getDate())) {
-            entryReaderBinding.editEntryButton.setVisibility(View.VISIBLE);
-        }
     }
 }
