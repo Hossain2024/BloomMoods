@@ -190,7 +190,6 @@ public class NewEntryFragment extends Fragment {
                 }
 
             } else {
-                Toast.makeText(this.getContext(),"Entry added", Toast.LENGTH_LONG).show();
                 Log.i("NewEntryFragment", "Response received, now observing mEntry");
                 mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), moodEntry -> {
                     if (moodEntry != null) {

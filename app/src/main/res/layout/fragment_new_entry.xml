@@ -268,6 +268,7 @@
             android:id="@+id/saveButton"
             android:layout_width="88dp"
             android:layout_height="42dp"
+            android:layout_marginBottom="4dp"
             android:background="@drawable/rounded_rect"
             android:fontFamily="@font/playfair_display"
             android:text="@string/save_entry"
@@ -275,7 +276,7 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/journalSpace"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.92"
+            app:layout_constraintHorizontal_bias="0.921"
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
