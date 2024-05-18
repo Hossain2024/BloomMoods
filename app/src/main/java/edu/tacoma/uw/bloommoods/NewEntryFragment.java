@@ -81,10 +81,13 @@ public class NewEntryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mNewEntryBinding = FragmentNewEntryBinding.inflate(inflater, container, false);
-//        mNewEntryBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
-        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
         mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
         mPlantViewModel = ((MainActivity) requireActivity()).getPlantViewModel();
+        mJournalViewModel = ((MainActivity) requireActivity()).getJournalViewModel();
+//        mNewEntryBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
+//        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
+//        mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
+
 
         TextView date = mNewEntryBinding.dateText;
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
@@ -105,8 +108,11 @@ public class NewEntryFragment extends Fragment {
     @Override
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.i("NewEntryFragment", "in onViewCreated");
         mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
-        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
+        mPlantViewModel = ((MainActivity) requireActivity()).getPlantViewModel();
+        mJournalViewModel = ((MainActivity) requireActivity()).getJournalViewModel();
+//        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
 
         // Observe userId from UserViewModel
         mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
@@ -129,8 +135,6 @@ public class NewEntryFragment extends Fragment {
                 isUnlockedPlant();
             }
         });
-
-        mJournalViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
         listeners();
     }
 
@@ -173,6 +177,7 @@ public class NewEntryFragment extends Fragment {
             Toast.makeText(this.getContext(),"Please enter a title and entry", Toast.LENGTH_LONG).show();
         } else {
             mJournalViewModel.addEntry(userId, title, mSelectedMood, entry);
+            mJournalViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
             addGrowth();
         }
     }
@@ -190,7 +195,7 @@ public class NewEntryFragment extends Fragment {
                 }
 
             } else {
-                Log.i("NewEntryFragment", "Response received, now observing mEntry");
+                Toast.makeText(this.getContext(),"Entry added", Toast.LENGTH_LONG).show();
                 mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), moodEntry -> {
                     if (moodEntry != null) {
                         // Navigate to TodaysEntryFragment with the moodEntry

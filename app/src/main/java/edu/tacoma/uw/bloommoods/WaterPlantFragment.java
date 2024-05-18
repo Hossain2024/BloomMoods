@@ -65,7 +65,8 @@ public class WaterPlantFragment extends Fragment {
         Log.i("WaterPlantFragment", "CREATED VIEW");
         mWaterPlantBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
         mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
-        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
+        mJournalViewModel = ((MainActivity) requireActivity()).getJournalViewModel();
+//        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
 
         return mWaterPlantBinding.getRoot();
     }
@@ -76,23 +77,28 @@ public class WaterPlantFragment extends Fragment {
         // Observe userId from UserViewModel
         mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
+                Log.i("WaterPlantFragment", String.valueOf(userId));
                 mJournalViewModel.getTodaysEntry(userId); // Fetch today's entry using the userId
             }
         });
 
-        mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), moodEntry -> {
-            Log.i("WaterPlantFragment", "OBSERVING ENTRY");
-            Log.i("WaterPlantFragment", String.valueOf(moodEntry));
-            if (moodEntry != null) {
-                Log.i("WaterPlantFragment", "GOING TO TODAYS ENTRY");
-                WaterPlantFragmentDirections.ActionNavWaterToTodaysEntryFragment directions =
-                        WaterPlantFragmentDirections.actionNavWaterToTodaysEntryFragment(moodEntry);
-                Navigation.findNavController(getView()).navigate(directions);
-            } else {
-                Log.i("WaterPlantFragment", "GOING TO NEW ENTRY");
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_nav_water_to_newEntryFragment);
+        mJournalViewModel.getRequestCompleted().observe(getViewLifecycleOwner(), isCompleted -> {
+            if (Boolean.TRUE.equals(isCompleted)) {
+                mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), moodEntry -> {
+                    Log.i("WaterPlantFragment", "OBSERVING ENTRY");
+                    Log.i("WaterPlantFragment", String.valueOf(moodEntry));
+                    if (moodEntry != null) {
+                        Log.i("WaterPlantFragment", "GOING TO TODAYS ENTRY");
+                        WaterPlantFragmentDirections.ActionNavWaterToTodaysEntryFragment directions =
+                                WaterPlantFragmentDirections.actionNavWaterToTodaysEntryFragment(moodEntry);
+                        Navigation.findNavController(getView()).navigate(directions);
+                    } else {
+                        Log.i("WaterPlantFragment", "GOING TO NEW ENTRY");
+                        NavHostFragment.findNavController(this)
+                                .navigate(R.id.action_nav_water_to_newEntryFragment);
 
+                    }
+                });
             }
         });
     }

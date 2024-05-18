@@ -34,6 +34,7 @@ public class TodaysEntryFragment extends Fragment {
 
     private JournalViewModel mJournalViewModel;
     private PlantViewModel mPlantViewModel;
+    private UserViewModel mUserViewModel;
     FragmentTodaysEntryBinding mTodaysEntryBinding;
     private String mSelectedMood;
     private int currentUser;
@@ -51,17 +52,21 @@ public class TodaysEntryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        
         mTodaysEntryBinding = FragmentTodaysEntryBinding.inflate(inflater, container, false);
+        mPlantViewModel = ((MainActivity) requireActivity()).getPlantViewModel();
+        mJournalViewModel = ((MainActivity) requireActivity()).getJournalViewModel();
+        mUserViewModel =  ((MainActivity) requireActivity()).getUserViewModel();
         return mTodaysEntryBinding.getRoot();
     }
 
     @Override
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        UserViewModel mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
-        mPlantViewModel = ((MainActivity) requireActivity()).getPlantViewModel();
-        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
+        Log.i("TodaysEntryFragment", "in onViewCreated");
+//        UserViewModel mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
+//        mPlantViewModel = ((MainActivity) requireActivity()).getPlantViewModel();
+//        mJournalViewModel = ((MainActivity) requireActivity()).getJournalViewModel();
+//        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
 
         // Observe userId from UserViewModel
         mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {

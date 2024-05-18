@@ -33,12 +33,14 @@ public class JournalViewModel extends AndroidViewModel {
     private final MutableLiveData<JSONObject> mResponse;
     private final MutableLiveData<JournalEntry> mEntry;
     private final MutableLiveData<String> mDateEntries;
+    private final MutableLiveData<Boolean> mRequestCompleted;
 
     public JournalViewModel(@NonNull Application application) {
         super(application);
         mResponse = new MutableLiveData<>();
         mEntry = new MutableLiveData<>();
         mDateEntries = new MutableLiveData<>();
+        mRequestCompleted = new MutableLiveData<>();
         mResponse.setValue(new JSONObject());
     }
 
@@ -107,6 +109,9 @@ public class JournalViewModel extends AndroidViewModel {
 
     protected void getTodaysEntry(int userId) {
         Log.i("JournalViewModel", "getTodaysEntry called with userId: " + userId); // Add this log
+        mRequestCompleted.setValue(false);
+//        mRequestCompleted.postValue(false);
+        Log.i("JournalViewModel getTodaysEntry", mEntry.toString());
         String url = "https://students.washington.edu/nchi22/api/log/get_todays_mood_log.php?user_id=" + userId;
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -120,8 +125,12 @@ public class JournalViewModel extends AndroidViewModel {
                     } else {
                         mEntry.postValue(null);
                     }
+                    mRequestCompleted.postValue(true);
                 },
-                this::handleError);
+                error -> {
+                    handleError(error);
+                    mRequestCompleted.postValue(true);
+                });
         Log.i("JournalViewModel", request.getUrl().toString());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
@@ -138,6 +147,10 @@ public class JournalViewModel extends AndroidViewModel {
 
     public LiveData<String> getDateEntries() {
         return mDateEntries;
+    }
+
+    public LiveData<Boolean> getRequestCompleted() {
+        return mRequestCompleted;
     }
 
     public void getEntriesByDate(int userId, int month, int year) {

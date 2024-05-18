@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private UserViewModel mUserViewModel;
 
     private PlantViewModel mPlantViewModel;
-
     private JournalViewModel mJournalViewModel;
     private BottomNavigationView bottomNavView;
 
@@ -97,6 +96,9 @@ public class MainActivity extends AppCompatActivity {
     }
     public PlantViewModel getPlantViewModel() {
         return mPlantViewModel;
+    }
+    public JournalViewModel getJournalViewModel() {
+        return mJournalViewModel;
     }
 
 
