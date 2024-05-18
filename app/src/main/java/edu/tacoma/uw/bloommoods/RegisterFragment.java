@@ -26,14 +26,18 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentRegisterBinding;
  */
 public class RegisterFragment extends Fragment {
     private FragmentRegisterBinding mBinding;
-    private UserViewModel mUserViewModel;
+    private RegisterViewModel mRegisterUserViewModel;
+
+
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mUserViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
+
+        //chaged to use registerviewmodl
+        mRegisterUserViewModel = new ViewModelProvider(getActivity()).get(RegisterViewModel.class);
         // Instantiate the Binding object and Inflate the layout for this fragment
         mBinding = FragmentRegisterBinding.inflate(inflater, container, false);
         return mBinding.getRoot();
@@ -43,7 +47,7 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
+        mRegisterUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
             observeResponse(response);
 
         });
@@ -67,9 +71,17 @@ public class RegisterFragment extends Fragment {
         if(email.isEmpty() || pwd.isEmpty() || name.isEmpty()){
             //throw a toast
             Toast.makeText(this.getContext(), "All fields are required ", Toast.LENGTH_LONG).show();
+           
         }else {
-            Log.i(TAG, email);
-            mUserViewModel.addUser(email, pwd, name);
+            try {
+                Account account = new Account(email, pwd);
+                Log.i(TAG, email);
+                mRegisterUserViewModel.addUser(account, name);
+            } catch (IllegalArgumentException ie) {
+                Log.e(TAG, ie.getMessage());
+                Toast.makeText(this.getContext(), ie.getMessage(), Toast.LENGTH_LONG).show();
+                mBinding.textError.setText(ie.getMessage());
+            }
         }
     }
 
@@ -81,6 +93,7 @@ public class RegisterFragment extends Fragment {
                     if ("failed".equals(result)) {
                         String errorMessage = response.getString("message");
                         Toast.makeText(this.getContext(), "Error: " + errorMessage, Toast.LENGTH_LONG).show();
+                        mBinding.textError.setText(errorMessage);
                     } else {
                         Toast.makeText(this.getContext(), "User added", Toast.LENGTH_LONG).show();
                         Navigation.findNavController(getView()).popBackStack();
@@ -88,8 +101,9 @@ public class RegisterFragment extends Fragment {
                 } else {
                     Log.d("JSON Response", "Missing 'result' key in response");
                 }
-            } catch (JSONException e) {
-                Log.e("JSON Parse Error", e.getMessage());
+            } catch (JSONException ie) {
+                Log.e("JSON Parse Error", ie.getMessage());
+                mBinding.textError.setText(ie.getMessage());
             }
         }
     }

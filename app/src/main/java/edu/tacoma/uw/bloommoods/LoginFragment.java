@@ -1,5 +1,7 @@
 package edu.tacoma.uw.bloommoods;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -64,12 +66,21 @@ public class LoginFragment extends Fragment {
     public void signin() {
         String email = String.valueOf(mBinding.emailEdit.getText());
         String pwd = String.valueOf(mBinding.pwdEdit.getText());
+        Account account;
         if(email.isEmpty() || pwd.isEmpty()){
             //throw a toast
             Toast.makeText(this.getContext(), "All fields are required ", Toast.LENGTH_LONG).show();
         }else {
+            try {
+                account = new Account(email, pwd);
+            } catch (IllegalArgumentException ie) {
+                Log.e(TAG, ie.getMessage());
+                Toast.makeText(getContext(), ie.getMessage(), Toast.LENGTH_LONG).show();
+                mBinding.errorLoginTextview.setText(ie.getMessage());
+                return;
+            }
             Log.i(TAG, email);
-            mUserViewModel.authenticateUser(email, pwd);
+            mUserViewModel.authenticateUser(account);
         }
     }
 
@@ -88,6 +99,7 @@ public class LoginFragment extends Fragment {
                         // If the result is "failed to login", display the error message to the user
                         String errorMessage = response.optString("message", "Unknown error");
                         Toast.makeText(getContext(), "Login failed: " + errorMessage, Toast.LENGTH_LONG).show();
+                        mBinding.errorLoginTextview.setText("User failed to authenticate");
                     } else if ("success".equals(result)) {
 
                         // If the result is "success", the login is successful
@@ -122,6 +134,7 @@ public class LoginFragment extends Fragment {
             } catch (JSONException e) {
                 // Log any JSON parsing errors
                 Log.e("JSON Parse Error", e.getMessage());
+                mBinding.errorLoginTextview.setText("User failed to authenticate");
             }
         }else{
             Log.e("Login Response", "email/password required");
