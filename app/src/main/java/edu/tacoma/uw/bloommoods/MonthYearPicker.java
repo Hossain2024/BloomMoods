@@ -1,14 +1,13 @@
 package edu.tacoma.uw.bloommoods;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -20,15 +19,14 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MonthYearPicker extends PopupWindow implements View.OnClickListener{
-
     private final Button monthSelector;
     private final ConstraintLayout monthButtonsLayout;
     private final TextView monthYearTextView;
     private Button prevSelectedMonthButton;
-
     // Map of month abbreviations to full month names
-    final Map<String, String> monthMap = new HashMap<>();
+    private static final Map<String, String> monthMap = createMonthMap();
 
+    @SuppressLint("ClickableViewAccessibility")
     public MonthYearPicker(Context context, TextView monthYear) {
         super(context);
         this.monthYearTextView = monthYear;
@@ -36,11 +34,8 @@ public class MonthYearPicker extends PopupWindow implements View.OnClickListener
         View view = LayoutInflater.from(context).inflate(R.layout.date_picker, null);
         setContentView(view);
 
-        createMonthMap();
-
         // Initialize buttons and set click listeners
         monthSelector = view.findViewById(R.id.monthSelectionButton);
-//        yearSelector = view.findViewById(R.id.yearSelectionButton);
         TextView yearText = view.findViewById(R.id.yearDateTextView);
         Button submitDate = view.findViewById(R.id.selectedDateButton);
         monthButtonsLayout = view.findViewById(R.id.monthsLayout);
@@ -63,20 +58,17 @@ public class MonthYearPicker extends PopupWindow implements View.OnClickListener
 
         // Make pop-up window close when clicked outside
         setOutsideTouchable(true);
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-                    dismiss();
-                    return true;
-                }
-                return false;
+        view.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                dismiss();
+                return true;
             }
+            return false;
         });
     }
 
-    private void createMonthMap() {
-        // Map of month abbreviations to full month names
+    private static Map<String, String> createMonthMap() {
+        Map<String, String> monthMap = new HashMap<>();
         monthMap.put("Jan", "January");
         monthMap.put("Feb", "February");
         monthMap.put("Mar", "March");
@@ -89,6 +81,7 @@ public class MonthYearPicker extends PopupWindow implements View.OnClickListener
         monthMap.put("Oct", "October");
         monthMap.put("Nov", "November");
         monthMap.put("Dec", "December");
+        return monthMap;
     }
 
     private void setOnClickListenerForMonthButtons() {
@@ -118,7 +111,6 @@ public class MonthYearPicker extends PopupWindow implements View.OnClickListener
                 prevSelectedMonthButton.setSelected(false);
             }
             prevSelectedMonthButton = selectedMonthButton;
-
             String selectedMonth = selectedMonthButton.getText().toString();
             monthSelector.setText(selectedMonth);
         }

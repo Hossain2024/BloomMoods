@@ -15,6 +15,8 @@ public class JournalEntry implements Serializable {
     private final String date;
     private final String content;
     private final int moodImage;
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.ENGLISH);
+    private static final SimpleDateFormat MONTH_FORMAT = new SimpleDateFormat("MMM", Locale.ENGLISH);
 
     public JournalEntry(String entryTitle, String entryDate, String entryContent, int entryMoodImage) {
         this.title = entryTitle;
@@ -39,18 +41,6 @@ public class JournalEntry implements Serializable {
         return moodImage;
     }
 
-    public Calendar parseDate() {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.ENGLISH);
-            Date parsedDate = sdf.parse(date);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(parsedDate);
-            return calendar;
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public String getDay() {
         Calendar calendar = parseDate();
         return String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
@@ -58,12 +48,23 @@ public class JournalEntry implements Serializable {
 
     public String getMonth() {
         Calendar calendar = parseDate();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM", Locale.ENGLISH);
-        return dateFormat.format(calendar.getTime());
+        return MONTH_FORMAT.format(calendar.getTime()); // Return abbreviated month ("Jan", "Feb", ...)
     }
 
     public String getYear() {
         Calendar calendar = parseDate();
         return String.valueOf(calendar.get(Calendar.YEAR)); // January is 0, so add 1
+    }
+
+    public Calendar parseDate() {
+         try {
+            Date parsedDate = DATE_FORMAT.parse(date);
+            Calendar calendar = Calendar.getInstance();
+             assert parsedDate != null;
+             calendar.setTime(parsedDate);
+            return calendar;
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

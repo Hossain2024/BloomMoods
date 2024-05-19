@@ -17,16 +17,13 @@ import java.util.ArrayList;
 
 public class JournalEntryAdapter extends RecyclerView.Adapter<JournalEntryAdapter.ViewHolder> {
     private final RecyclerViewInterface rvi;
-    Context context;
-    ArrayList<JournalEntry> journalEntries;
+    private final Context context;
+    private final ArrayList<JournalEntry> journalEntries;
 
     public JournalEntryAdapter(Context context, ArrayList<JournalEntry> journalEntries, RecyclerViewInterface rvi) {
         this.context = context;
         this.journalEntries = journalEntries;
         this.rvi = rvi;
-        for (JournalEntry entry : journalEntries) {
-            Log.i("JEA CONTENT", entry.getContent());
-        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -35,8 +32,6 @@ public class JournalEntryAdapter extends RecyclerView.Adapter<JournalEntryAdapte
 
         public ViewHolder(View itemView, RecyclerViewInterface rvi) {
             super(itemView);
-            // Define click listener for the ViewHolder's View
-
             dayTextView = itemView.findViewById(R.id.dayTextView);
             monthTextView = itemView.findViewById(R.id.monthTextView);
             yearTextView = itemView.findViewById(R.id.yearTextView);
@@ -55,8 +50,6 @@ public class JournalEntryAdapter extends RecyclerView.Adapter<JournalEntryAdapte
         }
     }
 
-
-    // Create new views (invoked by the layout manager)
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
