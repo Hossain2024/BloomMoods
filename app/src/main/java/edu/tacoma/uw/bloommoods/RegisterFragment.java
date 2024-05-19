@@ -29,8 +29,6 @@ public class RegisterFragment extends Fragment {
     private RegisterViewModel mRegisterUserViewModel;
 
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,8 +41,9 @@ public class RegisterFragment extends Fragment {
         return mBinding.getRoot();
 
     }
+
     @Override
-    public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         mRegisterUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
@@ -58,6 +57,7 @@ public class RegisterFragment extends Fragment {
                 .navigate(R.id.action_registerFragment_to_loginFragment));
 
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -68,11 +68,11 @@ public class RegisterFragment extends Fragment {
         String email = String.valueOf(mBinding.emailEdit.getText());
         String pwd = String.valueOf(mBinding.pwdEdit.getText());
         String name = String.valueOf(mBinding.nameEdit.getText());
-        if(email.isEmpty() || pwd.isEmpty() || name.isEmpty()){
+        if (email.isEmpty() || pwd.isEmpty() || name.isEmpty()) {
             //throw a toast
             Toast.makeText(this.getContext(), "All fields are required ", Toast.LENGTH_LONG).show();
-           
-        }else {
+
+        } else {
             try {
                 Account account = new Account(email, pwd);
                 Log.i(TAG, email);
@@ -88,25 +88,27 @@ public class RegisterFragment extends Fragment {
     private void observeResponse(final JSONObject response) {
         if (response.length() > 0) {
             try {
-                if (response.has("result")) {
-                    String result = response.getString("result");
-                    if ("failed".equals(result)) {
-                        String errorMessage = response.getString("message");
-                        Toast.makeText(this.getContext(), "Error: " + errorMessage, Toast.LENGTH_LONG).show();
+                if (response.has("error_code")) {
+                    int errorCode = response.getInt("error_code");
+                    if (errorCode == 1062) {
+                        String errorMessage = "Email already exists.";
+                        Toast.makeText(this.getContext(), errorMessage, Toast.LENGTH_LONG).show();
                         mBinding.textError.setText(errorMessage);
-                    } else {
-                        Toast.makeText(this.getContext(), "User added", Toast.LENGTH_LONG).show();
-                        Navigation.findNavController(getView()).popBackStack();
                     }
                 } else {
-                    Log.d("JSON Response", "Missing 'result' key in response");
+                    Toast.makeText(this.getContext(), "User added", Toast.LENGTH_LONG).show();
+                    Navigation.findNavController(getView()).popBackStack();
+
                 }
-            } catch (JSONException ie) {
-                Log.e("JSON Parse Error", ie.getMessage());
-                mBinding.textError.setText(ie.getMessage());
+            }catch(JSONException ie){
+                    Log.e("JSON Parse Error", ie.getMessage());
+                    mBinding.textError.setText(ie.getMessage());
+                }
             }
         }
+
+
     }
-}
+
 
 
