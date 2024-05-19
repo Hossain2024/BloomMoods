@@ -97,12 +97,10 @@ public class LoginFragment extends Fragment {
                     String result = response.getString("result");
                     if ("failed to login".equals(result)) {
                         // If the result is "failed to login", display the error message to the user
-                        String errorMessage = response.optString("message", "Unknown error");
+                        String errorMessage = response.optString("message", "invalid credentials");
                         Toast.makeText(getContext(), "Login failed: " + errorMessage, Toast.LENGTH_LONG).show();
                         mBinding.errorLoginTextview.setText("User failed to authenticate");
                     } else if ("success".equals(result)) {
-
-                        // If the result is "success", the login is successful
                         Toast.makeText(getContext(), "Login successful", Toast.LENGTH_LONG).show();
 
                         // Check if the user ID is present in the response
@@ -115,8 +113,8 @@ public class LoginFragment extends Fragment {
                                 ((MainActivity) activity).showBottomNavigation();
                             }
                             Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_homeFragment);
-
                         }
+                        // wrtting credentials to sharedpreferences
                         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.SignIN_PREFS),
                                 Context.MODE_PRIVATE);
                         sharedPreferences.edit().putBoolean(getString(R.string.SignedIN), true).apply();
@@ -132,7 +130,6 @@ public class LoginFragment extends Fragment {
                     Log.d("Login Response", "Missing 'result' key in response");
                 }
             } catch (JSONException e) {
-                // Log any JSON parsing errors
                 Log.e("JSON Parse Error", e.getMessage());
                 mBinding.errorLoginTextview.setText("User failed to authenticate");
             }

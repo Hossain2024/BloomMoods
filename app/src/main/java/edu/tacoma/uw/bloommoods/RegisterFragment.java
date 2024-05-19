@@ -88,18 +88,16 @@ public class RegisterFragment extends Fragment {
     private void observeResponse(final JSONObject response) {
         if (response.length() > 0) {
             try {
-                if (response.has("result")) {
-                    String result = response.getString("result");
-                    if ("failed".equals(result)) {
-                        String errorMessage = response.getString("message");
-                        Toast.makeText(this.getContext(), "Error: " + errorMessage, Toast.LENGTH_LONG).show();
+                if (response.has("error_code")) {
+                    int errorCode = response.getInt("error_code");
+                    if (errorCode == 1062) {
+                        String errorMessage = "Email already exists.";
+                        Toast.makeText(this.getContext(), errorMessage, Toast.LENGTH_LONG).show();
                         mBinding.textError.setText(errorMessage);
-                    } else {
-                        Toast.makeText(this.getContext(), "User added", Toast.LENGTH_LONG).show();
-                        Navigation.findNavController(getView()).popBackStack();
                     }
                 } else {
-                    Log.d("JSON Response", "Missing 'result' key in response");
+                    Toast.makeText(this.getContext(), "User added", Toast.LENGTH_LONG).show();
+                    Navigation.findNavController(getView()).popBackStack();
                 }
             } catch (JSONException ie) {
                 Log.e("JSON Parse Error", ie.getMessage());
@@ -107,6 +105,8 @@ public class RegisterFragment extends Fragment {
             }
         }
     }
+
+
 }
 
 
