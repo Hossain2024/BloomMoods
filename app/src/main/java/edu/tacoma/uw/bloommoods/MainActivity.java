@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -104,5 +105,15 @@ public class MainActivity extends AppCompatActivity {
     protected void hideBottomNavigation() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setVisibility(View.GONE);
+    }
+
+    protected void bottomNavBarBackground() {
+        BottomNavigationView navBarView = findViewById(R.id.navBarView);
+        int color = ContextCompat.getColor(this, R.color.light_pink);
+        navBarView.setBackgroundColor(color);
+    }
+    protected void bottomNavBarResetBg() {
+        BottomNavigationView navBarView = findViewById(R.id.navBarView);
+        navBarView.setBackground(null);
     }
 }
