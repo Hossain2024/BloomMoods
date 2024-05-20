@@ -7,4 +7,23 @@
     <color name="theme_blue">#CFDCED</color>
     <color name="dark_green">#3D5239</color>
     <color name="light_blue">#9DACD1</color>
+
+<!--    comment out later-->
+
+        <color name="colorPrimary">#024265</color>
+        <color name="colorPrimaryDark">#024265</color>
+        <color name="colorAccent">#05af9b</color>
+
+        <color name="color_one">#fb7268</color>
+        <color name="color_white">#ededf2</color>
+        <color name="color_two">#E3E0E0</color>
+
+        <color name="happy">#FFA726</color>
+        <color name="anxious">#66BB6A</color>
+        <color name="angry">#EF5350</color>
+        <color name="neutral">#29B6F6</color>
+        <color name="sad">#000080</color>
+
+
+
 </resources>
