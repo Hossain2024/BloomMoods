@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,7 +32,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import edu.tacoma.uw.bloommoods.databinding.FragmentPieChartBinding;
 import edu.tacoma.uw.bloommoods.databinding.FragmentReportBinding;
 
 /**
@@ -44,7 +44,6 @@ public class ReportFragment extends Fragment {
     private UserViewModel mUserViewModel;
     private List<JournalEntry> mJournalEntries;
     private List<Date> mDates;
-    private UserViewModel mUserViewModel;
     private ImageView excitedImageView, anxiousImageView, angryImageView,  neutralImageView, sadImageView;
     private PieChart pieChart;
 
@@ -57,8 +56,7 @@ public class ReportFragment extends Fragment {
         mJournalEntries = new ArrayList<>();
         mDates = new ArrayList<>();
         mGridView = mReportBinding.calendarGridView;
-        mReportBinding.PieChartbutton.setOnClickListener(button -> Navigation.findNavController(getView())
-                .navigate(R.id.action_nav_report_to_pieChartFragment));
+
         Activity activity = getActivity();
         if (activity instanceof MainActivity) {
             ((MainActivity) activity).bottomNavBarBackground();
@@ -77,8 +75,7 @@ public class ReportFragment extends Fragment {
         setData();
 
         mGridView = mReportBinding.calendarGridView;
-        List<CalendarCell> calendarCells = generateCalendarCells();
-        CalendarAdapter adapter = new CalendarAdapter(getActivity(), calendarCells);
+        CalendarAdapter adapter = new CalendarAdapter(getActivity(), mDates, mJournalEntries);
         mGridView.setAdapter(adapter);
 
         return mReportBinding.getRoot();
@@ -165,7 +162,6 @@ public class ReportFragment extends Fragment {
         mGridView.setAdapter(adapter);
     }
 
-}
     private void setData() {
         // Dummy data for the moods (replace with your actual data)
         int happyCount = 20;
