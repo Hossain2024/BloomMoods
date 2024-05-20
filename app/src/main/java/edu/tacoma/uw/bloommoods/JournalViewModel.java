@@ -180,6 +180,7 @@ public class JournalViewModel extends AndroidViewModel {
      */
     public void getEntriesByDate(int userId, int month, int year) {
         String url = "https://students.washington.edu/nchi22/api/log/get_mood_logs_by_month.php";
+        Log.i("JournalViewModel", "getEntriesByDate " + userId + ", " + month + ", " + year);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
             mDateEntries::postValue,
             error -> {
@@ -244,13 +245,12 @@ public class JournalViewModel extends AndroidViewModel {
      * @param jsonObject the JSON object to parse.
      * @return a JournalEntry object.
      */
-    private JournalEntry parseJsonObject(JSONObject jsonObject) {
+    public JournalEntry parseJsonObject(JSONObject jsonObject) {
         // Parse JSON object and create JournalEntry object
         String timestamp = jsonObject.optString("timestamp");
         String entry = jsonObject.optString("journal_entry");
         String mood = jsonObject.optString("mood");
         String title = jsonObject.optString("title");
-
 
         Date date;
         try {

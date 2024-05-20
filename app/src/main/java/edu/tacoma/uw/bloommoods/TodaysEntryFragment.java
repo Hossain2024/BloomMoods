@@ -143,12 +143,12 @@ public class TodaysEntryFragment extends Fragment {
     }
 
     private void setOnMoodClicks(LinearLayout moodLayout) {
-        for (int i = 0; i < moodLayout.getChildCount(); i++) {
-            View childView = moodLayout.getChildAt(i);
-            if (childView instanceof ImageView) {
-                childView.setOnClickListener(this::onMoodClicked);
-            }
-        }
+        mTodaysEntryBinding.anxiousImageView.setOnClickListener(this::onMoodClicked);
+        mTodaysEntryBinding.excitedImageView.setOnClickListener(this::onMoodClicked);
+        mTodaysEntryBinding.happyImageView.setOnClickListener(this::onMoodClicked);
+        mTodaysEntryBinding.sadImageView.setOnClickListener(this::onMoodClicked);
+        mTodaysEntryBinding.neutralImageView.setOnClickListener(this::onMoodClicked);
+        mTodaysEntryBinding.angryImageView.setOnClickListener(this::onMoodClicked);
     }
 
     private void onMoodClicked(View view) {

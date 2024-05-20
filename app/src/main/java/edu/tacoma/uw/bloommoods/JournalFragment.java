@@ -79,18 +79,18 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
                     JSONArray jsonArray = new JSONArray(string);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        JournalEntry entry = parseJsonObject(jsonObject);
+                        JournalEntry entry = mJournalViewModel.parseJsonObject(jsonObject);
                         journalEntries.add(entry);
                     }
                     updateRecyclerView(journalEntries);
                     mJournalBinding.noEntriesTextView.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
 //                    mJournalBinding.allEntriesButton.setOnClickListener(button -> updateRecyclerView(journalEntries));
-                } catch (JSONException | ParseException e) {
+                } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
             } else {
-                Log.i("JournalFragment", "Error" + string);
+                Log.i("JournalFragment", "Error " + string);
                 journalEntries.clear();
                 updateRecyclerView(journalEntries);
                 mJournalBinding.noEntriesTextView.setVisibility(View.VISIBLE);
@@ -106,23 +106,23 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
     }
 
     // Method to parse JSON object and create JournalEntry object
-    private JournalEntry parseJsonObject(JSONObject jsonObject) throws JSONException, ParseException {
-        String timestamp = jsonObject.getString("timestamp");
-        String entry = jsonObject.getString("journal_entry");
-        String mood = jsonObject.getString("mood");
-        String title = jsonObject.getString("title");
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-        Date date = sdf.parse(timestamp);
-
-        SimpleDateFormat outputFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.ENGLISH);
-        assert date != null;
-        String formattedDate = outputFormat.format(date);
-
-        int moodResourceId = getMipMapForMood(mood);
-
-        return new JournalEntry(title, formattedDate, entry, moodResourceId);
-    }
+//    private JournalEntry parseJsonObject(JSONObject jsonObject) throws JSONException, ParseException {
+//        String timestamp = jsonObject.getString("timestamp");
+//        String entry = jsonObject.getString("journal_entry");
+//        String mood = jsonObject.getString("mood");
+//        String title = jsonObject.getString("title");
+//
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+//        Date date = sdf.parse(timestamp);
+//
+//        SimpleDateFormat outputFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.ENGLISH);
+//        assert date != null;
+//        String formattedDate = outputFormat.format(date);
+//
+//        int moodResourceId = getMipMapForMood(mood);
+//
+//        return new JournalEntry(title, formattedDate, entry, moodResourceId);
+//    }
 
     private int getMipMapForMood(String mood) {
         switch (mood) {

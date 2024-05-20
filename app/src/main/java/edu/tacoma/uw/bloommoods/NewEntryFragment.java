@@ -148,7 +148,6 @@ public class NewEntryFragment extends Fragment {
         switchedPlant = mNewEntryBinding.plantStageSwitch;
         selectPlantText = mNewEntryBinding.selectPlantText;
         progressBar = mNewEntryBinding.progressBar;
-        moodLayout = mNewEntryBinding.linearLayout;
         plantGrowth = mNewEntryBinding.plantGrowth;
 
         leftArrow.setOnClickListener(v -> switchArrows("left"));
@@ -156,7 +155,7 @@ public class NewEntryFragment extends Fragment {
 
         mNewEntryBinding.switchButton.setOnClickListener(v -> toggleSwitchPlant());
 
-        setOnMoodClicks(moodLayout);
+        setOnMoodClicks();
         adjustToKeyboard();
     }
 
@@ -200,19 +199,20 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
-    private void setOnMoodClicks(LinearLayout moodLayout) {
-        for (int i = 0; i < moodLayout.getChildCount(); i++) {
-            View childView = moodLayout.getChildAt(i);
-            if (childView instanceof ImageView) {
-                childView.setOnClickListener(this::onMoodClicked);
-            }
-        }
+    private void setOnMoodClicks() {
+        mNewEntryBinding.anxiousImageView.setOnClickListener(this::onMoodClicked);
+        mNewEntryBinding.excitedImageView.setOnClickListener(this::onMoodClicked);
+        mNewEntryBinding.happyImageView.setOnClickListener(this::onMoodClicked);
+        mNewEntryBinding.sadImageView.setOnClickListener(this::onMoodClicked);
+        mNewEntryBinding.neutralImageView.setOnClickListener(this::onMoodClicked);
+        mNewEntryBinding.angryImageView.setOnClickListener(this::onMoodClicked);
     }
 
     private void onMoodClicked(View view) {
         if (mNewEntryBinding.moodTextView.getVisibility() == View.GONE) {
             mNewEntryBinding.moodTextView.setVisibility(View.VISIBLE);
         }
+        Log.i("NewEntryFragment onMoodClicked", (String) view.getTag());
         mSelectedMood = view.getTag().toString();
         mNewEntryBinding.moodTextView.setText(mSelectedMood);
     }
