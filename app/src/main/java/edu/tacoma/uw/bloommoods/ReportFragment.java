@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import edu.tacoma.uw.bloommoods.databinding.FragmentPieChartBinding;
 import edu.tacoma.uw.bloommoods.databinding.FragmentReportBinding;
 
 /**
@@ -22,6 +26,7 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentReportBinding;
 public class ReportFragment extends Fragment {
     private GridView mGridView;
     private FragmentReportBinding mReportBinding;
+    //private FragmentPieChartBinding pieChartBinding;
     private UserViewModel mUserViewModel;
 
     @Override
@@ -34,8 +39,17 @@ public class ReportFragment extends Fragment {
         List<CalendarCell> calendarCells = generateCalendarCells();
         CalendarAdapter adapter = new CalendarAdapter(getActivity(), calendarCells);
         mGridView.setAdapter(adapter);
+        mReportBinding.PieChartbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavDirections action = ReportFragmentDirections.actionNavReportToPieChartFragment();
+                Navigation.findNavController(v).navigate(action);
+            }
+        });
         return mReportBinding.getRoot();
     }
+
+
 
     @Override
     public void onDestroyView() {

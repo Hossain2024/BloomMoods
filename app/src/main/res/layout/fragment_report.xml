@@ -141,4 +141,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <Button
+        android:id="@+id/PieChartbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PieChart"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="632dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
