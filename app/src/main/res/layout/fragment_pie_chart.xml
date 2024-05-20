@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_white"
+    android:background="@drawable/background"
     tools:context="PieChartFragment">
 
     <androidx.cardview.widget.CardView
@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="220dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:layout_marginTop="15dp"
+        android:layout_marginRight="20dp"
         android:elevation="10dp"
         app:cardCornerRadius="10dp">
 
@@ -37,17 +37,16 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
-                android:padding="6dp"
-                />
+                android:padding="6dp" />
             <!-- to display pie chart details -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_marginLeft="20dp"
-                android:orientation="vertical"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
-                >
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
@@ -122,7 +121,7 @@
                     <View
                         android:layout_width="28dp"
                         android:layout_height="match_parent"
-                        android:background="@color/angry"/>
+                        android:background="@color/angry" />
 
 
                     <ImageView
@@ -146,7 +145,7 @@
                     <View
                         android:layout_width="28dp"
                         android:layout_height="match_parent"
-                        android:background="@color/neutral"/>
+                        android:background="@color/neutral" />
 
 
                     <ImageView
