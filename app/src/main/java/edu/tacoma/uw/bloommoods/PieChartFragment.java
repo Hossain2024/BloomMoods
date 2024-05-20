@@ -23,8 +23,6 @@ import edu.tacoma.uw.bloommoods.databinding.FragmentReportBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link PieChartFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class PieChartFragment extends Fragment {
 
@@ -86,7 +84,5 @@ public class PieChartFragment extends Fragment {
         // Start the animation
         pieChart.startAnimation();
     }
-
-
 
 }
