@@ -9,8 +9,6 @@
     android:background="@color/color_white"
     tools:context="PieChartFragment">
 
-
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewGraph"
         android:layout_width="match_parent"
@@ -20,8 +18,6 @@
         android:layout_marginTop="15dp"
         android:elevation="10dp"
         app:cardCornerRadius="10dp">
-
-
 
         <!-- and details of pie chart-->
 
@@ -42,12 +38,7 @@
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
                 android:padding="6dp"
-
-
-
                 />
-
-
             <!-- to display pie chart details -->
             <LinearLayout
                 android:layout_width="0dp"
@@ -57,15 +48,12 @@
                 android:orientation="vertical"
                 android:gravity="center_vertical"
                 >
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
                     android:layout_gravity="center_vertical">
 
-                    <!--View to display the yellow color icon-->
 
-                    <!--Text view to display R -->
                     <View
                         android:layout_width="26dp"
                         android:layout_height="match_parent"
@@ -81,20 +69,18 @@
 
                 </LinearLayout>
 
-                <!--Linear layout to display Python-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
                     android:layout_gravity="center_vertical">
 
-                    <!--View to display the yellow color icon-->
+
                     <View
                         android:layout_width="26dp"
                         android:layout_height="match_parent"
                         android:background="@color/colorPrimary" />
 
-                    <!--Text view to display R -->
                     <ImageView
                         android:id="@+id/happyImageView"
                         android:layout_width="30dp"
@@ -111,13 +97,12 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="5dp">
 
-                    <!--View to display the green color icon-->
+
                     <View
                         android:layout_width="26dp"
                         android:layout_height="match_parent"
                         android:background="@color/anxious" />
 
-                    <!--Text view to display python text -->
                     <ImageView
                         android:id="@+id/anxiousImageView"
                         android:layout_width="32dp"
@@ -157,7 +142,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="5dp">
 
-                    <!--View to display the blue color icon-->
+
                     <View
                         android:layout_width="28dp"
                         android:layout_height="match_parent"
@@ -359,7 +344,6 @@
                 android:layout_marginRight="25dp"
                 android:layout_marginBottom="10dp">
 
-                <!-- Image view to display the happy face -->
                 <ImageView
                     android:id="@+id/neutral"
                     android:layout_width="wrap_content"
@@ -367,8 +351,6 @@
                     android:layout_marginRight="290dp"
                     android:src="@mipmap/neutral" />
 
-                <!--Text view to display the percentage -->
-                <!-- of happy emotion. For now default set to 0-->
                 <TextView
                     android:id="@+id/neutraltext"
                     android:layout_width="match_parent"
@@ -406,8 +388,6 @@
                     android:layout_marginRight="290dp"
                     android:src="@mipmap/sad" />
 
-                <!--Text view to display the percentage -->
-                <!-- of happy emotion. For now default set to 0-->
                 <TextView
                     android:id="@+id/sadtext"
                     android:layout_width="match_parent"
@@ -437,7 +417,6 @@
                 android:layout_marginRight="25dp"
                 android:layout_marginBottom="10dp">
 
-                <!-- Image view to display the happy face -->
                 <ImageView
                     android:id="@+id/happy"
                     android:layout_width="wrap_content"
@@ -445,8 +424,7 @@
                     android:layout_marginRight="290dp"
                     android:src="@mipmap/happy" />
 
-                <!--Text view to display the percentage -->
-                <!-- of happy emotion. For now default set to 0-->
+
                 <TextView
                     android:id="@+id/happytext"
                     android:layout_width="match_parent"
@@ -460,7 +438,6 @@
 
             </RelativeLayout>
 
-
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
@@ -471,8 +448,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="56dp"
-        android:text="@string/calender" /> <!-- Align to the bottom of the CardView -->
+        android:text="@string/calender" />
     />
-
-
 </RelativeLayout>
