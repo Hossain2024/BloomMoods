@@ -58,13 +58,8 @@ public class PieChartFragment extends Fragment {
 
 
         // Set OnClickListener for the button
-        mpiechartBinding.calenderbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavDirections action = PieChartFragmentDirections.actionPieChartFragmentToNavReport();
-                Navigation.findNavController(v).navigate(action);
-            }
-        });
+        mpiechartBinding.calenderbutton.setOnClickListener(button -> Navigation.findNavController(getView())
+                .navigate(R.id.action_pieChartFragment_to_nav_report));
         return mpiechartBinding.getRoot();
     }
 

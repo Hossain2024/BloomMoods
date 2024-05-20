@@ -179,13 +179,20 @@ public class JournalViewModel extends AndroidViewModel {
      * @param year the year.
      */
     public void getEntriesByDate(int userId, int month, int year) {
+        mRequestCompleted.setValue(false);
+        Log.i("JournalViewModel getEntriesByDate", String.valueOf(mRequestCompleted.getValue()));
         String url = "https://students.washington.edu/nchi22/api/log/get_mood_logs_by_month.php";
         Log.i("JournalViewModel", "getEntriesByDate " + userId + ", " + month + ", " + year);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-            mDateEntries::postValue,
+            response -> {
+                mDateEntries.postValue(response);
+                mRequestCompleted.postValue(true);
+                Log.i("JournalViewModel getEntriesByDate", String.valueOf(mRequestCompleted.getValue()));
+            },
             error -> {
                 if (error.networkResponse != null && error.networkResponse.statusCode == 404) {
                     mDateEntries.postValue("No entries found");
+                    mRequestCompleted.postValue(true);
                 }
             }) {
 
