@@ -107,8 +107,8 @@
                 android:layout_width="43dp"
                 android:layout_height="41dp"
                 android:layout_marginEnd="4dp"
-                app:srcCompat="@mipmap/anxious"
-                tools:tag="Anxious" />
+                android:tag="Anxious"
+                app:srcCompat="@mipmap/anxious" />
 
             <ImageView
                 android:id="@+id/angryImageView"

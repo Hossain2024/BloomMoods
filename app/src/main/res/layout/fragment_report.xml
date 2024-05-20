@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/reportScrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
+            android:gravity="center"
             android:fontFamily="@font/playfair_display"
             android:text="@string/Report"
             android:textColor="@color/dark_blue"
@@ -39,6 +39,20 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/reportTextView">
+          
+          
+          <TextView
+              android:id="@+id/calendarDateTextView"
+              android:layout_width="244dp"
+              android:layout_height="34dp"
+              android:fontFamily="@font/alatsi"
+              android:textAlignment="center"
+              android:textColor="@color/dark_blue"
+              android:textSize="24sp"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent" />
+
 
             <GridView
                 android:id="@+id/calendarGridView"
@@ -600,5 +614,4 @@
             app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </ScrollView>

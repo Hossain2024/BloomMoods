@@ -32,16 +32,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
-
     private NavController navController;
-
-    private UserViewModel mUserViewModel;
-
-    private PlantViewModel mPlantViewModel;
-
     private JournalViewModel mJournalViewModel;
-    private BottomNavigationView bottomNavView;
-
+    private PlantViewModel mPlantViewModel;
+    private UserViewModel mUserViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 //        // Initialize NavController
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         // Set up BottomNavigationView with NavController
-        bottomNavView = findViewById(R.id.navBarView);
+        BottomNavigationView bottomNavView = findViewById(R.id.navBarView);
         NavigationUI.setupWithNavController(bottomNavView, navController);
     }
 
@@ -99,7 +93,9 @@ public class MainActivity extends AppCompatActivity {
     public PlantViewModel getPlantViewModel() {
         return mPlantViewModel;
     }
-
+    public JournalViewModel getJournalViewModel() {
+        return mJournalViewModel;
+    }
 
     protected void showBottomNavigation() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);

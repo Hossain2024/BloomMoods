@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -39,40 +38,41 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import edu.tacoma.uw.bloommoods.databinding.FragmentNewEntryBinding;
 
 /**
  * A simple {@link Fragment} subclass.
+ * @author Chelsea Dacones
+ * @author Amanda Nguyen
  */
 public class NewEntryFragment extends Fragment {
-
+    private FragmentNewEntryBinding mNewEntryBinding;
     private JournalViewModel mJournalViewModel;
-    private UserViewModel mUserViewModel;
     private PlantViewModel mPlantViewModel;
-    FragmentNewEntryBinding mNewEntryBinding;
-    private String mSelectedMood;
-    private int streak;
+    private UserViewModel mUserViewModel;
+    private Button saveButton;
+    private EditText titleEditText;
+    private EditText entryEditText;
+    private ImageButton selectPlantButton;
     private ImageView plantPhoto;
-    private boolean loggedToday;
-    private String activePlantName;
     private ImageView leftArrow;
     private ImageView rightArrow;
-    private double plantGrowthPercent;
-    private int numberOfUnlocked;
-    private int activePlantId;
-    private String currentPlantSwitch;
-    private int activePlantStage;
+    private ImageView switchedPlant;
+    private LinearLayout moodLayout;
     private ProgressBar progressBar;
     private TextView plantGrowth;
     private TextView selectPlantText;
-    private ImageButton selectPlantButton;
-    private ImageView switchedPlant;
-    private EditText titleEditText;
-    private EditText entryEditText;
-    private Button saveButton;
-    private LinearLayout moodLayout;
-    private int userId;
+    private String activePlantName;
+    private String currentPlantSwitch;
+    private String mSelectedMood;
+    private boolean loggedToday;
+    private double plantGrowthPercent;
+    private int streak;
+    private int numberOfUnlocked;
+    private int activePlantId;
+    private int mCurrentUserId;
     private int tulipStage;
     private int sunflowerStage;
     private int peonyStage;
@@ -81,23 +81,23 @@ public class NewEntryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mNewEntryBinding = FragmentNewEntryBinding.inflate(inflater, container, false);
-//        mNewEntryBinding = FragmentWaterPlantBinding.inflate(inflater, container, false);
-        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
         mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
         mPlantViewModel = ((MainActivity) requireActivity()).getPlantViewModel();
+        mJournalViewModel = ((MainActivity) requireActivity()).getJournalViewModel();
 
-        TextView date = mNewEntryBinding.dateText;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
-        String currentDate = dateFormat.format(new Date());
-        date.setText(currentDate);
+        mNewEntryBinding.dateText.setText(new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault()).format(new Date()));
 
-        TextView plantGrowth = mNewEntryBinding.plantGrowth;
-        float[] radii = {50, 50, 50, 50, 50, 50, 50, 50};
-        RoundRectShape roundRectShape = new RoundRectShape(radii, null,null);
-        ShapeDrawable shapeDrawable = new ShapeDrawable(roundRectShape);
-        int color = Color.parseColor("#4DFFD6C7");
-        shapeDrawable.getPaint().setColor(color);
-        plantGrowth.setBackground(shapeDrawable);
+        ShapeDrawable shapeDrawable = new ShapeDrawable(new RoundRectShape(new float[]{50, 50, 50, 50, 50, 50, 50, 50}, null, null));
+        shapeDrawable.getPaint().setColor(Color.parseColor("#4DFFD6C7"));
+        mNewEntryBinding.plantGrowth.setBackground(shapeDrawable);
+
+//        TextView plantGrowth = mNewEntryBinding.plantGrowth;
+//        float[] radii = {50, 50, 50, 50, 50, 50, 50, 50};
+//        RoundRectShape roundRectShape = new RoundRectShape(radii, null,null);
+//        ShapeDrawable shapeDrawable = new ShapeDrawable(roundRectShape);
+//        int color = Color.parseColor("#4DFFD6C7");
+//        shapeDrawable.getPaint().setColor(color);
+//        plantGrowth.setBackground(shapeDrawable);
 
         return mNewEntryBinding.getRoot();
     }
@@ -105,13 +105,12 @@ public class NewEntryFragment extends Fragment {
     @Override
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
-        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
 
         // Observe userId from UserViewModel
         mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
-                mJournalViewModel.getTodaysEntry(userId); // Fetch today's entry using the userId
+                mCurrentUserId = userId;
+                mJournalViewModel.getTodaysEntry(userId);
                 mNewEntryBinding.saveButton.setOnClickListener(button -> addEntry(userId));
                 mPlantViewModel.getCurrentPlantDetails(userId);
                 mPlantViewModel.addPlantResponseObserver(getViewLifecycleOwner() , response -> {
@@ -129,33 +128,7 @@ public class NewEntryFragment extends Fragment {
                 isUnlockedPlant();
             }
         });
-
-        mJournalViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
-        listeners();
-    }
-
-    private void listeners() {
-        moodLayout = mNewEntryBinding.linearLayout;
-        titleEditText = mNewEntryBinding.titleEditText;
-        entryEditText = mNewEntryBinding.entryEditText;
-        switchedPlant = mNewEntryBinding.plantStageSwitch;
-        selectPlantText = mNewEntryBinding.selectPlantText;
-        selectPlantButton = mNewEntryBinding.selectPlantButton;
-        plantPhoto = mNewEntryBinding.plantStage;
-        saveButton = mNewEntryBinding.saveButton;
-
-        ImageView switchButton = mNewEntryBinding.switchButton;
-        switchButton.setOnClickListener(v -> toggleSwitchPlant());
-
-        leftArrow = mNewEntryBinding.leftArrow;
-        rightArrow = mNewEntryBinding.rightArrow;
-
-        rightArrow.setOnClickListener(v -> switchArrows("right"));
-        leftArrow.setOnClickListener(v -> switchArrows("left"));
-        LinearLayout moodLayout = mNewEntryBinding.linearLayout;
-
-        setOnMoodClicks(moodLayout);
-        adjustToKeyboard();
+        initializeListeners();
     }
 
     @Override
@@ -164,15 +137,39 @@ public class NewEntryFragment extends Fragment {
         mNewEntryBinding = null;
     }
 
+    private void initializeListeners() {
+        titleEditText = mNewEntryBinding.titleEditText;
+        entryEditText = mNewEntryBinding.entryEditText;
+        selectPlantButton = mNewEntryBinding.selectPlantButton;
+        plantPhoto = mNewEntryBinding.plantStage;
+        saveButton = mNewEntryBinding.saveButton;
+        leftArrow = mNewEntryBinding.leftArrow;
+        rightArrow = mNewEntryBinding.rightArrow;
+        switchedPlant = mNewEntryBinding.plantStageSwitch;
+        selectPlantText = mNewEntryBinding.selectPlantText;
+        progressBar = mNewEntryBinding.progressBar;
+        plantGrowth = mNewEntryBinding.plantGrowth;
+
+        leftArrow.setOnClickListener(v -> switchArrows("left"));
+        rightArrow.setOnClickListener(v -> switchArrows("right"));
+
+        mNewEntryBinding.switchButton.setOnClickListener(v -> toggleSwitchPlant());
+
+        setOnMoodClicks();
+        adjustToKeyboard();
+    }
+
     private void addEntry(int userId) {
-        String title = mNewEntryBinding.titleEditText.getText().toString();
-        String entry = mNewEntryBinding.entryEditText.getText().toString();
+        String title = titleEditText.getText().toString();
+        String entry = entryEditText.getText().toString();
+
         if (mSelectedMood == null) {
             Toast.makeText(this.getContext(),"Please select a mood", Toast.LENGTH_LONG).show();
         } else if (title.isEmpty() || entry.isEmpty()) {
             Toast.makeText(this.getContext(),"Please enter a title and entry", Toast.LENGTH_LONG).show();
         } else {
             mJournalViewModel.addEntry(userId, title, mSelectedMood, entry);
+            mJournalViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
             addGrowth();
         }
     }
@@ -181,69 +178,54 @@ public class NewEntryFragment extends Fragment {
         if (response.length() > 0) {
             if (response.has("error")) {
                 try {
-                    Toast.makeText(this.getContext(),
-                            "Error Adding entry: " +
-                                    response.get("error"), Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(this.getContext(), "Error Adding entry: " + response.get("error"), Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
-                    Log.e("JSON Parse Error", e.getMessage());
+                    Log.e("JSON Parse Error", Objects.requireNonNull(e.getMessage()));
                 }
-
             } else {
-                Log.i("NewEntryFragment", "Response received, now observing mEntry");
+                Toast.makeText(this.getContext(),"Entry added", Toast.LENGTH_LONG).show();
                 mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), moodEntry -> {
                     if (moodEntry != null) {
-                        // Navigate to TodaysEntryFragment with the moodEntry
                         NewEntryFragmentDirections.ActionNewEntryFragmentToTodaysEntryFragment directions =
                                 NewEntryFragmentDirections.actionNewEntryFragmentToTodaysEntryFragment(moodEntry);
-                        Navigation.findNavController(getView()).navigate(directions);
+                        Navigation.findNavController(requireView()).navigate(directions);
                     } else {
-                        // Log if moodEntry is null
                         Log.e("NewEntryFragment", "Mood entry is null");
                     }
                 });
             }
-
         } else {
             Log.d("JSON Response", "No Response");
         }
     }
 
-
-    private void setOnMoodClicks(LinearLayout moodLayout) {
-        for (int i = 0; i < moodLayout.getChildCount(); i++) {
-            View childView = moodLayout.getChildAt(i);
-            if (childView instanceof ImageView) {
-                childView.setOnClickListener(this::onMoodClicked);
-            }
-        }
+    private void setOnMoodClicks() {
+        mNewEntryBinding.anxiousImageView.setOnClickListener(this::onMoodClicked);
+        mNewEntryBinding.excitedImageView.setOnClickListener(this::onMoodClicked);
+        mNewEntryBinding.happyImageView.setOnClickListener(this::onMoodClicked);
+        mNewEntryBinding.sadImageView.setOnClickListener(this::onMoodClicked);
+        mNewEntryBinding.neutralImageView.setOnClickListener(this::onMoodClicked);
+        mNewEntryBinding.angryImageView.setOnClickListener(this::onMoodClicked);
     }
 
     private void onMoodClicked(View view) {
         if (mNewEntryBinding.moodTextView.getVisibility() == View.GONE) {
             mNewEntryBinding.moodTextView.setVisibility(View.VISIBLE);
         }
+        Log.i("NewEntryFragment onMoodClicked", (String) view.getTag());
         mSelectedMood = view.getTag().toString();
         mNewEntryBinding.moodTextView.setText(mSelectedMood);
     }
 
-    /** All methods below were written by Amanda, due to conflicts Chelsea had to manually cut and paste the code here,
+    /** All methods below were written by Amanda, due to conflicts more difficult to resolve, Chelsea manually cut and paste the code here,
      * resulting in Git showing Chelsea as the author.*/
     private void setTextImage() {
-        TextView date = mNewEntryBinding.dateText;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
-        String currentDate = dateFormat.format(new Date());
-        date.setText(currentDate);
-
-        plantGrowth = mNewEntryBinding.plantGrowth;
+        mNewEntryBinding.dateText.setText(new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault()).format(new Date()));
 
         // Update current growth according to user's current plant details
         String growth = "Current Growth: " + plantGrowthPercent + "%";
         plantGrowth.setText(growth);
-
-        progressBar = mNewEntryBinding.progressBar;
         progressBar.setProgress((int) plantGrowthPercent);
-
     }
 
     private void setPlantImage(ImageView view, int plantStage, String plantName) {
@@ -276,7 +258,7 @@ public class NewEntryFragment extends Fragment {
                     Date currentDate = new Date();
 
                     // Check if lastLoggedDate is within the last 24 hours
-                    long diff = currentDate.getTime() - lastLoggedDate.getTime();
+                    long diff = currentDate.getTime() - Objects.requireNonNull(lastLoggedDate).getTime();
                     long hours = diff / (60 * 60 * 1000);
 
                     if (hours <= 24) {
@@ -288,12 +270,7 @@ public class NewEntryFragment extends Fragment {
             }
         });
 
-        double increaseGrowth;
-        if (streak >= 2) {
-            increaseGrowth = 5;
-        } else {
-            increaseGrowth = 2.5;
-        }
+        double increaseGrowth = streak >= 2 ? 5 : 2.5;
 
         if (!loggedToday) {
             // Get current user ID
@@ -328,17 +305,18 @@ public class NewEntryFragment extends Fragment {
                     activePlantName = response.getString(("name"));
                     currentPlantSwitch = activePlantName;
                     activePlantId = response.getInt(("plant_option_id"));
-                    activePlantStage = response.getInt("stage");
+                    int activePlantStage = response.getInt("stage");
                     setTextImage();
                     setPlantImage(plantPhoto, activePlantStage, activePlantName);
                 }
             } catch (JSONException e) {
-                Log.e("JSON Parse Error", e.getMessage());
+                Log.e("JSON Parse Error", Objects.requireNonNull(e.getMessage()));
             }
-        }else{
+        } else{
             Log.e("Plant details response", "Could not obtain plant details OBSERVE");
         }
     }
+
     private void observeUnlockedPlants(final JSONArray response) {
         if (response.length() > 0) {
             numberOfUnlocked = response.length();
@@ -376,7 +354,7 @@ public class NewEntryFragment extends Fragment {
                     }
                 }
             } catch (JSONException e) {
-                Log.e("JSON Parse Error", e.getMessage());
+                Log.e("JSON Parse Error", Objects.requireNonNull(e.getMessage()));
             }
         }else{
             Log.e("User details", "Could not obtain user details");
@@ -419,15 +397,19 @@ public class NewEntryFragment extends Fragment {
     }
 
     private void updateArrows(String plantName) {
-        if (plantName.equals("Tranquil Tulip")) {
-            rightArrow.setVisibility(View.VISIBLE);
-            leftArrow.setVisibility(View.GONE);
-        } else if (plantName.equals("Serenity Sunflower")) {
-            leftArrow.setVisibility(View.VISIBLE);
-            rightArrow.setVisibility(View.VISIBLE);
-        } else if (plantName.equals("Peaceful Peony")) {
-            leftArrow.setVisibility(View.VISIBLE);
-            rightArrow.setVisibility(View.GONE);
+        switch (plantName) {
+            case "Tranquil Tulip":
+                rightArrow.setVisibility(View.VISIBLE);
+                leftArrow.setVisibility(View.GONE);
+                break;
+            case "Serenity Sunflower":
+                leftArrow.setVisibility(View.VISIBLE);
+                rightArrow.setVisibility(View.VISIBLE);
+                break;
+            case "Peaceful Peony":
+                leftArrow.setVisibility(View.VISIBLE);
+                rightArrow.setVisibility(View.GONE);
+                break;
         }
     }
 
@@ -437,12 +419,11 @@ public class NewEntryFragment extends Fragment {
         String resourceName = "select_plant_locked";
         String selected = "Not yet unlocked";
         selectPlantText.setVisibility(View.VISIBLE);
-        int color = ContextCompat.getColor(getContext(), R.color.black);
+        int color = ContextCompat.getColor(requireContext(), R.color.black);
 
         updateArrows(plantName);
 
         switchedPlant.setVisibility(View.VISIBLE);
-
 
         if (numberOfUnlocked < plantOptionId && plantOptionId != activePlantId) {
             setPlantImage(switchedPlant, 1, plantName);
@@ -451,7 +432,7 @@ public class NewEntryFragment extends Fragment {
             selected = "Select Plant";
             resourceName = "select_plant_unlocked";
             color = ContextCompat.getColor(getContext(), R.color.dark_green);
-            selectPlantButton.setOnClickListener(v -> updatePlant(userId, plantOptionId));
+            selectPlantButton.setOnClickListener(v -> updatePlant(mCurrentUserId, plantOptionId));
             if (plantOptionId == 1) {
                 setPlantImage(switchedPlant, tulipStage, plantName);
             } else if (plantOptionId == 2) {
@@ -476,6 +457,7 @@ public class NewEntryFragment extends Fragment {
     }
 
     private void switchArrows(String direction) {
+        plantPhoto.setVisibility(View.INVISIBLE);
         plantPhoto.setVisibility(View.INVISIBLE);
         Log.i("CURRENT PLANT SWITCH", currentPlantSwitch);
         Log.i("DIRECTIONS", direction);
@@ -502,20 +484,21 @@ public class NewEntryFragment extends Fragment {
     private void unlockNewPlant(int currentPlantId) {
         if (currentPlantId != 3 && numberOfUnlocked < 3 && !(currentPlantId > numberOfUnlocked)) {
             int finalCurrentPlantId = currentPlantId + 1;
-            updatePlant(userId, finalCurrentPlantId);
-            mPlantViewModel.getUnlockedPlants(userId);
+            updatePlant(mCurrentUserId, finalCurrentPlantId);
+            mPlantViewModel.getUnlockedPlants(mCurrentUserId);
             Toast.makeText(getContext(), "NEW PLANT UNLOCKED", Toast.LENGTH_LONG).show();
         }
     }
     
     private void isUnlockedPlant() {
-        mPlantViewModel.getUnlockedPlants(userId);
+        mPlantViewModel.getUnlockedPlants(mCurrentUserId);
         mPlantViewModel.addUnlockedPlantResponseObserver(getViewLifecycleOwner(), response -> {
             if (response.length() > 0) {
                 observeUnlockedPlants(response);
             }
         });
     }
+
     private void updatePlant(int userId, int plantId){
         Log.i("UPDATED PLANT()", "START");
         mPlantViewModel.updateCurrentPlant(userId, plantId);

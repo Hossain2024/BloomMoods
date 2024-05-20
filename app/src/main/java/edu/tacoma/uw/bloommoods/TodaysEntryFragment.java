@@ -7,14 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -28,15 +25,16 @@ import java.util.Map;
 import edu.tacoma.uw.bloommoods.databinding.FragmentTodaysEntryBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment for displaying and editing today's journal entry.
+ * @author Chelsea Dacones
  */
 public class TodaysEntryFragment extends Fragment {
-
+    private FragmentTodaysEntryBinding mTodaysEntryBinding;
     private JournalViewModel mJournalViewModel;
     private PlantViewModel mPlantViewModel;
-    FragmentTodaysEntryBinding mTodaysEntryBinding;
+    private UserViewModel mUserViewModel;
     private String mSelectedMood;
-    private int currentUser;
+    private int mCurrentUser;
     private static final Map<Integer, String> moodMap = new HashMap<>();
 
     static {
@@ -49,24 +47,23 @@ public class TodaysEntryFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        
         mTodaysEntryBinding = FragmentTodaysEntryBinding.inflate(inflater, container, false);
+        mPlantViewModel = ((MainActivity) requireActivity()).getPlantViewModel();
+        mJournalViewModel = ((MainActivity) requireActivity()).getJournalViewModel();
+        mUserViewModel =  ((MainActivity) requireActivity()).getUserViewModel();
         return mTodaysEntryBinding.getRoot();
     }
 
     @Override
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        UserViewModel mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
-        mPlantViewModel = ((MainActivity) requireActivity()).getPlantViewModel();
-        mJournalViewModel = new ViewModelProvider(getActivity()).get(JournalViewModel.class);
 
         // Observe userId from UserViewModel
         mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
-                currentUser = userId;
+                mCurrentUser = userId;
                 mJournalViewModel.getTodaysEntry(userId); // Fetch today's entry
             }
         });
@@ -74,65 +71,43 @@ public class TodaysEntryFragment extends Fragment {
         // Observe the entry LiveData
         mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), this::updateUI);
 
-//        TodaysEntryFragmentArgs args = TodaysEntryFragmentArgs.fromBundle(getArguments());
-//        JournalEntry entry = args.getEntry();
-//        updateUI(entry);
-
         mTodaysEntryBinding.editButton.setOnClickListener(button -> setEditable(true));
         mTodaysEntryBinding.updateButton.setOnClickListener(button -> {
-            updateEntry(currentUser);
+            updateEntry(mCurrentUser);
             setEditable(false);
         });
 
-        mPlantViewModel.getCurrentPlantDetails(currentUser);
-        mPlantViewModel.addPlantResponseObserver(getViewLifecycleOwner(), response -> {
-            if (response.has("stage") && response.has("growthLevel") && response.has("name")) {
-                int stage;
-                ImageView plantStage = mTodaysEntryBinding.plantImageView;
-                String activePlantName = null;
-                try {
-                    activePlantName = response.getString(("name"));
-                    stage = response.getInt("stage");
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-                String resourceName = activePlantName.toLowerCase().replace(" ", "_") + "_stage_" + stage;
-                int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
-                if (resourceId != 0) {
-                    Drawable drawable = ContextCompat.getDrawable(requireContext(), resourceId);
-                    plantStage.setImageDrawable(drawable);
-                } else {
-                    Log.e("TodaysEntryFragment", "Drawable resource not found: " + resourceName);
-                }
-            }
-        });
-
-//        // Observe userId from UserViewModel
-//        mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
-//            if (userId != null) {
-//                currentUser = userId;
+        mPlantViewModel.getCurrentPlantDetails(mCurrentUser);
+//        mPlantViewModel.addPlantResponseObserver(getViewLifecycleOwner(), response -> {
+//            if (response.has("stage") && response.has("growthLevel") && response.has("name")) {
+//                int stage;
+//                ImageView plantStage = mTodaysEntryBinding.plantImageView;
+//                String activePlantName;
+//                try {
+//                    activePlantName = response.getString(("name"));
+//                    stage = response.getInt("stage");
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                String resourceName = activePlantName.toLowerCase().replace(" ", "_") + "_stage_" + stage;
+//                int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
+//                if (resourceId != 0) {
+//                    Drawable drawable = ContextCompat.getDrawable(requireContext(), resourceId);
+//                    plantStage.setImageDrawable(drawable);
+//                } else {
+//                    Log.e("TodaysEntryFragment", "Drawable resource not found: " + resourceName);
+//                }
 //            }
 //        });
-//
-//        TodaysEntryFragmentArgs args = TodaysEntryFragmentArgs.fromBundle(getArguments());
-//        JournalEntry entry = (JournalEntry) args.getEntry();
-//        mSelectedMood = moodMap.get(entry.getMoodImage());
-//        mTodaysEntryBinding.todaysDate.setText(entry.getDate());
-//        mTodaysEntryBinding.todaysTitleEditText.setText(entry.getTitle());
-//        mTodaysEntryBinding.todaysEntryEditText.setText(entry.getContent());
-//        mTodaysEntryBinding.todaysMoodImageView.setImageResource(entry.getMoodImage());
-//        mTodaysEntryBinding.editButton.setOnClickListener(button -> setEditable(true));
-//        mTodaysEntryBinding.updateButton.setOnClickListener(button -> {updateEntry(currentUser); setEditable(false);});
+        mPlantViewModel.addPlantResponseObserver(getViewLifecycleOwner(), this::observePlantResponse);
 
-//
-        LinearLayout moodLayout = mTodaysEntryBinding.linearLayout;
-        setOnMoodClicks(moodLayout);
+        setOnMoodClicks(mTodaysEntryBinding.linearLayout);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mJournalViewModel = null;
+        mTodaysEntryBinding = null;
     }
 
     private void setEditable(boolean isEditing) {
@@ -168,12 +143,12 @@ public class TodaysEntryFragment extends Fragment {
     }
 
     private void setOnMoodClicks(LinearLayout moodLayout) {
-        for (int i = 0; i < moodLayout.getChildCount(); i++) {
-            View childView = moodLayout.getChildAt(i);
-            if (childView instanceof ImageView) {
-                childView.setOnClickListener(this::onMoodClicked);
-            }
-        }
+        mTodaysEntryBinding.anxiousImageView.setOnClickListener(this::onMoodClicked);
+        mTodaysEntryBinding.excitedImageView.setOnClickListener(this::onMoodClicked);
+        mTodaysEntryBinding.happyImageView.setOnClickListener(this::onMoodClicked);
+        mTodaysEntryBinding.sadImageView.setOnClickListener(this::onMoodClicked);
+        mTodaysEntryBinding.neutralImageView.setOnClickListener(this::onMoodClicked);
+        mTodaysEntryBinding.angryImageView.setOnClickListener(this::onMoodClicked);
     }
 
     private void onMoodClicked(View view) {
@@ -185,20 +160,35 @@ public class TodaysEntryFragment extends Fragment {
         if (response.length() > 0) {
             if (response.has("error")) {
                 try {
-                    Toast.makeText(this.getContext(),
-                            "Error updating entry: " +
-                                    response.get("error"), Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(this.getContext(), "Error updating entry: " + response.get("error"), Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     Log.e("JSON Parse Error", e.getMessage());
                 }
-
             } else {
                 Toast.makeText(this.getContext(),"Entry updated", Toast.LENGTH_LONG).show();
-                mJournalViewModel.getTodaysEntry(currentUser); // Fetch today's entry
-//                mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), this::updateUI);
+                mJournalViewModel.getTodaysEntry(mCurrentUser);
             }
+        } else {
+            Log.d("JSON Response", "No Response");
+        }
+    }
 
+    private void observePlantResponse(final JSONObject response) {
+        if (response.length() > 0) {
+            try {
+                int stage = response.getInt("stage");
+                String activePlantName = response.getString("name");
+                String resourceName = activePlantName.toLowerCase().replace(" ", "_") + "_stage_" + stage;
+                int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
+                if (resourceId != 0) {
+                    Drawable drawable = ContextCompat.getDrawable(requireContext(), resourceId);
+                    mTodaysEntryBinding.plantImageView.setImageDrawable(drawable);
+                } else {
+                    Log.e("TodaysEntryFragment", "Drawable resource not found: " + resourceName);
+                }
+            } catch (JSONException e) {
+                Log.e("JSON Parse Error", e.getMessage());
+            }
         } else {
             Log.d("JSON Response", "No Response");
         }
