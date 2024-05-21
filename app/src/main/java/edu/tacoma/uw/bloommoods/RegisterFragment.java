@@ -69,17 +69,15 @@ public class RegisterFragment extends Fragment {
         String pwd = String.valueOf(mBinding.pwdEdit.getText());
         String name = String.valueOf(mBinding.nameEdit.getText());
         if (email.isEmpty() || pwd.isEmpty() || name.isEmpty()) {
-            //throw a toast
-            Toast.makeText(this.getContext(), "All fields are required ", Toast.LENGTH_LONG).show();
+            mBinding.textError.setText("All fields are required");
 
         } else {
             try {
-                Account account = new Account(email, pwd);
+                Account account = new Account(email, pwd, true);
                 Log.i(TAG, email);
                 mRegisterUserViewModel.addUser(account, name);
             } catch (IllegalArgumentException ie) {
                 Log.e(TAG, ie.getMessage());
-                Toast.makeText(this.getContext(), ie.getMessage(), Toast.LENGTH_LONG).show();
                 mBinding.textError.setText(ie.getMessage());
             }
         }
@@ -92,7 +90,6 @@ public class RegisterFragment extends Fragment {
                     int errorCode = response.getInt("error_code");
                     if (errorCode == 1062) {
                         String errorMessage = "Email already exists.";
-                        Toast.makeText(this.getContext(), errorMessage, Toast.LENGTH_LONG).show();
                         mBinding.textError.setText(errorMessage);
                     }
                 } else {
