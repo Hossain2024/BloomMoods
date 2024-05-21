@@ -84,7 +84,7 @@ public class Account {
 
     public void setPassword(String password) {
         if (!isValidPassword(password)) {
-            throw new IllegalArgumentException("Password must be at last 6 chars long with at least 1 digit and 1 symbol.");
+            throw new IllegalArgumentException("Password must be at last 6 characters long with at least 1 digit and 1 symbol");
         }
         this.myPassword = password;
     }
