@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
@@ -28,8 +29,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 import edu.tacoma.uw.bloommoods.databinding.FragmentReportBinding;
@@ -44,7 +47,7 @@ public class ReportFragment extends Fragment {
     private UserViewModel mUserViewModel;
     private List<JournalEntry> mJournalEntries;
     private List<Date> mDates;
-    private ImageView excitedImageView, anxiousImageView, angryImageView,  neutralImageView, sadImageView;
+    private TextView happytext, excitedtext, sadtext, anxioustext, angrytext, neutraltext;
     private PieChart pieChart;
 
     @Override
@@ -62,18 +65,15 @@ public class ReportFragment extends Fragment {
             ((MainActivity) activity).bottomNavBarBackground();
         }
 
-        excitedImageView = mReportBinding.excitedImageView;
-        anxiousImageView = mReportBinding.anxiousImageView;
-        angryImageView = mReportBinding.angryImageView;
-        neutralImageView = mReportBinding.neutralImageView;
-        sadImageView = mReportBinding.sadImageView;
-
+           happytext = mReportBinding.happytext;
+           excitedtext= mReportBinding.excitedtext;
+           angrytext= mReportBinding.angrytext;
+           neutraltext = mReportBinding.neutraltext;
+           sadtext = mReportBinding.sadtext;
+           anxioustext = mReportBinding.anxioustext;
         // Initialize the PieChart
-        pieChart = mReportBinding.piechart;
-
+          pieChart = mReportBinding.piechart;
         // Set the data for the PieChart
-        setData();
-
         mGridView = mReportBinding.calendarGridView;
         CalendarAdapter adapter = new CalendarAdapter(getActivity(), mDates, mJournalEntries);
         mGridView.setAdapter(adapter);
@@ -116,7 +116,8 @@ public class ReportFragment extends Fragment {
                                 mJournalEntries.add(entry);
                             }
                             Log.i("ReportFragment", "Journal entries length: " + mJournalEntries.size());
-                            updateGridView(mJournalEntries);
+                            updateViews();
+
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -163,24 +164,45 @@ public class ReportFragment extends Fragment {
     }
 
     private void setData() {
-        // Dummy data for the moods (replace with your actual data)
-        int happyCount = 20;
-        int anxiousCount = 15;
-        int angryCount = 10;
-        int excitedCount = 6;
-        int neutralCount = 30;
-        int sadCount = 25;
+        Map<Integer, Integer> moodCounts = new HashMap<>();
+        moodCounts.put(R.mipmap.happy, 0);
+        moodCounts.put(R.mipmap.excited, 0);
+        moodCounts.put(R.mipmap.anxious, 0);
+        moodCounts.put(R.mipmap.angry, 0);
+        moodCounts.put(R.mipmap.neutral, 0);
+        moodCounts.put(R.mipmap.sad, 0);
 
-        // Add data to the PieChart
-        pieChart.addPieSlice(new PieModel("Happy", happyCount, Color.parseColor("#D1EFC6")));
-        pieChart.addPieSlice(new PieModel("Excited", excitedCount, Color.parseColor("#F8F1D7")));
-        pieChart.addPieSlice(new PieModel("Anxious", anxiousCount, Color.parseColor("#C9C3EA")));
-        pieChart.addPieSlice(new PieModel("Angry", angryCount, Color.parseColor("#F4C7CA")));
-        pieChart.addPieSlice(new PieModel("Neutral", neutralCount, Color.parseColor("#DCDCDC")));
-        pieChart.addPieSlice(new PieModel("Sad", sadCount, Color.parseColor("#CFDCED")));
+        // Count the moods from the journal entries
+        for (JournalEntry entry : mJournalEntries) {
+            int moodImage = entry.getMoodImage();
+            if (moodCounts.containsKey(moodImage)) {
+                moodCounts.put(moodImage, moodCounts.get(moodImage) + 1);
+            }
+        }
+
+       happytext.setText(String.valueOf(moodCounts.get(R.mipmap.happy)));
+       excitedtext.setText(String.valueOf(moodCounts.get(R.mipmap.excited)));
+       anxioustext.setText(String.valueOf(moodCounts.get(R.mipmap.anxious)));
+       angrytext.setText(String.valueOf(moodCounts.get(R.mipmap.angry)));
+       neutraltext.setText(String.valueOf(moodCounts.get(R.mipmap.neutral)));
+       sadtext.setText(String.valueOf(moodCounts.get(R.mipmap.sad)));
+
+        pieChart.clearChart(); // Clear the previous data
+
+        pieChart.addPieSlice(new PieModel("Happy", moodCounts.get(R.mipmap.happy), Color.parseColor("#D1EFC6")));
+        pieChart.addPieSlice(new PieModel("Excited", moodCounts.get(R.mipmap.excited), Color.parseColor("#F8F1D7")));
+        pieChart.addPieSlice(new PieModel("Anxious", moodCounts.get(R.mipmap.anxious), Color.parseColor("#C9C3EA")));
+        pieChart.addPieSlice(new PieModel("Angry", moodCounts.get(R.mipmap.angry), Color.parseColor("#F4C7CA")));
+        pieChart.addPieSlice(new PieModel("Neutral", moodCounts.get(R.mipmap.neutral), Color.parseColor("#DCDCDC")));
+        pieChart.addPieSlice(new PieModel("Sad", moodCounts.get(R.mipmap.sad), Color.parseColor("#CFDCED")));
 
         // Start the animation
         pieChart.startAnimation();
+    }
+    private void updateViews() {
+        // Update GridView
+        updateGridView(mJournalEntries);
+        setData();
     }
 
 }
