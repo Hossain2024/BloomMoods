@@ -511,6 +511,7 @@ public class NewEntryFragment extends Fragment {
 
     private void resetPlant(int userId, int plantId) {
         mPlantViewModel.resetCurrentPlant(userId, plantId);
+        mPlantViewModel.updateCurrentPlant(userId, plantId);
     }
 
     private void toggleSelectPlant(Boolean on) {
