@@ -76,18 +76,19 @@
     <EditText
         android:id="@+id/nameEditText"
         android:layout_width="0dp"
-        android:background="@drawable/darker_rounded_bar"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:hint="@string/name_sample"
-        android:fontFamily="@font/playfair_display"
-        android:padding="12dp"
+        android:background="@drawable/darker_rounded_bar"
         android:enabled="false"
-        app:layout_constraintTop_toBottomOf="@+id/nameLabel"
+        android:fontFamily="@font/playfair_display"
+        android:hint="@string/name_sample"
+        android:maxLength="6"
+        android:padding="12dp"
+        app:layout_constraintEnd_toStartOf="@+id/editNameButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/editNameButton" />
+        app:layout_constraintTop_toBottomOf="@+id/nameLabel" />
 
 
     <ImageButton
@@ -199,7 +200,7 @@
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="128dp"
         android:background="@drawable/rounded_rect"
         android:fontFamily="@font/playfair_display"
         android:text="@string/logout"
@@ -214,8 +215,6 @@
         android:id="@+id/referButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="192dp"
-        android:layout_marginTop="100dp"
         android:background="@drawable/rounded_rect"
         android:drawableLeft="@mipmap/share"
         android:drawablePadding="8dp"
@@ -225,8 +224,10 @@
         android:textColor="@android:color/white"
         android:textSize="18sp"
         app:backgroundTint="@color/light_blue"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoutButton" />
+        app:layout_constraintBottom_toBottomOf="@+id/logoutButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/logoutButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

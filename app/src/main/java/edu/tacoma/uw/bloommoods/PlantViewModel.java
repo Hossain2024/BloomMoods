@@ -214,4 +214,31 @@ public class PlantViewModel extends AndroidViewModel {
         Volley.newRequestQueue(getApplication().getApplicationContext())
                 .add(request);
     }
+
+    protected void resetCurrentPlant(int userId, int plantId) {
+        String url = "https://students.washington.edu/nchi22/api/plants/reset_plant.php";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("user_id", userId);
+            body.put("plant_option_id", plantId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Request request = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                body,
+                response ->
+                        Log.i("Plant Reset Successfully", response.toString()),
+                this::handleError);
+
+        Log.i("UserViewModel", request.getUrl().toString());
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10_000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        //Instantiate the RequestQueue and add the request to the queue
+        Volley.newRequestQueue(getApplication().getApplicationContext())
+                .add(request);
+    }
 }
