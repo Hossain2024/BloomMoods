@@ -1,5 +1,7 @@
 package edu.tacoma.uw.bloommoods;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -52,30 +54,18 @@ public class NewEntryFragment extends Fragment {
     private JournalViewModel mJournalViewModel;
     private PlantViewModel mPlantViewModel;
     private UserViewModel mUserViewModel;
-    private Button saveButton;
-    private EditText titleEditText;
-    private EditText entryEditText;
+    private Button saveButton, resetButton;
+    private EditText titleEditText, entryEditText;
     private ImageButton selectPlantButton;
-    private ImageView plantPhoto;
-    private ImageView leftArrow;
-    private ImageView rightArrow;
-    private ImageView switchedPlant;
+    private ImageView plantPhoto, leftArrow,rightArrow,switchedPlant;
     private LinearLayout moodLayout;
     private ProgressBar progressBar;
-    private TextView plantGrowth;
-    private TextView selectPlantText;
-    private String activePlantName;
-    private String currentPlantSwitch;
-    private String mSelectedMood;
+    private TextView plantGrowth, selectPlantText;
+    private String activePlantName, currentPlantSwitch,mSelectedMood;
     private boolean loggedToday;
     private double plantGrowthPercent;
-    private int streak;
-    private int numberOfUnlocked;
-    private int activePlantId;
-    private int mCurrentUserId;
-    private int tulipStage;
-    private int sunflowerStage;
-    private int peonyStage;
+    private int streak, numberOfUnlocked, activePlantId, mCurrentUserId;
+    private int tulipStage, sunflowerStage,peonyStage;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -138,6 +128,7 @@ public class NewEntryFragment extends Fragment {
     }
 
     private void initializeListeners() {
+        resetButton = mNewEntryBinding.resetButton;
         titleEditText = mNewEntryBinding.titleEditText;
         entryEditText = mNewEntryBinding.entryEditText;
         selectPlantButton = mNewEntryBinding.selectPlantButton;
@@ -149,9 +140,11 @@ public class NewEntryFragment extends Fragment {
         selectPlantText = mNewEntryBinding.selectPlantText;
         progressBar = mNewEntryBinding.progressBar;
         plantGrowth = mNewEntryBinding.plantGrowth;
+        moodLayout = mNewEntryBinding.linearLayout;
 
         leftArrow.setOnClickListener(v -> switchArrows("left"));
         rightArrow.setOnClickListener(v -> switchArrows("right"));
+        resetButton.setOnClickListener(v -> showConfirmationDialog());
 
         mNewEntryBinding.switchButton.setOnClickListener(v -> toggleSwitchPlant());
 
@@ -375,6 +368,7 @@ public class NewEntryFragment extends Fragment {
             toggleSwitchPlantOff();
         } else {
             updateArrows(activePlantName);
+            resetButton.setVisibility(View.VISIBLE);
             entryEditText.setVisibility(View.GONE);
             titleEditText.setVisibility(View.GONE);
             saveButton.setVisibility(View.GONE);
@@ -384,6 +378,7 @@ public class NewEntryFragment extends Fragment {
     }
 
     private void toggleSwitchPlantOff() {
+        resetButton.setVisibility(View.GONE);
         rightArrow.setVisibility(View.GONE);
         leftArrow.setVisibility(View.GONE);
         toggleSelectPlant(false);
@@ -414,6 +409,7 @@ public class NewEntryFragment extends Fragment {
     }
 
     private void selectPlant(String plantName, int plantOptionId) {
+        resetButton.setVisibility(View.GONE);
         toggleSelectPlant(true);
 
         String resourceName = "select_plant_locked";
@@ -444,6 +440,7 @@ public class NewEntryFragment extends Fragment {
         }
         else {
             toggleSelectPlant(false);
+            resetButton.setVisibility(View.VISIBLE);
         }
         int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
 
@@ -512,6 +509,11 @@ public class NewEntryFragment extends Fragment {
         Log.i("UPDATED PLANT()", "FINISHED");
     }
 
+    private void resetPlant(int userId, int plantId) {
+        mPlantViewModel.resetCurrentPlant(userId, plantId);
+        mPlantViewModel.updateCurrentPlant(userId, plantId);
+    }
+
     private void toggleSelectPlant(Boolean on) {
         if (on) {
             progressBar.setVisibility(View.INVISIBLE);
@@ -542,5 +544,24 @@ public class NewEntryFragment extends Fragment {
             }
         });
 
+    }
+
+    private void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("All plant growth will be lost. Are you sure?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked Yes button
+                        resetPlant(mCurrentUserId, activePlantId);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked No button
+                        dialog.dismiss();
+                    }
+                });
+        // Create the AlertDialog object and show it
+        builder.create().show();
     }
 }

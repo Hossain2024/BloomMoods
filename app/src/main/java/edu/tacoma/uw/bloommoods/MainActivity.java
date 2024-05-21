@@ -1,9 +1,11 @@
 package edu.tacoma.uw.bloommoods;
 import edu.tacoma.uw.bloommoods.R;
+import edu.tacoma.uw.bloommoods.databinding.ActivityMainBinding;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -36,12 +38,14 @@ public class MainActivity extends AppCompatActivity {
     private JournalViewModel mJournalViewModel;
     private PlantViewModel mPlantViewModel;
     private UserViewModel mUserViewModel;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.frame_main_fragment_container), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -85,6 +89,18 @@ public class MainActivity extends AppCompatActivity {
         // Set up BottomNavigationView with NavController
         BottomNavigationView bottomNavView = findViewById(R.id.navBarView);
         NavigationUI.setupWithNavController(bottomNavView, navController);
+        bottomNavView.setOnItemSelectedListener(item -> {
+            int currentDestinationId = navController.getCurrentDestination().getId();
+            int itemId = item.getItemId();
+
+            if (currentDestinationId == itemId) {
+                // The user clicked the currently displayed fragment; do nothing
+                return true;
+            } else {
+                // Navigate to the selected fragment
+                return NavigationUI.onNavDestinationSelected(item, navController);
+            }
+        });
     }
 
     public UserViewModel getUserViewModel() {
@@ -115,5 +131,17 @@ public class MainActivity extends AppCompatActivity {
     protected void bottomNavBarResetBg() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setBackground(null);
+    }
+    protected void setHomeBg(boolean check) {
+        String resourceName = "background";
+        if (check) {
+            resourceName = "home_background";
+        }
+        int resourceId = getResources().getIdentifier(resourceName, "drawable", this.getPackageName());
+
+        if (resourceId != 0) {
+            Drawable drawable = ContextCompat.getDrawable(this, resourceId);
+            binding.frameMainFragmentContainer.setBackground(drawable);
+        }
     }
 }
