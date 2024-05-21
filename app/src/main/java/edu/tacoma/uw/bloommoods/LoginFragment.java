@@ -111,6 +111,7 @@ public class LoginFragment extends Fragment {
                             Activity activity = getActivity();
                             if (activity instanceof MainActivity) {
                                 ((MainActivity) activity).showBottomNavigation();
+                                ((MainActivity) activity).setupBottomNavigation();
                             }
                             Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_homeFragment);
                         }
