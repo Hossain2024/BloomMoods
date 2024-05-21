@@ -141,6 +141,7 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
         int year = calender.get(Calendar.YEAR);
         TextView monthYear = mJournalBinding.monthYearTextView;
         monthYear.setText(String.format(Locale.ENGLISH, "%s %d    ⓥ", month, year));
+        Log.i("JournalFragment monthYear", String.valueOf(monthYear));
         monthYear.setOnClickListener(v -> myp.showAsDropDown(monthYear));
 
         monthYear.addTextChangedListener(new TextWatcher() {
@@ -149,6 +150,7 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String selectedMonthYear = mJournalBinding.monthYearTextView.getText().toString();
+                Log.i("JournalFragment selectedMonthYear", selectedMonthYear);
                 String[] parts = selectedMonthYear.split(" ");
                 String selectedMonth = parts[0];
                 int monthInt = getMonthInt(selectedMonth);

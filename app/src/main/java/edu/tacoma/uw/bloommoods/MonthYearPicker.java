@@ -100,7 +100,7 @@ public class MonthYearPicker extends PopupWindow implements View.OnClickListener
             monthButtonsLayout.setVisibility(View.VISIBLE);
         } else if (viewId == R.id.selectedDateButton) {
             String selectedMonthAbbr = monthSelector.getText().toString();
-            String selectedDate = monthMap.get(selectedMonthAbbr) + "2024    ⓥ";
+            String selectedDate = monthMap.get(selectedMonthAbbr) + " 2024    ⓥ";
             monthYearTextView.setText(selectedDate);
             dismiss();
         } else {

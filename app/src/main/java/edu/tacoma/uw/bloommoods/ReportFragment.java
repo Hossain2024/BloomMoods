@@ -71,6 +71,7 @@ public class ReportFragment extends Fragment {
            neutraltext = mReportBinding.neutraltext;
            sadtext = mReportBinding.sadtext;
            anxioustext = mReportBinding.anxioustext;
+      
         // Initialize the PieChart
           pieChart = mReportBinding.piechart;
         // Set the data for the PieChart
@@ -84,6 +85,11 @@ public class ReportFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Activity activity = getActivity();
+        if (activity instanceof MainActivity) {
+            ((MainActivity) activity).bottomNavBarBackground();
+        }
 
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1; // January starts at 0
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
