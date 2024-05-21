@@ -57,11 +57,6 @@ public class ReportFragment extends Fragment {
         mDates = new ArrayList<>();
         mGridView = mReportBinding.calendarGridView;
 
-        Activity activity = getActivity();
-        if (activity instanceof MainActivity) {
-            ((MainActivity) activity).bottomNavBarBackground();
-        }
-
         excitedImageView = mReportBinding.excitedImageView;
         anxiousImageView = mReportBinding.anxiousImageView;
         angryImageView = mReportBinding.angryImageView;
@@ -84,6 +79,11 @@ public class ReportFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Activity activity = getActivity();
+        if (activity instanceof MainActivity) {
+            ((MainActivity) activity).bottomNavBarBackground();
+        }
 
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1; // January starts at 0
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);

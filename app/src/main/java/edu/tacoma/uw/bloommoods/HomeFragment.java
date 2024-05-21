@@ -1,5 +1,6 @@
 package edu.tacoma.uw.bloommoods;
 
+import android.app.Activity;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
@@ -58,6 +59,10 @@ public class HomeFragment extends Fragment {
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d("FragmentManager", "HomeFragment created.");
+        Activity activity = getActivity();
+        if (activity instanceof MainActivity) {
+            ((MainActivity) activity).setHomeBg(true);
+        }
         plantStage = homeBinding.plantStageView;
         userViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
@@ -86,6 +91,10 @@ public class HomeFragment extends Fragment {
         Log.d("FragmentManager", "HomeFragment destroyed.");
         super.onDestroyView();
         homeBinding = null;
+        Activity activity = getActivity();
+        if (activity instanceof MainActivity) {
+            ((MainActivity) activity).setHomeBg(false);
+        }
     }
 
     private void observeResponseUserId(final JSONObject response, int userId) {
