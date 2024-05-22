@@ -371,8 +371,9 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="25dp"
                         android:layout_marginTop="20dp"
-                        android:text="MOOD Report"
-                        android:textSize="23sp"
+                        android:text="Mood Report"
+                        android:textSize="25sp"
+                        android:gravity="center"
                         android:textStyle="bold" />
 
 
