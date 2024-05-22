@@ -60,11 +60,10 @@ public class LoginFragment extends Fragment {
         String pwd = String.valueOf(mBinding.pwdEdit.getText());
         Account account;
         if(email.isEmpty() || pwd.isEmpty()){
-            //throw a toast
-            Toast.makeText(this.getContext(), "All fields are required ", Toast.LENGTH_LONG).show();
+            mBinding.errorLoginTextview.setText("All fields are required");
         }else {
             try {
-                account = new Account(email, pwd);
+                account = new Account(email, pwd, false);
             } catch (IllegalArgumentException ie) {
                 Log.e(TAG, ie.getMessage());
                 Toast.makeText(getContext(), ie.getMessage(), Toast.LENGTH_LONG).show();
@@ -89,9 +88,7 @@ public class LoginFragment extends Fragment {
                     String result = response.getString("result");
                     if ("failed to login".equals(result)) {
                         // If the result is "failed to login", display the error message to the user
-                        String errorMessage = response.optString("message", "invalid credentials");
-                        Toast.makeText(getContext(), "Login failed: " + errorMessage, Toast.LENGTH_LONG).show();
-                        mBinding.errorLoginTextview.setText("User failed to authenticate");
+                        mBinding.errorLoginTextview.setText("Invalid credentials");
                     } else if ("success".equals(result)) {
                         Toast.makeText(getContext(), "Login successful", Toast.LENGTH_LONG).show();
 
@@ -103,6 +100,7 @@ public class LoginFragment extends Fragment {
                             Activity activity = getActivity();
                             if (activity instanceof MainActivity) {
                                 ((MainActivity) activity).showBottomNavigation();
+                                ((MainActivity) activity).setupBottomNavigation();
                             }
                             Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_homeFragment);
                         }
