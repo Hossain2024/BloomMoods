@@ -25,7 +25,8 @@
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/bloom_moods_icon" />
+            app:srcCompat="@mipmap/bloom_moods_icon"
+            android:contentDescription="@string/bloommoods" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"

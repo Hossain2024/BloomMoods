@@ -19,12 +19,11 @@ import java.util.Locale;
 import java.util.Map;
 
 public class CalendarAdapter extends BaseAdapter {
-    private Context mContext;
-    private List<CalendarCell> mCalendarCells;
-    private List<Date> mDates;
-    private List<JournalEntry> mJournalEntries;
-    private SimpleDateFormat journalDateFormat;
-    private SimpleDateFormat dateFormat;
+    private final Context mContext;
+    private final List<Date> mDates;
+    private final List<JournalEntry> mJournalEntries;
+    private final SimpleDateFormat journalDateFormat;
+    private final SimpleDateFormat dateFormat;
     private static final Map<String, Integer> moodMap = new HashMap<>();
     private static final int DEFAULT_IMAGE = R.mipmap.calendar_cell;
 
@@ -89,9 +88,7 @@ public class CalendarAdapter extends BaseAdapter {
                 Date entryDate = journalDateFormat.parse(entry.getDate());
                 if (entryDate != null && dateFormat.format(date).equals(dateFormat.format(entryDate))) {
                     Integer imageResId = entry.getMoodImage();
-                    if (imageResId != null) {
-                        imageView.setImageResource(imageResId);
-                    }
+                    imageView.setImageResource(imageResId);
                     break;
                 }
             } catch (ParseException e) {

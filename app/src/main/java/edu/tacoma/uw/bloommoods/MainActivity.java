@@ -3,35 +3,26 @@ import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.databinding.ActivityMainBinding;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-
-import android.widget.TextView;
 
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
     private NavController navController;
@@ -52,9 +43,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        findViewById(R.id.nav_host_fragment).post(() -> {
-            navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        });
+        findViewById(R.id.nav_host_fragment).post(() -> navController = Navigation.findNavController(this, R.id.nav_host_fragment));
 
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mPlantViewModel = new ViewModelProvider(this).get(PlantViewModel.class);

@@ -6,7 +6,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
@@ -97,14 +96,14 @@ public class PlantViewModel extends AndroidViewModel {
     protected void getCurrentPlantDetails(int userId) {
         String url = "https://students.washington.edu/nchi22/api/plants/get_current_plant_details.php?user_id=" + userId;
 
-        Request request = new JsonObjectRequest(
+        Request<JSONObject> request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
                 null, //no body for this get request
                 plantResponse::setValue,
                 this::handleError);
 
-        Log.i("PlantViewModel", request.getUrl().toString());
+        Log.i("PlantViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -123,14 +122,14 @@ public class PlantViewModel extends AndroidViewModel {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Request request = new JsonObjectRequest(
+        Request<JSONObject> request = new JsonObjectRequest(
                 Request.Method.POST,
                 url,
                 body,
                 updatePlantDetailsResponse::setValue,
                 this::handleError);
 
-        Log.i("PlantViewModel", request.getUrl().toString());
+        Log.i("PlantViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -149,14 +148,14 @@ public class PlantViewModel extends AndroidViewModel {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Request request = new JsonObjectRequest(
+        Request<JSONObject> request = new JsonObjectRequest(
                 Request.Method.POST,
                 url,
                 body,
                 updatePlantResponse::setValue,
                 this::handleError);
 
-        Log.i("PlantViewModel", request.getUrl().toString());
+        Log.i("PlantViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -168,7 +167,7 @@ public class PlantViewModel extends AndroidViewModel {
 
     protected void getUnlockedPlants(int userId) {
         String url = "https://students.washington.edu/nchi22/api/plants/get_plants_unlocked.php?user_id=" + userId;
-        Request request = new JsonArrayRequest(
+        Request<JSONArray> request = new JsonArrayRequest(
                 Request.Method.GET,
                 url,
                 null,
@@ -179,7 +178,7 @@ public class PlantViewModel extends AndroidViewModel {
                 },
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl().toString());
+        Log.i("UserViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -197,7 +196,7 @@ public class PlantViewModel extends AndroidViewModel {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Request request = new JsonObjectRequest(
+        Request<JSONObject> request = new JsonObjectRequest(
                 Request.Method.POST,
                 url,
                 body,
@@ -205,7 +204,7 @@ public class PlantViewModel extends AndroidViewModel {
                         Log.i("Growth Level Updated", response.toString()),
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl().toString());
+        Log.i("UserViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -224,7 +223,7 @@ public class PlantViewModel extends AndroidViewModel {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Request request = new JsonObjectRequest(
+        Request<JSONObject> request = new JsonObjectRequest(
                 Request.Method.POST,
                 url,
                 body,
@@ -232,7 +231,7 @@ public class PlantViewModel extends AndroidViewModel {
                         Log.i("Plant Reset Successfully", response.toString()),
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl().toString());
+        Log.i("UserViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,

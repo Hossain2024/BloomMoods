@@ -155,18 +155,5 @@
         android:id="@+id/nav_report"
         android:name="edu.tacoma.uw.bloommoods.ReportFragment"
         android:label="ReportFragment" >
-        <action
-            android:id="@+id/action_nav_report_to_pieChartFragment"
-            app:destination="@id/pieChartFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/pieChartFragment"
-        android:name="edu.tacoma.uw.bloommoods.PieChartFragment"
-        android:label="PieChartFragment" >
-        <action
-            android:id="@+id/action_pieChartFragment_to_nav_report"
-            app:destination="@id/nav_report" />
-    </fragment>
-
-
 </navigation>

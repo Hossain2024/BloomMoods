@@ -81,14 +81,6 @@ public class NewEntryFragment extends Fragment {
         shapeDrawable.getPaint().setColor(Color.parseColor("#4DFFD6C7"));
         mNewEntryBinding.plantGrowth.setBackground(shapeDrawable);
 
-//        TextView plantGrowth = mNewEntryBinding.plantGrowth;
-//        float[] radii = {50, 50, 50, 50, 50, 50, 50, 50};
-//        RoundRectShape roundRectShape = new RoundRectShape(radii, null,null);
-//        ShapeDrawable shapeDrawable = new ShapeDrawable(roundRectShape);
-//        int color = Color.parseColor("#4DFFD6C7");
-//        shapeDrawable.getPaint().setColor(color);
-//        plantGrowth.setBackground(shapeDrawable);
-
         return mNewEntryBinding.getRoot();
     }
 
@@ -241,7 +233,7 @@ public class NewEntryFragment extends Fragment {
     private void addGrowth() {
         loggedToday = false;
         mUserViewModel.getLastEntryLogged().observe(getViewLifecycleOwner(), entry -> {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
             if (!entry.equals("null")) {
                 try {
                     // Parse the date string into a Date object
@@ -531,17 +523,14 @@ public class NewEntryFragment extends Fragment {
 
     public void adjustToKeyboard () {
         ScrollView scroll = mNewEntryBinding.waterPlantScrollView;
-        scroll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-                scroll.getWindowVisibleDisplayFrame(r);
-                int screenHeight = scroll.getRootView().getHeight();
-                int keypadHeight = screenHeight - r.bottom;
+        scroll.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Rect r = new Rect();
+            scroll.getWindowVisibleDisplayFrame(r);
+            int screenHeight = scroll.getRootView().getHeight();
+            int keypadHeight = screenHeight - r.bottom;
 
-                // Adjust the bottom padding of the scroll view
-                scroll.setPadding(0, 0, 0, keypadHeight);
-            }
+            // Adjust the bottom padding of the scroll view
+            scroll.setPadding(0, 0, 0, keypadHeight);
         });
 
     }
@@ -549,17 +538,13 @@ public class NewEntryFragment extends Fragment {
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("All plant growth will be lost. Are you sure?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User clicked Yes button
-                        resetPlant(mCurrentUserId, activePlantId);
-                    }
+                .setPositiveButton("Yes", (dialog, id) -> {
+                    // User clicked Yes button
+                    resetPlant(mCurrentUserId, activePlantId);
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User clicked No button
-                        dialog.dismiss();
-                    }
+                .setNegativeButton("No", (dialog, id) -> {
+                    // User clicked No button
+                    dialog.dismiss();
                 });
         // Create the AlertDialog object and show it
         builder.create().show();

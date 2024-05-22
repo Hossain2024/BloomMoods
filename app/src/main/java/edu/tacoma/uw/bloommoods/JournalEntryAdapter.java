@@ -27,8 +27,12 @@ public class JournalEntryAdapter extends RecyclerView.Adapter<JournalEntryAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView dayTextView, monthTextView, yearTextView, titleCardTextView, entryCardTextView;
-        ImageView moodCardImageView;
+        final TextView dayTextView;
+        final TextView monthTextView;
+        final TextView yearTextView;
+        final TextView titleCardTextView;
+        final TextView entryCardTextView;
+        final ImageView moodCardImageView;
 
         public ViewHolder(View itemView, RecyclerViewInterface rvi) {
             super(itemView);

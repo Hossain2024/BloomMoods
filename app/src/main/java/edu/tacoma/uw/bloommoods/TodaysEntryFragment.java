@@ -12,8 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -78,30 +76,9 @@ public class TodaysEntryFragment extends Fragment {
         });
 
         mPlantViewModel.getCurrentPlantDetails(mCurrentUser);
-//        mPlantViewModel.addPlantResponseObserver(getViewLifecycleOwner(), response -> {
-//            if (response.has("stage") && response.has("growthLevel") && response.has("name")) {
-//                int stage;
-//                ImageView plantStage = mTodaysEntryBinding.plantImageView;
-//                String activePlantName;
-//                try {
-//                    activePlantName = response.getString(("name"));
-//                    stage = response.getInt("stage");
-//                } catch (JSONException e) {
-//                    throw new RuntimeException(e);
-//                }
-//                String resourceName = activePlantName.toLowerCase().replace(" ", "_") + "_stage_" + stage;
-//                int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
-//                if (resourceId != 0) {
-//                    Drawable drawable = ContextCompat.getDrawable(requireContext(), resourceId);
-//                    plantStage.setImageDrawable(drawable);
-//                } else {
-//                    Log.e("TodaysEntryFragment", "Drawable resource not found: " + resourceName);
-//                }
-//            }
-//        });
         mPlantViewModel.addPlantResponseObserver(getViewLifecycleOwner(), this::observePlantResponse);
 
-        setOnMoodClicks(mTodaysEntryBinding.linearLayout);
+        setOnMoodClicks();
     }
 
     @Override
@@ -142,7 +119,7 @@ public class TodaysEntryFragment extends Fragment {
         }
     }
 
-    private void setOnMoodClicks(LinearLayout moodLayout) {
+    private void setOnMoodClicks() {
         mTodaysEntryBinding.anxiousImageView.setOnClickListener(this::onMoodClicked);
         mTodaysEntryBinding.excitedImageView.setOnClickListener(this::onMoodClicked);
         mTodaysEntryBinding.happyImageView.setOnClickListener(this::onMoodClicked);

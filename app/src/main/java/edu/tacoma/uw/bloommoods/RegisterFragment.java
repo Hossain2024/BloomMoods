@@ -46,10 +46,7 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRegisterUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
-            observeResponse(response);
-
-        });
+        mRegisterUserViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
 
 
         mBinding.registerButton.setOnClickListener(button -> signup());

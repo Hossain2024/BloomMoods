@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -228,7 +229,7 @@ public class HomeFragment extends Fragment {
         userViewModel.getLastEntryLogged().observe(getViewLifecycleOwner(), lastEntry -> {
             if (!Objects.equals(lastEntry, "null")) {
                 // Create a SimpleDateFormat object for parsing the date in the given format
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                 try {
                     // Parse the date string into a Date object
                     Date lastLoggedDate = dateFormat.parse(lastEntry);

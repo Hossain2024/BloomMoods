@@ -59,12 +59,15 @@
                 android:id="@+id/calendarGridView"
                 android:layout_width="match_parent"
                 android:layout_height="410dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="24dp"
+                android:clickable="false"
                 android:horizontalSpacing="0dp"
+                android:isScrollContainer="false"
+                android:longClickable="false"
                 android:numColumns="7"
                 android:verticalSpacing="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -73,7 +76,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="S"
+                android:text="@string/s"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
@@ -86,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
                 android:gravity="center"
-                android:text="M"
+                android:text="@string/m"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/textView6"
@@ -98,7 +101,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="T"
+                android:text="@string/t"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
@@ -110,7 +113,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="W"
+                android:text="@string/w"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView6"
@@ -122,7 +125,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="T"
+                android:text="@string/t"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView7"
@@ -134,7 +137,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="F"
+                android:text="@string/f"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView8"
@@ -147,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="1dp"
                 android:gravity="center"
-                android:text="S"
+                android:text="@string/s"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView9"
@@ -225,7 +228,8 @@
                                 android:layout_height="match_parent"
                                 android:layout_marginEnd="0dp"
                                 android:tag="Excited"
-                                app:srcCompat="@mipmap/excited" />
+                                app:srcCompat="@mipmap/excited"
+                                android:contentDescription="@string/excited_button" />
 
                         </LinearLayout>
 
@@ -248,54 +252,10 @@
                                 android:layout_height="match_parent"
                                 android:layout_marginEnd="0dp"
                                 android:tag="Excited"
-                                app:srcCompat="@mipmap/happy" />
+                                app:srcCompat="@mipmap/happy"
+                                android:contentDescription="@string/happy_button" />
 
                         </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="28dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginTop="5dp">
-
-
-                            <View
-                                android:layout_width="26dp"
-                                android:layout_height="match_parent"
-                                android:background="#C9C3EA" />
-
-                            <ImageView
-                                android:id="@+id/anxiousImageView"
-                                android:layout_width="32dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginEnd="0dp"
-                                android:tag="Anxious"
-                                app:srcCompat="@mipmap/anxious" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="28dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginTop="5dp">
-
-                            <View
-                                android:layout_width="28dp"
-                                android:layout_height="match_parent"
-                                android:background="#F4C7CA" />
-
-
-                            <ImageView
-                                android:id="@+id/angryImageView"
-                                android:layout_width="30dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginEnd="0dp"
-                                android:tag="Angry"
-                                app:srcCompat="@mipmap/angry" />
-
-                        </LinearLayout>
-
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -316,7 +276,8 @@
                                 android:layout_height="match_parent"
                                 android:layout_marginEnd="0dp"
                                 android:tag="Neutral"
-                                app:srcCompat="@mipmap/neutral" />
+                                app:srcCompat="@mipmap/neutral"
+                                android:contentDescription="@string/neutral_button" />
 
                         </LinearLayout>
 
@@ -338,7 +299,54 @@
                                 android:layout_height="match_parent"
                                 android:layout_marginEnd="0dp"
                                 android:tag="Sad"
-                                app:srcCompat="@mipmap/sad" />
+                                app:srcCompat="@mipmap/sad"
+                                android:contentDescription="@string/sad_button" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="5dp">
+
+
+                            <View
+                                android:layout_width="26dp"
+                                android:layout_height="match_parent"
+                                android:background="#C9C3EA" />
+
+                            <ImageView
+                                android:id="@+id/anxiousImageView"
+                                android:layout_width="32dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="0dp"
+                                android:tag="Anxious"
+                                app:srcCompat="@mipmap/anxious"
+                                android:contentDescription="@string/anxious_button" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="5dp">
+
+                            <View
+                                android:layout_width="28dp"
+                                android:layout_height="match_parent"
+                                android:background="#F4C7CA" />
+
+
+                            <ImageView
+                                android:id="@+id/angryImageView"
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="0dp"
+                                android:tag="Angry"
+                                app:srcCompat="@mipmap/angry"
+                                android:contentDescription="@string/angry_button" />
 
                         </LinearLayout>
 
@@ -371,7 +379,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="25dp"
                         android:layout_marginTop="20dp"
-                        android:text="MOOD Report"
+                        android:text="@string/mood_report"
                         android:textSize="23sp"
                         android:textStyle="bold" />
 
@@ -398,7 +406,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:layout_marginRight="290dp"
-                            android:src="@mipmap/excited" />
+                            android:src="@mipmap/excited"
+                            android:contentDescription="@string/excited_button" />
 
                         <!--Text view to display the percentage -->
                         <!-- of happy emotion. For now default set to 0-->
@@ -407,7 +416,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-light"
-                            android:text="0"
+                            android:text="@string/_0"
                             android:textAlignment="textEnd"
                             android:textColor="@color/color_one"
                             android:textSize="18sp"
@@ -415,6 +424,115 @@
 
                     </RelativeLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@color/color_two" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginBottom="10dp">
+
+                        <ImageView
+                            android:id="@+id/happy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginRight="290dp"
+                            android:src="@mipmap/happy"
+                            android:contentDescription="@string/happy_button" />
+
+
+                        <TextView
+                            android:id="@+id/happytext"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
+                            android:text="@string/_0"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/color_one"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@color/color_two" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginBottom="10dp">
+
+                        <ImageView
+                            android:id="@+id/neutral"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginRight="290dp"
+                            android:src="@mipmap/neutral"
+                            android:contentDescription="@string/neutral_button" />
+
+                        <TextView
+                            android:id="@+id/neutraltext"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
+                            android:text="@string/_0"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/color_one"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@color/color_two" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginBottom="10dp">
+
+                        <!-- Image view to display the happy face -->
+                        <ImageView
+                            android:id="@+id/sad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginRight="290dp"
+                            android:src="@mipmap/sad"
+                            android:contentDescription="@string/sad_button" />
+
+                        <TextView
+                            android:id="@+id/sadtext"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
+                            android:text="@string/_0"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/color_one"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -437,7 +555,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:layout_marginRight="290dp"
-                            android:src="@mipmap/anxious" />
+                            android:src="@mipmap/anxious"
+                            android:contentDescription="@string/anxious_button" />
 
 
                         <TextView
@@ -445,7 +564,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-light"
-                            android:text="0"
+                            android:text="@string/_0"
                             android:textAlignment="textEnd"
                             android:textColor="@color/color_one"
                             android:textSize="18sp"
@@ -474,7 +593,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
                             android:layout_marginRight="290dp"
-                            android:src="@mipmap/angry" />
+                            android:src="@mipmap/angry"
+                            android:contentDescription="@string/angry_button" />
 
 
                         <TextView
@@ -482,42 +602,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-light"
-                            android:text="0"
-                            android:textAlignment="textEnd"
-                            android:textColor="@color/color_one"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:background="@color/color_two" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="25dp"
-                        android:layout_marginBottom="10dp">
-
-                        <ImageView
-                            android:id="@+id/neutral"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_marginRight="290dp"
-                            android:src="@mipmap/neutral" />
-
-                        <TextView
-                            android:id="@+id/neutraltext"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-light"
-                            android:text="0"
+                            android:text="@string/_0"
                             android:textAlignment="textEnd"
                             android:textColor="@color/color_one"
                             android:textSize="18sp"
@@ -533,35 +618,6 @@
                         android:layout_marginRight="20dp"
                         android:background="@color/color_two" />
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="25dp"
-                        android:layout_marginBottom="10dp">
-
-                        <!-- Image view to display the happy face -->
-                        <ImageView
-                            android:id="@+id/sad"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_marginRight="290dp"
-                            android:src="@mipmap/sad" />
-
-                        <TextView
-                            android:id="@+id/sadtext"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-light"
-                            android:text="0"
-                            android:textAlignment="textEnd"
-                            android:textColor="@color/color_one"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                    </RelativeLayout>
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -569,35 +625,6 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="20dp"
                         android:background="@color/color_two" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="25dp"
-                        android:layout_marginBottom="10dp">
-
-                        <ImageView
-                            android:id="@+id/happy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_marginRight="290dp"
-                            android:src="@mipmap/happy" />
-
-
-                        <TextView
-                            android:id="@+id/happytext"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-light"
-                            android:text="0"
-                            android:textAlignment="textEnd"
-                            android:textColor="@color/color_one"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                    </RelativeLayout>
 
                 </LinearLayout>
 

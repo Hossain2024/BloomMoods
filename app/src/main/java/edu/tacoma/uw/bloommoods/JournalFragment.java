@@ -21,18 +21,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
 import edu.tacoma.uw.bloommoods.databinding.FragmentJournalBinding;
 
 public class JournalFragment extends Fragment implements RecyclerViewInterface {
+    private static final String[] MONTHS = {"JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+            "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"};
     private final ArrayList<JournalEntry> journalEntries = new ArrayList<>();
     private final Calendar calender = Calendar.getInstance();
     private final int currentMonth = calender.get(Calendar.MONTH) + 1; // Jan starts at 0
@@ -105,37 +105,6 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
         mJournalBinding = null;
     }
 
-    // Method to parse JSON object and create JournalEntry object
-//    private JournalEntry parseJsonObject(JSONObject jsonObject) throws JSONException, ParseException {
-//        String timestamp = jsonObject.getString("timestamp");
-//        String entry = jsonObject.getString("journal_entry");
-//        String mood = jsonObject.getString("mood");
-//        String title = jsonObject.getString("title");
-//
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-//        Date date = sdf.parse(timestamp);
-//
-//        SimpleDateFormat outputFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.ENGLISH);
-//        assert date != null;
-//        String formattedDate = outputFormat.format(date);
-//
-//        int moodResourceId = getMipMapForMood(mood);
-//
-//        return new JournalEntry(title, formattedDate, entry, moodResourceId);
-//    }
-
-    private int getMipMapForMood(String mood) {
-        switch (mood) {
-            case "Excited": return R.mipmap.excited;
-            case "Happy": return R.mipmap.happy;
-            case "Neutral":  return R.mipmap.neutral;
-            case "Sad":  return R.mipmap.sad;
-            case "Anxious": return R.mipmap.anxious;
-            case "Angry": return R.mipmap.angry;
-            default: return R.mipmap.neutral;
-        }
-    }
-
     private void openDateDialog() {
         String month = new SimpleDateFormat("MMMM", Locale.ENGLISH).format(calender.getTime());
         int year = calender.get(Calendar.YEAR);
@@ -162,7 +131,13 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
     }
 
     private int getMonthInt(String monthString) {
-        return Month.valueOf(monthString.toUpperCase()).getValue();
+        String month = monthString.toUpperCase(Locale.ENGLISH);
+        for (int i = 0; i < MONTHS.length; i++) {
+            if (MONTHS[i].equals(month)) {
+                return i + 1; // Make months 1-based (January is 1)
+            }
+        }
+        throw new IllegalArgumentException("Invalid month name: " + monthString);
     }
 
     private void updateRecyclerView(ArrayList<JournalEntry> entries) {
@@ -175,7 +150,6 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
         JournalEntry selectedEntry = journalEntries.get(position);
         JournalFragmentDirections.ActionJournalFragmentToEntryReaderFragment directions =
                 JournalFragmentDirections.actionJournalFragmentToEntryReaderFragment(selectedEntry);
-        Navigation.findNavController(getView())
-                .navigate(directions);
+        Navigation.findNavController(getView()).navigate(directions);
     }
 }
