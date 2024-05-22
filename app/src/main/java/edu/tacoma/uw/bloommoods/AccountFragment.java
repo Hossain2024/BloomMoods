@@ -1,7 +1,9 @@
 package edu.tacoma.uw.bloommoods;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -82,13 +84,23 @@ public class AccountFragment extends Fragment {
                 updatePassword();
             }
         });
-        binding.logoutButton.setOnClickListener(v ->{
+
+        binding.logoutButton.setOnClickListener(v -> {
             Activity activity = getActivity();
-            if(activity instanceof MainActivity){
+            if (activity instanceof MainActivity) {
                 ((MainActivity) activity).hideBottomNavigation();
+
+                // Clear the SharedPreferences
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.SignIN_PREFS),
+                        Context.MODE_PRIVATE);
+                sharedPreferences.edit().putBoolean(getString(R.string.SignedIN), false).apply();
+                sharedPreferences.edit().putInt("userId", 0).apply();
+
+                // Navigate to the login fragment
+                Navigation.findNavController(getView()).navigate(R.id.loginFragment);
             }
-            Navigation.findNavController(getView()).navigate(R.id.loginFragment);
         });
+
         binding.referButton.setOnClickListener(v -> shareAppLink());
 
     }

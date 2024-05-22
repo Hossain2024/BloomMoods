@@ -16,9 +16,15 @@ public class Account {
      * @param password The password to set.
      * @throws IllegalArgumentException if the email or password is invalid.
      */
-    public Account(String email, String password) {
-        setEmail(email);
-        setPassword(password);
+    public Account(String email, String password, Boolean validate) {
+        if (validate) {
+            setEmail(email);
+            setPassword(password);
+        } else {
+            myEmail = email;
+            myPassword = password;
+        }
+
     }
 
     /**
@@ -78,7 +84,7 @@ public class Account {
 
     public void setPassword(String password) {
         if (!isValidPassword(password)) {
-            throw new IllegalArgumentException("Invalid password");
+            throw new IllegalArgumentException("Password must be at last 6 characters long with at least 1 digit and 1 symbol");
         }
         this.myPassword = password;
     }
