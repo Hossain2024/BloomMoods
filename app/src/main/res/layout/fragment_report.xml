@@ -351,7 +351,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/details"
                 android:layout_width="wrap_content"
-                android:layout_height="370dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/cardViewGraph"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
@@ -395,9 +395,9 @@
 
                         <ImageView
                             android:id="@+id/excited"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_marginRight="290dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentLeft="true"
                             android:src="@mipmap/excited" />
 
                         <!--Text view to display the percentage -->
@@ -407,10 +407,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-light"
+                            android:layout_alignParentRight="true"
                             android:text="0"
                             android:textAlignment="textEnd"
                             android:textColor="@color/color_one"
-                            android:textSize="18sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
 
                     </RelativeLayout>
@@ -434,9 +435,9 @@
 
                         <ImageView
                             android:id="@+id/anxious"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_marginRight="290dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentLeft="true"
                             android:src="@mipmap/anxious" />
 
 
@@ -445,10 +446,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-light"
+                            android:layout_alignParentRight="true"
                             android:text="0"
                             android:textAlignment="textEnd"
                             android:textColor="@color/color_one"
-                            android:textSize="18sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
 
                     </RelativeLayout>
@@ -471,9 +473,9 @@
 
                         <ImageView
                             android:id="@+id/angry"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_marginRight="290dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentLeft="true"
                             android:src="@mipmap/angry" />
 
 
@@ -482,10 +484,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-light"
+                            android:layout_alignParentRight="true"
                             android:text="0"
                             android:textAlignment="textEnd"
                             android:textColor="@color/color_one"
-                            android:textSize="18sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
 
                     </RelativeLayout>
@@ -507,9 +510,9 @@
 
                         <ImageView
                             android:id="@+id/neutral"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_marginRight="290dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentLeft="true"
                             android:src="@mipmap/neutral" />
 
                         <TextView
@@ -517,10 +520,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-light"
+                            android:layout_alignParentRight="true"
                             android:text="0"
                             android:textAlignment="textEnd"
                             android:textColor="@color/color_one"
-                            android:textSize="18sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
 
                     </RelativeLayout>
@@ -544,9 +548,9 @@
                         <!-- Image view to display the happy face -->
                         <ImageView
                             android:id="@+id/sad"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_marginRight="290dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentLeft="true"
                             android:src="@mipmap/sad" />
 
                         <TextView
@@ -554,10 +558,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-light"
+                            android:layout_alignParentRight="true"
                             android:text="0"
                             android:textAlignment="textEnd"
                             android:textColor="@color/color_one"
-                            android:textSize="18sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
 
                     </RelativeLayout>
@@ -580,9 +585,9 @@
 
                         <ImageView
                             android:id="@+id/happy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_marginRight="290dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentLeft="true"
                             android:src="@mipmap/happy" />
 
 
@@ -591,10 +596,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-light"
+                            android:layout_alignParentRight="true"
                             android:text="0"
                             android:textAlignment="textEnd"
                             android:textColor="@color/color_one"
-                            android:textSize="18sp"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
 
                     </RelativeLayout>
