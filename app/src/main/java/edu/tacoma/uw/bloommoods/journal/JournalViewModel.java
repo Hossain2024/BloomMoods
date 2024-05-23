@@ -116,6 +116,7 @@ public class JournalViewModel extends AndroidViewModel {
 
         Request<JSONObject> request = new JsonObjectRequest(Request.Method.POST, url, body,
             response -> {
+                // On successful response, update the LiveData and create a new JournalEntry object
                 mResponse.setValue(response);
                 JournalEntry newEntry = new JournalEntry(title, currentDate, entry, getMipMapForMood(mood));
                 mEntry.postValue(newEntry);
@@ -137,8 +138,8 @@ public class JournalViewModel extends AndroidViewModel {
      * @param userId the current user ID.
      */
     public void getTodaysEntry(int userId) {
-        mRequestCompleted.setValue(false);
-        JsonObjectRequest request = getTodaysEntryRequest(userId);
+        mRequestCompleted.setValue(false); // Indicate that the request is not completed yet
+        JsonObjectRequest request = getTodaysEntryRequest(userId); // Create the request
         Log.i("JournalViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
@@ -160,16 +161,18 @@ public class JournalViewModel extends AndroidViewModel {
         String url = "https://students.washington.edu/nchi22/api/log/get_todays_mood_log.php?user_id=" + userId;
         return new JsonObjectRequest(Request.Method.GET, url, null,
             response -> {
+                // If the response has a "message" field, set the entry to null (i.e. no entry for today)
                 if (response.has("message")) {
                     mEntry.postValue(null);
                 } else {
+                    // Otherwise, parse the response and set it as the entry
                     mEntry.postValue(parseJsonObject(response));
                 }
-                mRequestCompleted.postValue(true);
+                mRequestCompleted.postValue(true); // Indicate that the request is completed
             },
             error -> {
                 handleError(error);
-                mRequestCompleted.postValue(true);
+                mRequestCompleted.postValue(true); // Indicate that the request is completed
             });
     }
 
@@ -181,17 +184,19 @@ public class JournalViewModel extends AndroidViewModel {
      * @param year the year.
      */
     public void getEntriesByDate(int userId, int month, int year) {
-        mRequestCompleted.setValue(false);
+        mRequestCompleted.setValue(false);  // Indicate that the request is not completed yet
         Log.i("JournalViewModel getEntriesByDate", String.valueOf(mRequestCompleted.getValue()));
         String url = "https://students.washington.edu/nchi22/api/log/get_mood_logs_by_month.php";
         Log.i("JournalViewModel", "getEntriesByDate " + userId + ", " + month + ", " + year);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
             response -> {
+                // On successful response, update the LiveData and indicate request completion
                 mDateEntries.postValue(response);
                 mRequestCompleted.postValue(true);
                 Log.i("JournalViewModel getEntriesByDate", String.valueOf(mRequestCompleted.getValue()));
             },
             error -> {
+                // If a 404 error occurs, indicate no entries were found
                 if (error.networkResponse != null && error.networkResponse.statusCode == 404) {
                     mDateEntries.postValue("No entries found");
                     mRequestCompleted.postValue(true);
