@@ -148,6 +148,14 @@ public class ReportFragment extends Fragment {
 
     }
 
+
+    /**
+     * Generates a list of  consecutive dates for the specific month of the year
+     * @param month the month for which the dates are to be generated
+     * @param year  the year for which the dates are to be generated
+     * @return a list of Date objects covering the month and year
+     */
+
     private List<Date> generateDates(int month, int year) {
         List<Date> dates = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
@@ -165,12 +173,19 @@ public class ReportFragment extends Fragment {
 
         return dates;
     }
-
+    /**
+     * Updates the calender with a new adapter containing the provided journal entries and dates.
+     * @param entries The list of journal entries to display in the grid view.
+     */
     private void updateGridView(List<JournalEntry> entries) {
         CalendarAdapter adapter = new CalendarAdapter(getActivity(), mDates, entries);
         mGridView.setAdapter(adapter);
     }
 
+    /**
+     * sets the pieslice according to user mood data
+     *
+     */
     private void setData() {
         Map<Integer, Integer> moodCounts = new HashMap<>();
         moodCounts.put(R.mipmap.happy, 0);
