@@ -21,6 +21,13 @@ import java.util.Map;
 import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.journal.JournalEntry;
 
+/**
+ * Adapter for displaying calendar cells with associated journal entries.
+ * This adapter populates a GridView with calendar cells, where each cell represents a date.
+ * Journal entries for each date are retrieved and used to display mood images in the corresponding cells.
+ *
+ * @author Chelsea Dacones
+ */
 public class CalendarAdapter extends BaseAdapter {
     private final Context mContext;
     private final List<Date> mDates;
@@ -40,6 +47,13 @@ public class CalendarAdapter extends BaseAdapter {
         moodMap.put("Angry", R.mipmap.angry);
     }
 
+    /**
+     * Constructs a new CalendarAdapter.
+     *
+     * @param context The context in which the adapter is created.
+     * @param dates The list of dates to be displayed in the calendar cells.
+     * @param journalEntries The list of journal entries of the current month/year.
+     */
     public CalendarAdapter(Context context, List<Date> dates, List<JournalEntry> journalEntries) {
         this.mContext = context;
         this.mJournalEntries = journalEntries;
