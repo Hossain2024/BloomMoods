@@ -60,7 +60,12 @@ public class PlantViewModel extends AndroidViewModel {
                                          @NonNull Observer<? super JSONObject> observer) {
         plantResponse.observe(owner, observer);
     }
-
+    /**
+     * Adds an observer to the reset plant response LiveData.
+     *
+     * @param owner    The LifecycleOwner which controls the observer.
+     * @param observer The observer that will receive the response updates.
+     */
     public void addResetPlantResponseObserver(@NonNull LifecycleOwner owner,
                                          @NonNull Observer<? super JSONObject> observer) {
         resetPlantResponse.observe(owner, observer);
@@ -243,7 +248,7 @@ public class PlantViewModel extends AndroidViewModel {
                 },
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl());
+        Log.i("PlantViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -274,7 +279,7 @@ public class PlantViewModel extends AndroidViewModel {
                         Log.i("Growth Level Updated", response.toString()),
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl());
+        Log.i("PlantViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -306,7 +311,7 @@ public class PlantViewModel extends AndroidViewModel {
                 resetPlantResponse::setValue,
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl());
+        Log.i("PlantViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
