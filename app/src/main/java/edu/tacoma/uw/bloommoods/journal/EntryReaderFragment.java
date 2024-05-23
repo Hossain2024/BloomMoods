@@ -1,22 +1,16 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.journal;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
+import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.databinding.FragmentEntryReaderBinding;
 
 public class EntryReaderFragment extends Fragment {

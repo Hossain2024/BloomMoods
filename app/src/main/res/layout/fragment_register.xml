@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    tools:context=".RegisterFragment">
+    tools:context=".authentication.RegisterFragment">
 
     <TextView
         android:id="@+id/textView2"
@@ -114,7 +114,8 @@
         android:layout_marginEnd="64dp"
         android:src="@mipmap/arrow"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pwd_edit" />
+        app:layout_constraintTop_toBottomOf="@+id/pwd_edit"
+        android:contentDescription="@string/auth_button" />
 
     <TextView
         android:id="@+id/textError"

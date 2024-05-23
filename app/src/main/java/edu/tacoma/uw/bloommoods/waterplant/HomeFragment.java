@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.waterplant;
 
 import android.app.Activity;
 import android.graphics.ColorMatrix;
@@ -29,9 +29,12 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
+import edu.tacoma.uw.bloommoods.MainActivity;
+import edu.tacoma.uw.bloommoods.R;
+import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -40,7 +43,7 @@ public class HomeFragment extends Fragment {
     private int userEntries;
     private double plantGrowth;
     private int stage;
-    private long days;
+    private double days;
     private ImageView plantStage;
     private UserViewModel userViewModel;
     private PlantViewModel plantViewModel;
@@ -115,7 +118,8 @@ public class HomeFragment extends Fragment {
                         String lastEntry = response.getString("last_log_date");
                         userViewModel.setLastEntryLogged(lastEntry);
                         calculateHours();
-                        if (days > 1) {
+                        if (days > 1.0) {
+                            Log.i("Difference in Days: ", String.valueOf(days));
                             resetStreak(userId);
                         }
                         setEditText();
@@ -146,7 +150,7 @@ public class HomeFragment extends Fragment {
                         plantGrowth = response.getDouble("growthLevel");
                         String activePlantName = response.getString(("name"));
                         stage = response.getInt("stage");
-                        if (days > 7) {
+                        if (days > 7.0) {
                             resetStage(userId);
                         }
                         setPlantDetails(activePlantName);
@@ -228,7 +232,7 @@ public class HomeFragment extends Fragment {
         userViewModel.getLastEntryLogged().observe(getViewLifecycleOwner(), lastEntry -> {
             if (!Objects.equals(lastEntry, "null")) {
                 // Create a SimpleDateFormat object for parsing the date in the given format
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                 try {
                     // Parse the date string into a Date object
                     Date lastLoggedDate = dateFormat.parse(lastEntry);
@@ -238,7 +242,7 @@ public class HomeFragment extends Fragment {
 
                     // Get difference between current date and last logged date in hours.
                     long differenceInMillis = currentDate.getTime() - lastLoggedDate.getTime();
-                    days = TimeUnit.MILLISECONDS.toDays(differenceInMillis);
+                    days = (double) differenceInMillis / (1000 * 60 * 60 * 24);
 
                 } catch (ParseException e) {
                     System.out.println("Error parsing the date: " + e.getMessage());

@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.authentication;
 
 import android.app.Application;
 import android.util.Log;
@@ -6,7 +6,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
@@ -71,14 +70,14 @@ public class RegisterViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
 
-        Request request = new JsonObjectRequest(
+        Request<JSONObject> request = new JsonObjectRequest(
                 Request.Method.POST,
                 url,
                 body, //no body for this get request
                 mResponse::setValue,
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl().toString());
+        Log.i("UserViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,

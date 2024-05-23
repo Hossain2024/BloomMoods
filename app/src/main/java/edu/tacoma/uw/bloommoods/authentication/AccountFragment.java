@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.authentication;
 
 import android.app.Activity;
 import android.content.Context;
@@ -36,6 +36,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.tacoma.uw.bloommoods.MainActivity;
+import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.databinding.FragmentAccountBinding;
 
 public class AccountFragment extends Fragment {
@@ -141,7 +143,7 @@ public class AccountFragment extends Fragment {
             plantsMessage.append("! ");
         }
 
-        String shareMessage = plantsMessage.toString() + "\nDownload BloomMoods now \uD83C\uDF31 ✨ \nhttps://drive.google.com/file/d/1Atew0-wJrSMIuFRnNVtlPKeCM24weni8/view?usp=drive_link";
+        String shareMessage = plantsMessage + "\nDownload BloomMoods now \uD83C\uDF31 ✨ \nhttps://drive.google.com/file/d/1Atew0-wJrSMIuFRnNVtlPKeCM24weni8/view?usp=drive_link";
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");

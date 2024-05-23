@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.authentication;
 
 import android.app.Application;
 import android.util.Log;
@@ -13,11 +13,9 @@ import androidx.lifecycle.Observer;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.nio.charset.Charset;
@@ -91,7 +89,7 @@ public class UserViewModel extends AndroidViewModel {
                 mResponse::setValue,
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl().toString());
+        Log.i("UserViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -103,7 +101,7 @@ public class UserViewModel extends AndroidViewModel {
 
 
 
-    protected void getUserProfile(int userId) {
+    public void getUserProfile(int userId) {
         String url = "https://students.washington.edu/nchi22/api/users/get_profile.php?user_id=" + userId;
 
         Request request = new JsonObjectRequest(
@@ -113,7 +111,7 @@ public class UserViewModel extends AndroidViewModel {
                 mResponse::setValue,
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl().toString());
+        Log.i("UserViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -124,7 +122,7 @@ public class UserViewModel extends AndroidViewModel {
     }
 
 
-    protected void resetStreak(int userId) {
+    public void resetStreak(int userId) {
         String url = "https://students.washington.edu/nchi22/api/users/reset_streak.php";
         JSONObject body = new JSONObject();
         try {
@@ -140,7 +138,7 @@ public class UserViewModel extends AndroidViewModel {
                     Log.i("Streak", "Streak has been reset"),
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl().toString());
+        Log.i("UserViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,

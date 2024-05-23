@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.journal;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,6 +17,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import edu.tacoma.uw.bloommoods.R;
 
 public class MonthYearPicker extends PopupWindow implements View.OnClickListener{
     private final Button monthSelector;

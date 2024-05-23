@@ -1,7 +1,4 @@
-package edu.tacoma.uw.bloommoods;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+package edu.tacoma.uw.bloommoods.journal;
 
 import java.io.Serializable;
 import java.text.ParseException;

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background"
-        tools:context=".NewEntryFragment">
+        tools:context=".waterplant.NewEntryFragment">
 
         <android.widget.Button
             android:id="@+id/saveButton"
@@ -38,7 +38,8 @@
             app:layout_constraintStart_toStartOf="@+id/view2"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.974"
-            app:srcCompat="@mipmap/img" />
+            app:srcCompat="@mipmap/img"
+            android:contentDescription="@string/switch_button" />
 
 
         <ImageView
@@ -51,7 +52,8 @@
             app:layout_constraintStart_toStartOf="@+id/view2"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.974"
-            app:srcCompat="@mipmap/img" />
+            app:srcCompat="@mipmap/img"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/rightArrow"
@@ -62,7 +64,8 @@
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/plantStage"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/arrow" />
+            app:srcCompat="@mipmap/arrow"
+            android:contentDescription="@string/right_arrow" />
 
         <ImageView
             android:id="@+id/leftArrow"
@@ -73,7 +76,8 @@
             android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/plantStage"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/left_arrow" />
+            app:srcCompat="@mipmap/left_arrow"
+            android:contentDescription="@string/left_arrow" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -91,7 +95,8 @@
                 android:layout_height="41dp"
                 android:layout_marginEnd="4dp"
                 android:tag="Excited"
-                app:srcCompat="@mipmap/excited" />
+                app:srcCompat="@mipmap/excited"
+                android:contentDescription="@string/excited_button" />
 
             <ImageView
                 android:id="@+id/happyImageView"
@@ -99,7 +104,8 @@
                 android:layout_height="41dp"
                 android:layout_marginEnd="4dp"
                 android:tag="Happy"
-                app:srcCompat="@mipmap/happy" />
+                app:srcCompat="@mipmap/happy"
+                android:contentDescription="@string/happy_button" />
 
             <ImageView
                 android:id="@+id/neutralImageView"
@@ -107,7 +113,8 @@
                 android:layout_height="41dp"
                 android:layout_marginEnd="4dp"
                 android:tag="Neutral"
-                app:srcCompat="@mipmap/neutral" />
+                app:srcCompat="@mipmap/neutral"
+                android:contentDescription="@string/neutral_button" />
 
             <ImageView
                 android:id="@+id/sadImageView"
@@ -115,7 +122,8 @@
                 android:layout_height="41dp"
                 android:layout_marginEnd="4dp"
                 android:tag="Sad"
-                app:srcCompat="@mipmap/sad" />
+                app:srcCompat="@mipmap/sad"
+                android:contentDescription="@string/sad_button" />
 
             <ImageView
                 android:id="@+id/anxiousImageView"
@@ -123,7 +131,8 @@
                 android:layout_height="41dp"
                 android:layout_marginEnd="4dp"
                 android:tag="Anxious"
-                app:srcCompat="@mipmap/anxious" />
+                app:srcCompat="@mipmap/anxious"
+                android:contentDescription="@string/anxious_button" />
 
             <ImageView
                 android:id="@+id/angryImageView"
@@ -131,7 +140,8 @@
                 android:layout_height="41dp"
                 android:layout_marginEnd="4dp"
                 android:tag="Angry"
-                app:srcCompat="@mipmap/angry" />
+                app:srcCompat="@mipmap/angry"
+                android:contentDescription="@string/angry_button" />
 
         </LinearLayout>
 
@@ -174,7 +184,7 @@
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dateText"
-            />
+            android:contentDescription="@string/plant_image" />
 
         <ImageView
             android:id="@+id/plantStageSwitch"
@@ -184,7 +194,8 @@
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dateText"
-            tools:visibility="invisible" />
+            tools:visibility="invisible"
+            android:contentDescription="@string/plant_image" />
 
         <View
             android:id="@+id/view2"
@@ -227,7 +238,8 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/plantStage" />
+            app:layout_constraintTop_toBottomOf="@+id/plantStage"
+            android:contentDescription="@string/select_plant" />
 
         <TextView
             android:id="@+id/selectPlantText"
@@ -330,7 +342,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/catamaran"
-            android:text="Mood"
+            android:text="@string/mood"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".JournalFragment">
+    tools:context=".journal.JournalFragment">
 
     <TextView
         android:id="@+id/journalTextView"
@@ -27,11 +27,11 @@
         android:id="@+id/entriesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="511dp"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/allEntriesButton" />
+        app:layout_constraintTop_toBottomOf="@+id/monthYearTextView" />
 
     <TextView
         android:id="@+id/monthYearTextView"
@@ -45,21 +45,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/journalTextView" />
 
-    <Button
-        android:id="@+id/allEntriesButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="102dp"
-        android:layout_marginEnd="6dp"
-        android:background="@android:color/transparent"
-        android:fontFamily="@font/catamaran"
-        android:text="@string/see_all"
-        android:textAlignment="viewEnd"
-        android:textColor="@color/medium_blue"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <Button-->
+<!--        android:id="@+id/allEntriesButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="102dp"-->
+<!--        android:layout_marginEnd="6dp"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:fontFamily="@font/catamaran"-->
+<!--        android:text="@string/see_all"-->
+<!--        android:textAlignment="viewEnd"-->
+<!--        android:textColor="@color/medium_blue"-->
+<!--        android:textSize="15sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <TextView
         android:id="@+id/noEntriesTextView"

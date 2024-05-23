@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.journal;
 
 import static android.content.ContentValues.TAG;
 
@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import edu.tacoma.uw.bloommoods.R;
+
 public class JournalEntryAdapter extends RecyclerView.Adapter<JournalEntryAdapter.ViewHolder> {
     private final RecyclerViewInterface rvi;
     private final Context context;
@@ -27,8 +29,12 @@ public class JournalEntryAdapter extends RecyclerView.Adapter<JournalEntryAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView dayTextView, monthTextView, yearTextView, titleCardTextView, entryCardTextView;
-        ImageView moodCardImageView;
+        final TextView dayTextView;
+        final TextView monthTextView;
+        final TextView yearTextView;
+        final TextView titleCardTextView;
+        final TextView entryCardTextView;
+        final ImageView moodCardImageView;
 
         public ViewHolder(View itemView, RecyclerViewInterface rvi) {
             super(itemView);
