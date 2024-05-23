@@ -8,6 +8,8 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import edu.tacoma.uw.bloommoods.authentication.Account;
+
 public class AccountUnitTest {
 
     // Constructor Tests
