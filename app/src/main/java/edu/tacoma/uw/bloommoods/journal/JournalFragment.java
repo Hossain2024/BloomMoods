@@ -31,6 +31,11 @@ import edu.tacoma.uw.bloommoods.MainActivity;
 import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.FragmentJournalBinding;
 
+/**
+ * A Fragment that displays a list of journal entries.
+ * Implements RecyclerViewInterface to handle item click events.
+ * @author Chelsea Dacones
+ */
 public class JournalFragment extends Fragment implements RecyclerViewInterface {
     private static final String[] MONTHS = {"JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
             "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"};
@@ -64,6 +69,7 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Observe changes to the user ID and fetch entries of current month/year when it changes
         mUserViewModel.getUserId().observe(getViewLifecycleOwner(), currentUser -> {
             if (currentUser != null) {
                 userId = currentUser;
@@ -71,6 +77,7 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
             }
         });
 
+        // Observe changes to the list of journal entries and update the UI
         mJournalViewModel.getDateEntries().observe(getViewLifecycleOwner(), string -> {
             journalEntries.clear();
             Log.i("JournalFragment", "Observing entries" + string);
@@ -86,7 +93,6 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
                     updateRecyclerView(journalEntries);
                     mJournalBinding.noEntriesTextView.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
-//                    mJournalBinding.allEntriesButton.setOnClickListener(button -> updateRecyclerView(journalEntries));
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -106,6 +112,9 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
         mJournalBinding = null;
     }
 
+    /**
+     * Opens the date picker dialog and sets the date text view with the current/selected date.
+     */
     private void openDateDialog() {
         String month = new SimpleDateFormat("MMMM", Locale.ENGLISH).format(calender.getTime());
         int year = calender.get(Calendar.YEAR);
@@ -124,6 +133,7 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
                 String[] parts = selectedMonthYear.split(" ");
                 String selectedMonth = parts[0];
                 int monthInt = getMonthInt(selectedMonth);
+                // Fetch journal entries for the selected month (we've limited it to year 2024 for now)
                 mJournalViewModel.getEntriesByDate(userId, monthInt, 2024);
             }
             @Override
@@ -131,6 +141,13 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
         });
     }
 
+    /**
+     * Converts a month name to its corresponding month number (1-based).
+     *
+     * @param monthString The month name.
+     * @return The month number.
+     * @throws IllegalArgumentException if the month name is invalid.
+     */
     private int getMonthInt(String monthString) {
         String month = monthString.toUpperCase(Locale.ENGLISH);
         for (int i = 0; i < MONTHS.length; i++) {
@@ -141,14 +158,25 @@ public class JournalFragment extends Fragment implements RecyclerViewInterface {
         throw new IllegalArgumentException("Invalid month name: " + monthString);
     }
 
+    /**
+     * Updates the RecyclerView with the specified list of journal entries.
+     *
+     * @param entries The list of journal entries to display.
+     */
     private void updateRecyclerView(ArrayList<JournalEntry> entries) {
         JournalEntryAdapter adapter = new JournalEntryAdapter(getActivity(), entries, this);
         mJournalBinding.entriesRecyclerView.setAdapter(adapter);
     }
 
+    /**
+     * Handles item click events in the RecyclerView.
+     *
+     * @param position The position of the clicked item.
+     */
     @Override
     public void onItemClick(int position) {
         JournalEntry selectedEntry = journalEntries.get(position);
+        // Navigate to the entry reader fragment with the selected entry
         JournalFragmentDirections.ActionJournalFragmentToEntryReaderFragment directions =
                 JournalFragmentDirections.actionJournalFragmentToEntryReaderFragment(selectedEntry);
         Navigation.findNavController(getView()).navigate(directions);

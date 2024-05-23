@@ -13,6 +13,10 @@ import androidx.navigation.Navigation;
 import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.databinding.FragmentEntryReaderBinding;
 
+/**
+ * A Fragment that displays the details of a journal entry.
+ * @author Chelsea Dacones
+ */
 public class EntryReaderFragment extends Fragment {
     private FragmentEntryReaderBinding mEntryReaderBinding;
 
@@ -21,6 +25,7 @@ public class EntryReaderFragment extends Fragment {
                              Bundle savedInstanceState) {
         mEntryReaderBinding = FragmentEntryReaderBinding.inflate(inflater, container, false);
 
+        // Set a click listener on the exit button to navigate back to the journal fragment
         mEntryReaderBinding.exitReadEntryButton.setOnClickListener(button -> Navigation.findNavController(getView())
                 .navigate(R.id.action_entryReaderFragment_to_journalFragment));
 
@@ -33,13 +38,20 @@ public class EntryReaderFragment extends Fragment {
         mEntryReaderBinding = null;
     }
 
+    /**
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Retrieve arguments passed to this fragment and extract the journal entry
         EntryReaderFragmentArgs args = EntryReaderFragmentArgs.fromBundle(getArguments());
         JournalEntry entry = args.getEntry();
 
+        // Populate the UI with the journal entry details
         mEntryReaderBinding.titleTextView.setText(entry.getTitle());
         mEntryReaderBinding.dateTextView.setText(entry.getDate());
         mEntryReaderBinding.entryTextView.setText(entry.getContent());
