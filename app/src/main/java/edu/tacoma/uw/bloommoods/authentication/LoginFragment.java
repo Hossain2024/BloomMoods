@@ -34,6 +34,9 @@ public class LoginFragment extends Fragment {
 
     private int userId = 0;
 
+    /**
+     * Navigates to the registration screen.
+     */
     public void navigateToRegister() {
         Navigation.findNavController(getView())
                 .navigate(R.id.action_loginFragment_to_registerFragment);
@@ -57,6 +60,9 @@ public class LoginFragment extends Fragment {
 
     }
 
+    /**
+     * Handles user sign-in by validating input and authenticating the user.
+     */
     public void signin() {
         String email = String.valueOf(mBinding.emailEdit.getText());
         String pwd = String.valueOf(mBinding.pwdEdit.getText());
@@ -77,12 +83,20 @@ public class LoginFragment extends Fragment {
         }
     }
 
-
-
+    /**
+     * Retrieves the user ID of the currently logged-in user.
+     *
+     * @return The user ID.
+     */
     public int getUserId(){
         return userId;
     }
 
+    /**
+     * Observes the authentication response and updates the UI accordingly.
+     *
+     * @param response The JSON response from the authentication request.
+     */
     private void observeResponse(final JSONObject response) {
         if (response.length() > 0) {
             try {

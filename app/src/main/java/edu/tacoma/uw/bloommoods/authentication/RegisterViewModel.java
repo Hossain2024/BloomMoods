@@ -36,6 +36,11 @@ public class RegisterViewModel extends AndroidViewModel {
         mResponse.observe(owner, observer);
     }
 
+    /**
+     * Handles errors encountered during a request.
+     *
+     * @param error The VolleyError encountered during the request.
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             try {
@@ -59,6 +64,12 @@ public class RegisterViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Registers a new user by making a POST request to the server.
+     *
+     * @param account The account object containing the user's email and password.
+     * @param name    The name of the user.
+     */
     public void addUser( Account account, String name) {
         String url = "https://students.washington.edu/nchi22/api/users/register_user.php";
         JSONObject body = new JSONObject();

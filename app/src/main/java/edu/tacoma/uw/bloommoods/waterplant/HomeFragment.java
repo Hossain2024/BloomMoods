@@ -100,6 +100,12 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    /**
+     * Observes the response for user profile details.
+     *
+     * @param response The JSON response from the server.
+     * @param userId The user ID.
+     */
     private void observeResponseUserId(final JSONObject response, int userId) {
         Log.d("RESPONSE LENGTH", String.valueOf(response.length()));
         if (response.length() > 0) {
@@ -132,10 +138,11 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    /*
-    Observe response from method getCurrentPlantDetails. Method will take the plant growth,
-    stage, and name. Then call local method setPlantDetails to update the progress bar in Home page
-    and the image view.
+    /**
+     * Observes the response for plant details.
+     *
+     * @param response The JSON response from the server.
+     * @param userId The user ID.
      */
     private void observeResponsePlantDetails(final JSONObject response, int userId) {
             try {
@@ -161,6 +168,11 @@ public class HomeFragment extends Fragment {
             }
     }
 
+    /**
+     * Sets the plant details including the plant image and growth level.
+     *
+     * @param activePlantName The name of the active plant.
+     */
     private void setPlantDetails(String activePlantName) {
         String resourceName = activePlantName.toLowerCase().replace(" ", "_") + "_stage_" + stage;
         int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
@@ -180,6 +192,9 @@ public class HomeFragment extends Fragment {
 
         }
 
+    /**
+     * Sets the text fields for the user name, streak, and total entries.
+     */
     private void setEditText() {
         TextView usernameText = homeBinding.textUserName;
         String name = "Hey, " + userName + "!";
@@ -217,10 +232,20 @@ public class HomeFragment extends Fragment {
         entriesText.setText(spannableStringEntries);
     }
 
+    /**
+     * Resets the user's streak.
+     *
+     * @param userId The user ID for which to reset the streak.
+     */
     private void resetStreak(int userId) {
         userViewModel.resetStreak(userId);
     }
 
+    /**
+     * Resets the plant's stage.
+     *
+     * @param userId The user ID for which to reset the plant stage.
+     */
     private void resetStage(int userId) {
         plantViewModel.resetCurrentPlantStage(userId);
         setSaturation(plantStage);
@@ -228,6 +253,9 @@ public class HomeFragment extends Fragment {
 
     }
 
+    /**
+     * Calculates the difference in hours since the last entry logged.
+     */
     private void calculateHours() {
         userViewModel.getLastEntryLogged().observe(getViewLifecycleOwner(), lastEntry -> {
             if (!Objects.equals(lastEntry, "null")) {
@@ -250,6 +278,12 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+    /**
+     * Sets the saturation of the plant image view to grayscale.
+     *
+     * @param imageView The ImageView to be desaturated.
+     */
     private void setSaturation(ImageView imageView) {
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation((float) 0.0);

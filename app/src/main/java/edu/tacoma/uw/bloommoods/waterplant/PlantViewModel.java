@@ -28,6 +28,7 @@ public class PlantViewModel extends AndroidViewModel {
     final private MutableLiveData<JSONObject> updatePlantResponse;
     final private MutableLiveData<JSONObject> updatePlantDetailsResponse;
     final private MutableLiveData<JSONArray> unlockedPlantResponse;
+    private Observer<? super JSONObject> currentObserver;
 
     public PlantViewModel(@NonNull Application application) {
         super(application);
@@ -41,22 +42,45 @@ public class PlantViewModel extends AndroidViewModel {
         unlockedPlantResponse.setValue(new JSONArray());
     }
 
+    /**
+     * Adds an observer to the plant response LiveData.
+     *
+     * @param owner    The LifecycleOwner which controls the observer.
+     * @param observer The observer that will receive the response updates.
+     */
     public void addPlantResponseObserver(@NonNull LifecycleOwner owner,
                                          @NonNull Observer<? super JSONObject> observer) {
         plantResponse.observe(owner, observer);
     }
 
+    /**
+     * Adds an observer to the unlocked plant response LiveData.
+     *
+     * @param owner    The LifecycleOwner which controls the observer.
+     * @param observer The observer that will receive the response updates.
+     */
     public void addUnlockedPlantResponseObserver(@NonNull LifecycleOwner owner,
                                                  @NonNull Observer<? super JSONArray> observer) {
         unlockedPlantResponse.observe(owner, observer);
     }
+
+    /**
+     * Adds an observer to the plant details response LiveData.
+     *
+     * @param owner    The LifecycleOwner which controls the observer.
+     * @param observer The observer that will receive the response updates.
+     */
     public void addPlantDetailResponseObserver(@NonNull LifecycleOwner owner,
                                                  @NonNull Observer<? super JSONObject> observer) {
         updatePlantDetailsResponse.observe(owner, observer);
     }
 
-    private Observer<? super JSONObject> currentObserver;
-
+    /**
+     * Adds an observer to the updated plant response LiveData.
+     *
+     * @param owner    The LifecycleOwner which controls the observer.
+     * @param observer The observer that will receive the response updates.
+     */
     public void addUpdatedPlantResponseObserver(@NonNull LifecycleOwner owner,
                                                 @NonNull Observer<? super JSONObject> observer) {
         // Remove the current observer if it exists
@@ -69,7 +93,11 @@ public class PlantViewModel extends AndroidViewModel {
         currentObserver = observer;
     }
 
-
+    /**
+     * Handles errors encountered during a Volley request.
+     *
+     * @param error The VolleyError encountered during the request.
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             try {
@@ -93,6 +121,11 @@ public class PlantViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Retrieves the current plant details for a user.
+     *
+     * @param userId The user ID.
+     */
     public void getCurrentPlantDetails(int userId) {
         String url = "https://students.washington.edu/nchi22/api/plants/get_current_plant_details.php?user_id=" + userId;
 
@@ -113,6 +146,12 @@ public class PlantViewModel extends AndroidViewModel {
                 .add(request);
     }
 
+    /**
+     * Updates the current plant details for a user.
+     *
+     * @param userId    The user ID.
+     * @param newGrowth The new growth level.
+     */
     protected void updateCurrentPlantDetails(int userId, double newGrowth) {
         String url = "https://students.washington.edu/nchi22/api/plants/update_current_plant_details.php";
         JSONObject body = new JSONObject();
@@ -139,6 +178,13 @@ public class PlantViewModel extends AndroidViewModel {
                 .add(request);
     }
 
+
+    /**
+     * Updates the current plant for a user.
+     *
+     * @param userId       The user ID.
+     * @param plantOptionId The plant option ID.
+     */
     public void updateCurrentPlant(int userId, int plantOptionId) {
         String url = "https://students.washington.edu/nchi22/api/plants/update_current_plant.php";
         JSONObject body = new JSONObject();
@@ -165,7 +211,12 @@ public class PlantViewModel extends AndroidViewModel {
                 .add(request);
     }
 
-    protected void getUnlockedPlants(int userId) {
+    /**
+     * Retrieves the unlocked plants for a user.
+     *
+     * @param userId The user ID.
+     */
+    public void getUnlockedPlants(int userId) {
         String url = "https://students.washington.edu/nchi22/api/plants/get_plants_unlocked.php?user_id=" + userId;
         Request<JSONArray> request = new JsonArrayRequest(
                 Request.Method.GET,
@@ -188,6 +239,11 @@ public class PlantViewModel extends AndroidViewModel {
                 .add(request);
     }
 
+    /**
+     * Resets the current plant stage for a user.
+     *
+     * @param userId The user ID.
+     */
     protected void resetCurrentPlantStage(int userId) {
         String url = "https://students.washington.edu/nchi22/api/plants/reset_current_plant_stage.php";
         JSONObject body = new JSONObject();
@@ -214,6 +270,12 @@ public class PlantViewModel extends AndroidViewModel {
                 .add(request);
     }
 
+    /**
+     * Resets the current plant for a user.
+     *
+     * @param userId  The user ID.
+     * @param plantId The plant ID.
+     */
     protected void resetCurrentPlant(int userId, int plantId) {
         String url = "https://students.washington.edu/nchi22/api/plants/reset_plant.php";
         JSONObject body = new JSONObject();
