@@ -11,7 +11,8 @@
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:scaleType="fitCenter"
-        android:src="@mipmap/happy" />
+        android:src="@mipmap/happy"
+        android:contentDescription="@string/mood_image" />
 
     <TextView
         android:id="@+id/dayTextView"
@@ -19,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingTop="4dp"
-        android:text="Day"
+        android:text="@string/day"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="16sp" />
 

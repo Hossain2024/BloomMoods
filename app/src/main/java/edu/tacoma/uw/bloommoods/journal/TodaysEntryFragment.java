@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.journal;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,8 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -22,11 +20,18 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.tacoma.uw.bloommoods.MainActivity;
+import edu.tacoma.uw.bloommoods.waterplant.PlantViewModel;
+import edu.tacoma.uw.bloommoods.R;
+import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.FragmentTodaysEntryBinding;
 
 /**
  * Fragment for displaying and editing today's journal entry.
+ * It also displays the user's current plant.
+ *
  * @author Chelsea Dacones
+ * @author Amanda Nguyen
  */
 public class TodaysEntryFragment extends Fragment {
     private FragmentTodaysEntryBinding mTodaysEntryBinding;
@@ -37,6 +42,7 @@ public class TodaysEntryFragment extends Fragment {
     private int mCurrentUser;
     private static final Map<Integer, String> moodMap = new HashMap<>();
 
+    // Populate moodMap with mood resource IDs and corresponding mood strings
     static {
         moodMap.put(R.mipmap.excited, "Excited");
         moodMap.put(R.mipmap.happy, "Happy");
@@ -71,37 +77,19 @@ public class TodaysEntryFragment extends Fragment {
         // Observe the entry LiveData
         mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), this::updateUI);
 
+        // Set click listeners for edit and update buttons
         mTodaysEntryBinding.editButton.setOnClickListener(button -> setEditable(true));
         mTodaysEntryBinding.updateButton.setOnClickListener(button -> {
             updateEntry(mCurrentUser);
             setEditable(false);
         });
 
+        // Fetch and observe plant details for the current user
         mPlantViewModel.getCurrentPlantDetails(mCurrentUser);
-//        mPlantViewModel.addPlantResponseObserver(getViewLifecycleOwner(), response -> {
-//            if (response.has("stage") && response.has("growthLevel") && response.has("name")) {
-//                int stage;
-//                ImageView plantStage = mTodaysEntryBinding.plantImageView;
-//                String activePlantName;
-//                try {
-//                    activePlantName = response.getString(("name"));
-//                    stage = response.getInt("stage");
-//                } catch (JSONException e) {
-//                    throw new RuntimeException(e);
-//                }
-//                String resourceName = activePlantName.toLowerCase().replace(" ", "_") + "_stage_" + stage;
-//                int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
-//                if (resourceId != 0) {
-//                    Drawable drawable = ContextCompat.getDrawable(requireContext(), resourceId);
-//                    plantStage.setImageDrawable(drawable);
-//                } else {
-//                    Log.e("TodaysEntryFragment", "Drawable resource not found: " + resourceName);
-//                }
-//            }
-//        });
         mPlantViewModel.addPlantResponseObserver(getViewLifecycleOwner(), this::observePlantResponse);
 
-        setOnMoodClicks(mTodaysEntryBinding.linearLayout);
+        // Set click listeners for mood selection
+        setOnMoodClicks();
     }
 
     @Override
@@ -110,6 +98,11 @@ public class TodaysEntryFragment extends Fragment {
         mTodaysEntryBinding = null;
     }
 
+    /**
+     * Sets the UI to editable or non-editable state.
+     *
+     * @param isEditing true to set the UI to editable state, false to set it to non-editable state.
+     */
     private void setEditable(boolean isEditing) {
         int editButtonVisibility = isEditing ? View.GONE : View.VISIBLE;
         int updateButtonVisibility = isEditing ? View.VISIBLE : View.GONE;
@@ -124,6 +117,11 @@ public class TodaysEntryFragment extends Fragment {
         mTodaysEntryBinding.moodTextView.setVisibility(updateButtonVisibility);
     }
 
+    /**
+     * Updates the journal entry with the current user's input.
+     *
+     * @param userId the current user ID.
+     */
     private void updateEntry(int userId) {
         String title = mTodaysEntryBinding.todaysTitleEditText.getText().toString();
         String entry = mTodaysEntryBinding.todaysEntryEditText.getText().toString();
@@ -131,6 +129,11 @@ public class TodaysEntryFragment extends Fragment {
         mJournalViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
     }
 
+    /**
+     * Updates the UI with the provided journal entry.
+     *
+     * @param entry the journal entry to display.
+     */
     private void updateUI(JournalEntry entry) {
         if (entry != null) {
             mSelectedMood = moodMap.get(entry.getMoodImage());
@@ -142,7 +145,10 @@ public class TodaysEntryFragment extends Fragment {
         }
     }
 
-    private void setOnMoodClicks(LinearLayout moodLayout) {
+    /**
+     * Sets click listeners for mood selection buttons.
+     */
+    private void setOnMoodClicks() {
         mTodaysEntryBinding.anxiousImageView.setOnClickListener(this::onMoodClicked);
         mTodaysEntryBinding.excitedImageView.setOnClickListener(this::onMoodClicked);
         mTodaysEntryBinding.happyImageView.setOnClickListener(this::onMoodClicked);
@@ -151,11 +157,21 @@ public class TodaysEntryFragment extends Fragment {
         mTodaysEntryBinding.angryImageView.setOnClickListener(this::onMoodClicked);
     }
 
+    /**
+     * Handles mood button clicks and updates the selected mood.
+     *
+     * @param view the clicked mood button view.
+     */
     private void onMoodClicked(View view) {
         mSelectedMood = view.getTag().toString();
         mTodaysEntryBinding.moodTextView.setText(mSelectedMood);
     }
 
+    /**
+     * Observes the response from the journal entry update request and fetches the updated entry.
+     *
+     * @param response the JSON response from the server.
+     */
     private void observeResponse(final JSONObject response) {
         if (response.length() > 0) {
             if (response.has("error")) {
@@ -173,6 +189,11 @@ public class TodaysEntryFragment extends Fragment {
         }
     }
 
+    /**
+     * Observes the response from the plant details request and updates the plant image.
+     * NOTE: Written by Amanda.
+     * @param response the JSON response from the server.
+     */
     private void observePlantResponse(final JSONObject response) {
         if (response.length() > 0) {
             try {

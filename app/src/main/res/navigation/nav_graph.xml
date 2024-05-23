@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="edu.tacoma.uw.bloommoods.LoginFragment"
+        android:name="edu.tacoma.uw.bloommoods.authentication.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login">
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_home"
-        android:name="edu.tacoma.uw.bloommoods.HomeFragment"
+        android:name="edu.tacoma.uw.bloommoods.waterplant.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home">
         <action
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment2"
-        android:name="edu.tacoma.uw.bloommoods.RegisterFragment"
+        android:name="edu.tacoma.uw.bloommoods.authentication.RegisterFragment"
         android:label="Register"
         tools:layout="@layout/fragment_register">
         <action
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_journal"
-        android:name="edu.tacoma.uw.bloommoods.JournalFragment"
+        android:name="edu.tacoma.uw.bloommoods.journal.JournalFragment"
         android:label="Journal"
         tools:layout="@layout/fragment_journal">
         <action
@@ -73,7 +73,7 @@
     </fragment>
     <fragment
         android:id="@+id/entryReaderFragment"
-        android:name="edu.tacoma.uw.bloommoods.EntryReaderFragment"
+        android:name="edu.tacoma.uw.bloommoods.journal.EntryReaderFragment"
         android:label="Entry Reader"
         tools:layout="@layout/fragment_entry_reader">
         <action
@@ -81,11 +81,11 @@
             app:destination="@id/nav_journal" />
         <argument
             android:name="entry"
-            app:argType="edu.tacoma.uw.bloommoods.JournalEntry" />
+            app:argType="edu.tacoma.uw.bloommoods.journal.JournalEntry" />
     </fragment>
     <fragment
         android:id="@+id/nav_account"
-        android:name="edu.tacoma.uw.bloommoods.AccountFragment"
+        android:name="edu.tacoma.uw.bloommoods.authentication.AccountFragment"
         android:label="Account"
         tools:layout="@layout/fragment_account" >
         <action
@@ -100,7 +100,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_water"
-        android:name="edu.tacoma.uw.bloommoods.WaterPlantFragment"
+        android:name="edu.tacoma.uw.bloommoods.waterplant.WaterPlantFragment"
         android:label="fragment_water_plant"
         tools:layout="@layout/fragment_water_plant" >
         <action
@@ -122,7 +122,7 @@
 
     <fragment
         android:id="@+id/todaysEntryFragment"
-        android:name="edu.tacoma.uw.bloommoods.TodaysEntryFragment"
+        android:name="edu.tacoma.uw.bloommoods.journal.TodaysEntryFragment"
         android:label="fragment_todays_entry"
         tools:layout="@layout/fragment_todays_entry" >
         <action
@@ -133,11 +133,11 @@
             app:destination="@id/nav_journal" />
         <argument
             android:name="entry"
-            app:argType="edu.tacoma.uw.bloommoods.JournalEntry" />
+            app:argType="edu.tacoma.uw.bloommoods.journal.JournalEntry" />
     </fragment>
     <fragment
         android:id="@+id/newEntryFragment"
-        android:name="edu.tacoma.uw.bloommoods.NewEntryFragment"
+        android:name="edu.tacoma.uw.bloommoods.waterplant.NewEntryFragment"
         android:label="fragment_new_entry"
         tools:layout="@layout/fragment_water_plant" >
         <action
@@ -153,20 +153,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_report"
-        android:name="edu.tacoma.uw.bloommoods.ReportFragment"
+        android:name="edu.tacoma.uw.bloommoods.report.ReportFragment"
         android:label="ReportFragment" >
-        <action
-            android:id="@+id/action_nav_report_to_pieChartFragment"
-            app:destination="@id/pieChartFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/pieChartFragment"
-        android:name="edu.tacoma.uw.bloommoods.PieChartFragment"
-        android:label="PieChartFragment" >
-        <action
-            android:id="@+id/action_pieChartFragment_to_nav_report"
-            app:destination="@id/nav_report" />
-    </fragment>
-
-
 </navigation>

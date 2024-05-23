@@ -1,10 +1,7 @@
-package edu.tacoma.uw.bloommoods;
-
-import static android.content.ContentValues.TAG;
+package edu.tacoma.uw.bloommoods.authentication;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -12,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,11 +19,15 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.tacoma.uw.bloommoods.MainActivity;
+import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.databinding.FragmentLoginBinding;
-import edu.tacoma.uw.bloommoods.databinding.FragmentRegisterBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment for user login.
+ *
+ * @author Maliha Hossain
+ *
  */
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding mBinding;
@@ -37,6 +37,9 @@ public class LoginFragment extends Fragment {
 
     private int userId = 0;
 
+    /**
+     * Navigates to the registration screen.
+     */
     public void navigateToRegister() {
         Navigation.findNavController(getView())
                 .navigate(R.id.action_loginFragment_to_registerFragment);
@@ -54,15 +57,15 @@ public class LoginFragment extends Fragment {
 
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
-            observeResponse(response);
-
-        });
+        mUserViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
         mBinding.navToSignUpButton.setOnClickListener(button -> navigateToRegister());
         mBinding.logInButton.setOnClickListener(button-> signin());
 
     }
 
+    /**
+     * Handles user sign-in by validating input and authenticating the user.
+     */
     public void signin() {
         String email = String.valueOf(mBinding.emailEdit.getText());
         String pwd = String.valueOf(mBinding.pwdEdit.getText());
@@ -83,12 +86,20 @@ public class LoginFragment extends Fragment {
         }
     }
 
-
-
+    /**
+     * Retrieves the user ID of the currently logged-in user.
+     *
+     * @return The user ID.
+     */
     public int getUserId(){
         return userId;
     }
 
+    /**
+     * Observes the authentication response and updates the UI accordingly.
+     *
+     * @param response The JSON response from the authentication request.
+     */
     private void observeResponse(final JSONObject response) {
         if (response.length() > 0) {
             try {

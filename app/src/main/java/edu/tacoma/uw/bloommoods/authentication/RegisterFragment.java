@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.authentication;
 
 import static android.content.ContentValues.TAG;
 
@@ -19,15 +19,17 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.databinding.FragmentRegisterBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment for user registration.
+ *
+ * @author Maliha Hossain
  */
 public class RegisterFragment extends Fragment {
     private FragmentRegisterBinding mBinding;
     private RegisterViewModel mRegisterUserViewModel;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,10 +48,7 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRegisterUserViewModel.addResponseObserver(getViewLifecycleOwner(), response -> {
-            observeResponse(response);
-
-        });
+        mRegisterUserViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponse);
 
 
         mBinding.registerButton.setOnClickListener(button -> signup());
@@ -64,6 +63,9 @@ public class RegisterFragment extends Fragment {
         mBinding = null;
     }
 
+    /**
+     * Handles user sign-up by validating input and registering the user.
+     */
     public void signup() {
         String email = String.valueOf(mBinding.emailEdit.getText());
         String pwd = String.valueOf(mBinding.pwdEdit.getText());
@@ -83,6 +85,11 @@ public class RegisterFragment extends Fragment {
         }
     }
 
+    /**
+     * Observes the registration response and updates the UI accordingly.
+     *
+     * @param response The JSON response from the registration request.
+     */
     private void observeResponse(final JSONObject response) {
         if (response.length() > 0) {
             try {

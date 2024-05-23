@@ -30,7 +30,7 @@
                 android:fontFamily="@font/catamaran"
                 android:lineSpacingExtra="-7sp"
                 android:maxLines="3"
-                android:text="The city of southern California, san diego is locally known as &quot;America's Finest City&quot;"
+                android:text="@string/entryExample"
                 android:textAlignment="textStart"
                 android:textColor="@color/dark_blue"
                 android:textSize="20sp"
@@ -44,7 +44,7 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="-7dp"
                 android:fontFamily="@font/playfair_display"
-                android:text="25"
+                android:text="@string/_25"
                 android:textAlignment="center"
                 android:textColor="@color/dark_blue"
                 android:textSize="36sp"
@@ -61,7 +61,7 @@
                 android:layout_marginStart="23dp"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/alatsi"
-                android:text="Apr"
+                android:text="@string/apr"
                 android:textAlignment="center"
                 android:textColor="@color/dark_blue"
                 android:textSize="20sp"
@@ -75,7 +75,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginBottom="48dp"
                 android:fontFamily="@font/alatsi"
-                android:text="2024"
+                android:text="@string/_2024"
                 android:textAlignment="textStart"
                 android:textColor="@color/dark_blue"
                 android:textSize="20sp"
@@ -101,7 +101,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/alatsi"
                 android:maxLines="1"
-                android:text="Hike in the Mountains"
+                android:text="@string/titleExample"
                 android:textAlignment="viewStart"
                 android:textColor="@color/dark_blue"
                 android:textSize="20sp"
@@ -116,7 +116,8 @@
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/entryCardTextView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@mipmap/smilingface" />
+                app:srcCompat="@mipmap/smilingface"
+                android:contentDescription="@string/mood_image" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

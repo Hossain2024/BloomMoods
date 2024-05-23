@@ -1,7 +1,6 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.waterplant;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -21,7 +20,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -42,10 +40,15 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import edu.tacoma.uw.bloommoods.journal.JournalViewModel;
+import edu.tacoma.uw.bloommoods.MainActivity;
+import edu.tacoma.uw.bloommoods.R;
+import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.FragmentNewEntryBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A Fragment that displays the Water Plant page (i.e. adding a new journal entry)
+ *
  * @author Chelsea Dacones
  * @author Amanda Nguyen
  */
@@ -119,6 +122,9 @@ public class NewEntryFragment extends Fragment {
         mNewEntryBinding = null;
     }
 
+    /**
+     * Initializes listeners for various UI elements.
+     */
     private void initializeListeners() {
         resetButton = mNewEntryBinding.resetButton;
         titleEditText = mNewEntryBinding.titleEditText;
@@ -144,6 +150,11 @@ public class NewEntryFragment extends Fragment {
         adjustToKeyboard();
     }
 
+    /**
+     * Adds a journal entry for the user.
+     *
+     * @param userId The user ID.
+     */
     private void addEntry(int userId) {
         String title = titleEditText.getText().toString();
         String entry = entryEditText.getText().toString();
@@ -159,6 +170,11 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+    /**
+     * Observes the response from adding a journal entry.
+     *
+     * @param response The JSON response from the server.
+     */
     private void observeResponse(final JSONObject response) {
         if (response.length() > 0) {
             if (response.has("error")) {
@@ -184,6 +200,9 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets onClick listeners for mood selection.
+     */
     private void setOnMoodClicks() {
         mNewEntryBinding.anxiousImageView.setOnClickListener(this::onMoodClicked);
         mNewEntryBinding.excitedImageView.setOnClickListener(this::onMoodClicked);
@@ -193,6 +212,12 @@ public class NewEntryFragment extends Fragment {
         mNewEntryBinding.angryImageView.setOnClickListener(this::onMoodClicked);
     }
 
+
+    /**
+     * Handles the click event for mood selection.
+     *
+     * @param view The clicked view.
+     */
     private void onMoodClicked(View view) {
         if (mNewEntryBinding.moodTextView.getVisibility() == View.GONE) {
             mNewEntryBinding.moodTextView.setVisibility(View.VISIBLE);
@@ -204,6 +229,10 @@ public class NewEntryFragment extends Fragment {
 
     /** All methods below were written by Amanda, due to conflicts more difficult to resolve, Chelsea manually cut and paste the code here,
      * resulting in Git showing Chelsea as the author.*/
+
+    /**
+     * Sets the text and image for the plant growth and details.
+     */
     private void setTextImage() {
         mNewEntryBinding.dateText.setText(new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault()).format(new Date()));
 
@@ -213,6 +242,13 @@ public class NewEntryFragment extends Fragment {
         progressBar.setProgress((int) plantGrowthPercent);
     }
 
+    /**
+     * Sets the image for the plant stage.
+     *
+     * @param view      The ImageView to set the image on.
+     * @param plantStage The plant stage.
+     * @param plantName The plant name.
+     */
     private void setPlantImage(ImageView view, int plantStage, String plantName) {
         String resourceName = plantName.toLowerCase().replace(" ", "_") + "_stage_" + plantStage;
         int resourceId = getResources().getIdentifier(resourceName, "drawable", requireActivity().getPackageName());
@@ -230,10 +266,13 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+    /**
+     * Adds growth to the current plant.
+     */
     private void addGrowth() {
         loggedToday = false;
         mUserViewModel.getLastEntryLogged().observe(getViewLifecycleOwner(), entry -> {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
             if (!entry.equals("null")) {
                 try {
                     // Parse the date string into a Date object
@@ -276,6 +315,11 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+    /**
+     * Observes the response for plant details.
+     *
+     * @param response The JSON response from the server.
+     */
     private void observeResponsePlantDetails(final JSONObject response) {
         if (response.length() > 0) {
             try {
@@ -302,6 +346,11 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+    /**
+     * Observes the response for unlocked plants.
+     *
+     * @param response The JSON response from the server.
+     */
     private void observeUnlockedPlants(final JSONArray response) {
         if (response.length() > 0) {
             numberOfUnlocked = response.length();
@@ -324,6 +373,11 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+    /**
+     * Observes the response for user profile details.
+     *
+     * @param response The JSON response from the server.
+     */
     private void observeResponseUserProfile(final JSONObject response) {
         if (response.length() > 0) {
             try {
@@ -346,6 +400,12 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets the saturation of the plant image view.
+     *
+     * @param imageView  The ImageView to set the saturation on.
+     * @param saturation The saturation level.
+     */
     private void setSaturation(ImageView imageView, float saturation) {
         ColorMatrix colorMatrix = new ColorMatrix();
         colorMatrix.setSaturation(saturation);
@@ -369,6 +429,9 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+    /**
+     * Toggles the plant switching UI elements.
+     */
     private void toggleSwitchPlantOff() {
         resetButton.setVisibility(View.GONE);
         rightArrow.setVisibility(View.GONE);
@@ -383,6 +446,11 @@ public class NewEntryFragment extends Fragment {
 
     }
 
+    /**
+     * Updates the visibility of the arrow buttons based on the current plant.
+     *
+     * @param plantName The name of the current plant.
+     */
     private void updateArrows(String plantName) {
         switch (plantName) {
             case "Tranquil Tulip":
@@ -400,6 +468,12 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+    /**
+     * Selects a plant for the user.
+     *
+     * @param plantName   The name of the plant.
+     * @param plantOptionId The plant option ID.
+     */
     private void selectPlant(String plantName, int plantOptionId) {
         resetButton.setVisibility(View.GONE);
         toggleSelectPlant(true);
@@ -445,6 +519,11 @@ public class NewEntryFragment extends Fragment {
 
     }
 
+    /**
+     * Switches the plant based on the direction of the arrow clicked.
+     *
+     * @param direction The direction to switch the plant.
+     */
     private void switchArrows(String direction) {
         plantPhoto.setVisibility(View.INVISIBLE);
         plantPhoto.setVisibility(View.INVISIBLE);
@@ -470,6 +549,11 @@ public class NewEntryFragment extends Fragment {
 
     }
 
+    /**
+     * Unlocks a new plant for the user if certain conditions are met.
+     *
+     * @param currentPlantId The current plant ID.
+     */
     private void unlockNewPlant(int currentPlantId) {
         if (currentPlantId != 3 && numberOfUnlocked < 3 && !(currentPlantId > numberOfUnlocked)) {
             int finalCurrentPlantId = currentPlantId + 1;
@@ -478,7 +562,10 @@ public class NewEntryFragment extends Fragment {
             Toast.makeText(getContext(), "NEW PLANT UNLOCKED", Toast.LENGTH_LONG).show();
         }
     }
-    
+
+    /**
+     * Checks if the plant is unlocked.
+     */
     private void isUnlockedPlant() {
         mPlantViewModel.getUnlockedPlants(mCurrentUserId);
         mPlantViewModel.addUnlockedPlantResponseObserver(getViewLifecycleOwner(), response -> {
@@ -488,6 +575,12 @@ public class NewEntryFragment extends Fragment {
         });
     }
 
+    /**
+     * Updates the current plant for the user.
+     *
+     * @param userId  The user ID.
+     * @param plantId The plant ID.
+     */
     private void updatePlant(int userId, int plantId){
         Log.i("UPDATED PLANT()", "START");
         mPlantViewModel.updateCurrentPlant(userId, plantId);
@@ -501,11 +594,22 @@ public class NewEntryFragment extends Fragment {
         Log.i("UPDATED PLANT()", "FINISHED");
     }
 
+    /**
+     * Resets the current plant for the user.
+     *
+     * @param userId  The user ID.
+     * @param plantId The plant ID.
+     */
     private void resetPlant(int userId, int plantId) {
         mPlantViewModel.resetCurrentPlant(userId, plantId);
         mPlantViewModel.updateCurrentPlant(userId, plantId);
     }
 
+    /**
+     * Toggles the visibility of the plant selection UI elements.
+     *
+     * @param on Whether to show the plant selection UI elements.
+     */
     private void toggleSelectPlant(Boolean on) {
         if (on) {
             progressBar.setVisibility(View.INVISIBLE);
@@ -521,37 +625,35 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+    /**
+     * Adjusts the scroll view to the keyboard height.
+     */
     public void adjustToKeyboard () {
         ScrollView scroll = mNewEntryBinding.waterPlantScrollView;
-        scroll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-                scroll.getWindowVisibleDisplayFrame(r);
-                int screenHeight = scroll.getRootView().getHeight();
-                int keypadHeight = screenHeight - r.bottom;
+        scroll.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Rect r = new Rect();
+            scroll.getWindowVisibleDisplayFrame(r);
+            int screenHeight = scroll.getRootView().getHeight();
+            int keypadHeight = screenHeight - r.bottom;
 
-                // Adjust the bottom padding of the scroll view
-                scroll.setPadding(0, 0, 0, keypadHeight);
-            }
+            // Adjust the bottom padding of the scroll view
+            scroll.setPadding(0, 0, 0, keypadHeight);
         });
-
     }
 
+    /**
+     * Shows a confirmation dialog for resetting the plant.
+     */
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("All plant growth will be lost. Are you sure?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User clicked Yes button
-                        resetPlant(mCurrentUserId, activePlantId);
-                    }
+                .setPositiveButton("Yes", (dialog, id) -> {
+                    // User clicked Yes button
+                    resetPlant(mCurrentUserId, activePlantId);
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User clicked No button
-                        dialog.dismiss();
-                    }
+                .setNegativeButton("No", (dialog, id) -> {
+                    // User clicked No button
+                    dialog.dismiss();
                 });
         // Create the AlertDialog object and show it
         builder.create().show();

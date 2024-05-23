@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.authentication;
 
 import android.app.Application;
 import android.util.Log;
@@ -13,16 +13,20 @@ import androidx.lifecycle.Observer;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.nio.charset.Charset;
 import java.util.Objects;
 
+/**
+ * ViewModel for handling user related data and operations.
+ *
+ * @author Maliha Hossain
+ * @author Amanda Nguyen
+ */
 public class UserViewModel extends AndroidViewModel {
     final private MutableLiveData<JSONObject> mResponse;
     final private MutableLiveData<Integer> mUserId;
@@ -47,7 +51,11 @@ public class UserViewModel extends AndroidViewModel {
         mResponse.observe(owner, observer);
     }
 
-
+    /**
+     * Handles errors encountered during a request.
+     *
+     * @param error The VolleyError encountered during the request.
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             try {
@@ -72,8 +80,11 @@ public class UserViewModel extends AndroidViewModel {
     }
 
 
-
-
+    /**
+     * Authenticates a user by making a POST request to the server.
+     *
+     * @param account The account object containing the user's email and password.
+     */
     public void authenticateUser(Account account) {
         String url = "https://students.washington.edu/nchi22/api/users/login.php";
         JSONObject body = new JSONObject();
@@ -91,7 +102,7 @@ public class UserViewModel extends AndroidViewModel {
                 mResponse::setValue,
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl().toString());
+        Log.i("UserViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -102,8 +113,12 @@ public class UserViewModel extends AndroidViewModel {
     }
 
 
-
-    protected void getUserProfile(int userId) {
+    /**
+     * Fetches the user profile by making a GET request to the server.
+     *
+     * @param userId The user ID for which to fetch the profile.
+     */
+    public void getUserProfile(int userId) {
         String url = "https://students.washington.edu/nchi22/api/users/get_profile.php?user_id=" + userId;
 
         Request request = new JsonObjectRequest(
@@ -113,7 +128,7 @@ public class UserViewModel extends AndroidViewModel {
                 mResponse::setValue,
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl().toString());
+        Log.i("UserViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -124,7 +139,12 @@ public class UserViewModel extends AndroidViewModel {
     }
 
 
-    protected void resetStreak(int userId) {
+    /**
+     * Resets the user's streak by making a PUT request to the server.
+     *
+     * @param userId The user ID for which to reset the streak.
+     */
+    public void resetStreak(int userId) {
         String url = "https://students.washington.edu/nchi22/api/users/reset_streak.php";
         JSONObject body = new JSONObject();
         try {
@@ -140,7 +160,7 @@ public class UserViewModel extends AndroidViewModel {
                     Log.i("Streak", "Streak has been reset"),
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl().toString());
+        Log.i("UserViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -150,25 +170,56 @@ public class UserViewModel extends AndroidViewModel {
                 .add(request);
     }
 
-
+    /**
+     * Gets the LiveData containing the user ID.
+     *
+     * @return The LiveData containing the user ID.
+     */
     public LiveData<Integer> getUserId() {
         return mUserId;
     }
+
+    /**
+     * Sets the user ID.
+     *
+     * @param id The user ID to set.
+     */
     public void setUserId(int id) {
         mUserId.setValue(id);
     }
 
+    /**
+     * Gets the LiveData indicating if the streak has been reset.
+     *
+     * @return The LiveData indicating if the streak has been reset.
+     */
     public LiveData<Boolean> getReset() {
         return resetted;
     }
+
+    /**
+     * Sets the streak reset status.
+     *
+     * @param reset The reset status to set.
+     */
     public void setReset(boolean reset) {
         resetted.setValue(reset);
     }
 
+    /**
+     * Gets the LiveData containing the last entry logged.
+     *
+     * @return The LiveData containing the last entry logged.
+     */
     public MutableLiveData<String> getLastEntryLogged() {
         return lastEntryLogged;
     }
 
+    /**
+     * Sets the last entry logged.
+     *
+     * @param entry The last entry to set.
+     */
     public void setLastEntryLogged(String entry) {
         lastEntryLogged.setValue(entry);
     }

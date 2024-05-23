@@ -13,17 +13,17 @@
         android:theme="@style/Theme.BloomMoods"
         tools:targetApi="31">
         <activity
-            android:name=".JournalFragment"
+            android:name=".journal.JournalFragment"
             android:exported="false" />
         <activity
-            android:name=".EntryReaderFragment"
+            android:name=".journal.EntryReaderFragment"
             android:exported="false" />
         <activity
-            android:name=".WaterPlantFragment"
+            android:name=".waterplant.WaterPlantFragment"
             android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
-            android:name=".HomeFragment"
+            android:name=".waterplant.HomeFragment"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

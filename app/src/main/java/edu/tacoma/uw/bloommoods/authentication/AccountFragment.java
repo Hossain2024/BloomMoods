@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.authentication;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -36,26 +37,38 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.tacoma.uw.bloommoods.MainActivity;
+import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.databinding.FragmentAccountBinding;
+import edu.tacoma.uw.bloommoods.waterplant.PlantViewModel;
 
+/**
+ * Fragment for managing user account settings.
+ *
+ * @author Rainie Chi
+ */
 public class AccountFragment extends Fragment {
-
-
-
+    /**
+     * API URL for updating user profile.
+     */
     private static final String UPDATE_PROFILE_API_URL = "https://students.washington.edu/nchi22/api/users/update_profile.php";
-    private static final String FETCH_PLANT_API_URL = "https://students.washington.edu/nchi22/api/plants/get_plants_unlocked.php?user_id=";
-    private static final int COLOR_ERROR = Color.parseColor("#610000");
-    private static final int COLOR_SUCCESS = Color.parseColor("#8fb38f");
+    private int COLOR_ERROR;
+    private int COLOR_SUCCESS;
 
     private UserViewModel mUserViewModel;
+    private PlantViewModel mPlantViewModel;
     private FragmentAccountBinding binding;
     private int userID;
     private List<String> unlockedPlants;
 
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        COLOR_ERROR = ContextCompat.getColor(getContext(), R.color.red);
+        COLOR_SUCCESS = ContextCompat.getColor(getContext(), R.color.dark_green);
         mUserViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        mPlantViewModel = new ViewModelProvider(requireActivity()).get(PlantViewModel.class);
         binding = FragmentAccountBinding.inflate(inflater, container, false);
         unlockedPlants = new ArrayList<>();
         return binding.getRoot();
@@ -68,6 +81,9 @@ public class AccountFragment extends Fragment {
         observeUserProfile();
     }
 
+    /**
+     * Sets up listeners for UI interactions.
+     */
     private void setUpListeners() {
         binding.editNameButton.setOnClickListener(v -> {
             if ("edit".equals(binding.editNameButton.getTag())) {
@@ -106,16 +122,22 @@ public class AccountFragment extends Fragment {
     }
 
 
-
-
-
-
+    /**
+     * Switches the UI to update mode for editing text fields.
+     *
+     * @param editText The EditText to be enabled for editing.
+     * @param button The button associated with the edit action.
+     * @param iconResource The resource ID of the icon to be set for the button.
+     */
     private void switchToUpdateMode(EditText editText, ImageButton button, int iconResource) {
         editText.setEnabled(true);
         button.setImageResource(iconResource);
         button.setTag("save");
     }
 
+    /**
+     * Observes the user profile data from the ViewModel.
+     */
     private void observeUserProfile() {
         mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
@@ -128,6 +150,9 @@ public class AccountFragment extends Fragment {
         });
     }
 
+    /**
+     * Shares the app link with a message about unlocked plants.
+     */
     private void shareAppLink() {
         StringBuilder plantsMessage = new StringBuilder();
         if (!unlockedPlants.isEmpty()) {
@@ -141,7 +166,7 @@ public class AccountFragment extends Fragment {
             plantsMessage.append("! ");
         }
 
-        String shareMessage = plantsMessage.toString() + "\nDownload BloomMoods now \uD83C\uDF31 ✨ \nhttps://drive.google.com/file/d/1Atew0-wJrSMIuFRnNVtlPKeCM24weni8/view?usp=drive_link";
+        String shareMessage = plantsMessage + "\nDownload BloomMoods now \uD83C\uDF31 ✨ \nhttps://drive.google.com/file/d/1Atew0-wJrSMIuFRnNVtlPKeCM24weni8/view?usp=drive_link";
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
@@ -149,6 +174,11 @@ public class AccountFragment extends Fragment {
         startActivity(Intent.createChooser(shareIntent, "Share via"));
     }
 
+    /**
+     * Updates the UI with the user profile data.
+     *
+     * @param response The JSONObject containing user profile data.
+     */
     private void updateUIWithUserProfile(JSONObject response) {
         try {
             if (!response.has("error")) {
@@ -171,14 +201,28 @@ public class AccountFragment extends Fragment {
         }
     }
 
+    /**
+     * Updates the user name on the server.
+     */
     private void updateUserName() {
         handleUpdate("name", binding.nameEditText, binding.nameUpdateResult, binding.editNameButton);
     }
 
+    /**
+     * Updates the user password on the server.
+     */
     private void updatePassword() {
         handleUpdate("password", binding.passwordEditText, binding.passwordUpdateResult, binding.editPasswordButton);
     }
 
+    /**
+     * Handles the update request for the specified field.
+     *
+     * @param field The field to be updated.
+     * @param editText The EditText containing the new value.
+     * @param resultView The TextView to display the result message.
+     * @param button The button associated with the update action.
+     */
     private void handleUpdate(String field, EditText editText, TextView resultView, ImageButton button) {
         String newValue = editText.getText().toString().trim();
         if (newValue.isEmpty()) {
@@ -226,30 +270,30 @@ public class AccountFragment extends Fragment {
     }
 
 
+    /**
+     * Fetches the unlocked plants for the user from the server.
+     */
     private void fetchUserPlants() {
-        String url = FETCH_PLANT_API_URL + userID;
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                response -> {
-                    try {
-                        if (response.length() > 0) {
-                            updatePlantsUI(response);
-                        }
-                    } catch (Exception e) {
-                        Log.e("AccountFragment", "Error processing JSON response: " + e.getMessage());
-                        Toast.makeText(getContext(), "Error processing plants.", Toast.LENGTH_LONG).show();
-                    }
-                },
-                error -> {
-                    TextView emptyTextView = binding.emptyTextView;
-                    emptyTextView.setVisibility(View.VISIBLE);
+        mPlantViewModel.getUnlockedPlants(userID);
+        mPlantViewModel.addUnlockedPlantResponseObserver(getViewLifecycleOwner(), response -> {
+            try {
+                if (response.length() > 0) {
+                    updatePlantsUI(response);
                 }
-        );
-
-        Volley.newRequestQueue(requireContext()).add(jsonArrayRequest);
+            } catch (JSONException e) {
+                Log.e("AccountFragment", "Error processing JSON response: " + e.getMessage());
+                Toast.makeText(getContext(), "Error processing plants.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
+    /**
+     * Updates the UI with the unlocked plants data.
+     *
+     * @param plants The JSONArray containing the unlocked plants data.
+     * @throws JSONException If there is an error parsing the JSON data.
+     */
     private void updatePlantsUI(JSONArray plants) throws JSONException {
         LinearLayout plantsContainer = binding.plantsContainer;
         plantsContainer.removeAllViews();
@@ -287,6 +331,12 @@ public class AccountFragment extends Fragment {
     }
 
 
+    /**
+     * Creates an ImageView for a plant icon.
+     *
+     * @param drawableId The resource ID of the drawable to be set for the ImageView.
+     * @return The created ImageView.
+     */
     private ImageView createImageView(int drawableId) {
         ImageView imageView = new ImageView(getContext());
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -299,6 +349,12 @@ public class AccountFragment extends Fragment {
         return imageView;
     }
 
+    /**
+     * Converts a value in dp (density-independent pixels) to pixels.
+     *
+     * @param dp The value in dp to be converted.
+     * @return The converted value in pixels.
+     */
     private int convertDpToPixel(int dp) {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".TodaysEntryFragment">
+    tools:context=".journal.TodaysEntryFragment">
 
     <TextView
     android:id="@+id/todayEntryTextView"
@@ -30,7 +30,8 @@
         android:src="@mipmap/peony70"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/todayEntryTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/todayEntryTextView"
+        android:contentDescription="@string/plant_image" />
 
 <TextView
     android:id="@+id/textView4"
@@ -58,7 +59,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/plantImageView"
-        app:srcCompat="@mipmap/excited" />
+        app:srcCompat="@mipmap/excited"
+        android:contentDescription="@string/mood_image" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -77,7 +79,8 @@
             android:layout_height="41dp"
             android:layout_marginEnd="4dp"
             android:tag="Excited"
-            app:srcCompat="@mipmap/excited" />
+            app:srcCompat="@mipmap/excited"
+            android:contentDescription="@string/excited_button" />
 
         <ImageView
             android:id="@+id/happyImageView"
@@ -85,7 +88,8 @@
             android:layout_height="41dp"
             android:layout_marginEnd="4dp"
             android:tag="Happy"
-            app:srcCompat="@mipmap/happy" />
+            app:srcCompat="@mipmap/happy"
+            android:contentDescription="@string/happy_button" />
 
         <ImageView
             android:id="@+id/neutralImageView"
@@ -93,7 +97,8 @@
             android:layout_height="41dp"
             android:layout_marginEnd="4dp"
             android:tag="Neutral"
-            app:srcCompat="@mipmap/neutral" />
+            app:srcCompat="@mipmap/neutral"
+            android:contentDescription="@string/neutral_button" />
 
         <ImageView
             android:id="@+id/sadImageView"
@@ -101,7 +106,8 @@
             android:layout_height="41dp"
             android:layout_marginEnd="4dp"
             android:tag="Sad"
-            app:srcCompat="@mipmap/sad" />
+            app:srcCompat="@mipmap/sad"
+            android:contentDescription="@string/sad_button" />
 
         <ImageView
             android:id="@+id/anxiousImageView"
@@ -109,7 +115,8 @@
             android:layout_height="41dp"
             android:layout_marginEnd="4dp"
             android:tag="Anxious"
-            app:srcCompat="@mipmap/anxious" />
+            app:srcCompat="@mipmap/anxious"
+            android:contentDescription="@string/anxious_button" />
 
         <ImageView
             android:id="@+id/angryImageView"
@@ -117,7 +124,8 @@
             android:layout_height="41dp"
             android:layout_marginEnd="4dp"
             android:tag="Angry"
-            app:srcCompat="@mipmap/angry" />
+            app:srcCompat="@mipmap/angry"
+            android:contentDescription="@string/angry_button" />
 
     </LinearLayout>
 
@@ -127,7 +135,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="9dp"
         android:fontFamily="@font/catamaran"
-        android:text="Mood"
+        android:text="@string/mood"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -148,6 +156,7 @@
         android:linksClickable="false"
         android:longClickable="false"
         android:text="@string/title"
+        android:hint="@string/title"
         android:textColor="@color/dark_blue"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -170,6 +179,7 @@
         android:linksClickable="false"
         android:longClickable="false"
         android:text="@string/journal_entry"
+        android:hint="@string/journal_entry"
         android:textColor="@color/dark_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

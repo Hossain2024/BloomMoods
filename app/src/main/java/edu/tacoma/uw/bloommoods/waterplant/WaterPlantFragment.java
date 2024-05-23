@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.waterplant;
 
 import android.os.Bundle;
 
@@ -13,10 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import edu.tacoma.uw.bloommoods.journal.JournalViewModel;
+import edu.tacoma.uw.bloommoods.MainActivity;
+import edu.tacoma.uw.bloommoods.R;
+import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A Fragment for the Water Plant page.
+ * Directs to either NewEntryFragment of TodaysEntryFragment based on status of current dates entry.
+ *
  * @author Chelsea Dacones
  */
 public class WaterPlantFragment extends Fragment {

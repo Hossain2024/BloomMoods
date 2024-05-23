@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.authentication;
 
 import android.app.Application;
 import android.util.Log;
@@ -6,7 +6,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
@@ -21,6 +20,11 @@ import org.json.JSONObject;
 import java.nio.charset.Charset;
 import java.util.Objects;
 
+/**
+ * ViewModel for handling user registration operations.
+ *
+ * @author Maliha Hossain
+ */
 public class RegisterViewModel extends AndroidViewModel {
 
     final private MutableLiveData<JSONObject> mResponse;
@@ -37,6 +41,11 @@ public class RegisterViewModel extends AndroidViewModel {
         mResponse.observe(owner, observer);
     }
 
+    /**
+     * Handles errors encountered during a request.
+     *
+     * @param error The VolleyError encountered during the request.
+     */
     private void handleError(final VolleyError error) {
         if (Objects.isNull(error.networkResponse)) {
             try {
@@ -60,6 +69,12 @@ public class RegisterViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Registers a new user by making a POST request to the server.
+     *
+     * @param account The account object containing the user's email and password.
+     * @param name    The name of the user.
+     */
     public void addUser( Account account, String name) {
         String url = "https://students.washington.edu/nchi22/api/users/register_user.php";
         JSONObject body = new JSONObject();
@@ -71,14 +86,14 @@ public class RegisterViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
 
-        Request request = new JsonObjectRequest(
+        Request<JSONObject> request = new JsonObjectRequest(
                 Request.Method.POST,
                 url,
                 body, //no body for this get request
                 mResponse::setValue,
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl().toString());
+        Log.i("UserViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
