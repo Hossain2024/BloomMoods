@@ -11,7 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A Fragment that displays an overview and FAQs about BloomMoods.
+ * @author Chelsea Dacones
  */
 public class AboutFragment extends Fragment {
     @Override
@@ -26,11 +27,6 @@ public class AboutFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ImageButton closeButton = view.findViewById(R.id.closeButton);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigateUp();
-            }
-        });
+        closeButton.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
     }
 }
