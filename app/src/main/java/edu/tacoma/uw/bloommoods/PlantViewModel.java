@@ -27,17 +27,20 @@ import java.util.Objects;
 public class PlantViewModel extends AndroidViewModel {
     final private MutableLiveData<JSONObject> plantResponse;
     final private MutableLiveData<JSONObject> updatePlantResponse;
+    final private MutableLiveData<JSONObject> resetPlantResponse;
     final private MutableLiveData<JSONObject> updatePlantDetailsResponse;
     final private MutableLiveData<JSONArray> unlockedPlantResponse;
 
     public PlantViewModel(@NonNull Application application) {
         super(application);
         plantResponse = new MutableLiveData<>();
+        resetPlantResponse = new MutableLiveData<>();
         unlockedPlantResponse = new MutableLiveData<>();
         updatePlantResponse = new MutableLiveData<>();
         updatePlantResponse.setValue(new JSONObject());
         updatePlantDetailsResponse = new MutableLiveData<>();
         updatePlantDetailsResponse.setValue(new JSONObject());
+        resetPlantResponse.setValue(new JSONObject());
         plantResponse.setValue(new JSONObject());
         unlockedPlantResponse.setValue(new JSONArray());
     }
@@ -45,6 +48,11 @@ public class PlantViewModel extends AndroidViewModel {
     public void addPlantResponseObserver(@NonNull LifecycleOwner owner,
                                          @NonNull Observer<? super JSONObject> observer) {
         plantResponse.observe(owner, observer);
+    }
+
+    public void addResetPlantResponseObserver(@NonNull LifecycleOwner owner,
+                                         @NonNull Observer<? super JSONObject> observer) {
+        resetPlantResponse.observe(owner, observer);
     }
 
     public void addUnlockedPlantResponseObserver(@NonNull LifecycleOwner owner,
@@ -69,6 +77,8 @@ public class PlantViewModel extends AndroidViewModel {
         updatePlantResponse.observe(owner, observer);
         currentObserver = observer;
     }
+
+
 
 
     private void handleError(final VolleyError error) {
@@ -228,8 +238,7 @@ public class PlantViewModel extends AndroidViewModel {
                 Request.Method.POST,
                 url,
                 body,
-                response ->
-                        Log.i("Plant Reset Successfully", response.toString()),
+                resetPlantResponse::setValue,
                 this::handleError);
 
         Log.i("UserViewModel", request.getUrl().toString());

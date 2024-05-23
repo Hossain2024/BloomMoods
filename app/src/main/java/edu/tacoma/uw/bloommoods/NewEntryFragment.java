@@ -81,14 +81,6 @@ public class NewEntryFragment extends Fragment {
         shapeDrawable.getPaint().setColor(Color.parseColor("#4DFFD6C7"));
         mNewEntryBinding.plantGrowth.setBackground(shapeDrawable);
 
-//        TextView plantGrowth = mNewEntryBinding.plantGrowth;
-//        float[] radii = {50, 50, 50, 50, 50, 50, 50, 50};
-//        RoundRectShape roundRectShape = new RoundRectShape(radii, null,null);
-//        ShapeDrawable shapeDrawable = new ShapeDrawable(roundRectShape);
-//        int color = Color.parseColor("#4DFFD6C7");
-//        shapeDrawable.getPaint().setColor(color);
-//        plantGrowth.setBackground(shapeDrawable);
-
         return mNewEntryBinding.getRoot();
     }
 
