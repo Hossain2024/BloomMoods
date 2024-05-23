@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.waterplant;
 
 import android.app.Application;
 import android.util.Log;
@@ -93,7 +93,7 @@ public class PlantViewModel extends AndroidViewModel {
         }
     }
 
-    protected void getCurrentPlantDetails(int userId) {
+    public void getCurrentPlantDetails(int userId) {
         String url = "https://students.washington.edu/nchi22/api/plants/get_current_plant_details.php?user_id=" + userId;
 
         Request<JSONObject> request = new JsonObjectRequest(
@@ -139,7 +139,7 @@ public class PlantViewModel extends AndroidViewModel {
                 .add(request);
     }
 
-    protected void updateCurrentPlant(int userId, int plantOptionId) {
+    public void updateCurrentPlant(int userId, int plantOptionId) {
         String url = "https://students.washington.edu/nchi22/api/plants/update_current_plant.php";
         JSONObject body = new JSONObject();
         try {

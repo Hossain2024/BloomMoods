@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.report;
 
 import android.content.Context;
 import android.util.Log;
@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import edu.tacoma.uw.bloommoods.R;
+import edu.tacoma.uw.bloommoods.journal.JournalEntry;
 
 public class CalendarAdapter extends BaseAdapter {
     private final Context mContext;

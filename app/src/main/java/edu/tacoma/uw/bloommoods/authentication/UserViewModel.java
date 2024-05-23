@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.authentication;
 
 import android.app.Application;
 import android.util.Log;
@@ -101,7 +101,7 @@ public class UserViewModel extends AndroidViewModel {
 
 
 
-    protected void getUserProfile(int userId) {
+    public void getUserProfile(int userId) {
         String url = "https://students.washington.edu/nchi22/api/users/get_profile.php?user_id=" + userId;
 
         Request request = new JsonObjectRequest(
@@ -122,7 +122,7 @@ public class UserViewModel extends AndroidViewModel {
     }
 
 
-    protected void resetStreak(int userId) {
+    public void resetStreak(int userId) {
         String url = "https://students.washington.edu/nchi22/api/users/reset_streak.php";
         JSONObject body = new JSONObject();
         try {

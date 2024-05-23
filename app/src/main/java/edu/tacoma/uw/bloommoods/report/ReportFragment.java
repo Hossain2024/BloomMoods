@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.report;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -32,7 +32,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import edu.tacoma.uw.bloommoods.MainActivity;
+import edu.tacoma.uw.bloommoods.R;
+import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.FragmentReportBinding;
+import edu.tacoma.uw.bloommoods.journal.JournalEntry;
+import edu.tacoma.uw.bloommoods.journal.JournalViewModel;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.authentication;
 
 import android.app.Activity;
 import android.content.Context;
@@ -36,6 +36,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.tacoma.uw.bloommoods.MainActivity;
+import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.databinding.FragmentAccountBinding;
 
 public class AccountFragment extends Fragment {

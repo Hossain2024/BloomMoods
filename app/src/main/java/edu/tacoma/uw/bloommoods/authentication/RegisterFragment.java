@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.authentication;
 
 import static android.content.ContentValues.TAG;
 
@@ -19,6 +19,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.databinding.FragmentRegisterBinding;
 
 /**

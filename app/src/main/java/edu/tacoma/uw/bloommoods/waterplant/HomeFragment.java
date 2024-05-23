@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.waterplant;
 
 import android.app.Activity;
 import android.graphics.ColorMatrix;
@@ -31,8 +31,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
+import edu.tacoma.uw.bloommoods.MainActivity;
+import edu.tacoma.uw.bloommoods.R;
+import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {

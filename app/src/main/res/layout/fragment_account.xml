@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:padding="20dp"
-    tools:context=".AccountFragment">
+    tools:context=".authentication.AccountFragment">
 
     <TextView
         android:id="@+id/accountLabel"
@@ -84,7 +84,6 @@
         android:enabled="false"
         android:fontFamily="@font/playfair_display"
         android:hint="@string/name_sample"
-        android:maxLength="6"
         android:padding="12dp"
         app:layout_constraintEnd_toStartOf="@+id/editNameButton"
         app:layout_constraintStart_toStartOf="parent"

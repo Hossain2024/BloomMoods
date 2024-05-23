@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.authentication;
 
 import android.app.Application;
 import android.util.Log;

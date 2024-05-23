@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background"
-        tools:context=".NewEntryFragment">
+        tools:context=".waterplant.NewEntryFragment">
 
         <android.widget.Button
             android:id="@+id/saveButton"

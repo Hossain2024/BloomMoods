@@ -1,6 +1,8 @@
 package edu.tacoma.uw.bloommoods;
-import edu.tacoma.uw.bloommoods.R;
+import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.ActivityMainBinding;
+import edu.tacoma.uw.bloommoods.journal.JournalViewModel;
+import edu.tacoma.uw.bloommoods.waterplant.PlantViewModel;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    protected void setupBottomNavigation() {
+    public void setupBottomNavigation() {
 //        // Initialize NavController
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         // Set up BottomNavigationView with NavController
@@ -102,26 +104,26 @@ public class MainActivity extends AppCompatActivity {
         return mJournalViewModel;
     }
 
-    protected void showBottomNavigation() {
+    public void showBottomNavigation() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setVisibility(View.VISIBLE);
     }
 
-    protected void hideBottomNavigation() {
+    public void hideBottomNavigation() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setVisibility(View.GONE);
     }
 
-    protected void bottomNavBarBackground() {
+    public void bottomNavBarBackground() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         int color = ContextCompat.getColor(this, R.color.light_pink);
         navBarView.setBackgroundColor(color);
     }
-    protected void bottomNavBarResetBg() {
+    public void bottomNavBarResetBg() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setBackground(null);
     }
-    protected void setHomeBg(boolean check) {
+    public void setHomeBg(boolean check) {
         String resourceName = "background";
         if (check) {
             resourceName = "home_background";

@@ -1,7 +1,6 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.waterplant;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -21,7 +20,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -42,6 +40,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import edu.tacoma.uw.bloommoods.journal.JournalViewModel;
+import edu.tacoma.uw.bloommoods.MainActivity;
+import edu.tacoma.uw.bloommoods.R;
+import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.FragmentNewEntryBinding;
 
 /**

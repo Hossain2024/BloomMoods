@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.journal;
 
 import android.app.Application;
 import android.util.Log;
@@ -26,6 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+
+import edu.tacoma.uw.bloommoods.R;
 
 /**
  * ViewModel for handling journal-related data and operations.
@@ -98,7 +100,7 @@ public class JournalViewModel extends AndroidViewModel {
      * @param mood the entry mood.
      * @param entry the content of the entry.
      */
-    protected void addEntry(int userId, String title, String mood, String entry) {
+    public void addEntry(int userId, String title, String mood, String entry) {
         String url = "https://students.washington.edu/nchi22/api/log/update_mood_log.php";
         String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).format(new Date());
         JSONObject body = new JSONObject();
@@ -134,7 +136,7 @@ public class JournalViewModel extends AndroidViewModel {
      *
      * @param userId the current user ID.
      */
-    protected void getTodaysEntry(int userId) {
+    public void getTodaysEntry(int userId) {
         mRequestCompleted.setValue(false);
         JsonObjectRequest request = getTodaysEntryRequest(userId);
         Log.i("JournalViewModel", request.getUrl());

@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.journal;
 
 import java.io.Serializable;
 import java.text.ParseException;

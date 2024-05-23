@@ -1,4 +1,4 @@
-package edu.tacoma.uw.bloommoods;
+package edu.tacoma.uw.bloommoods.journal;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -20,6 +20,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.tacoma.uw.bloommoods.MainActivity;
+import edu.tacoma.uw.bloommoods.waterplant.PlantViewModel;
+import edu.tacoma.uw.bloommoods.R;
+import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.FragmentTodaysEntryBinding;
 
 /**
