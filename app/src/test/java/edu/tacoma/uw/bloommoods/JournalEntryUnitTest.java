@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import java.util.Calendar;
 
+import edu.tacoma.uw.bloommoods.journal.JournalEntry;
+
 public class JournalEntryUnitTest {
     private JournalEntry entry;
     private final String title = "Test Entry";
