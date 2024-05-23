@@ -20,7 +20,9 @@ import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.FragmentWaterPlantBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A Fragment for the Water Plant page.
+ * Directs to either NewEntryFragment of TodaysEntryFragment based on status of current dates entry.
+ *
  * @author Chelsea Dacones
  */
 public class WaterPlantFragment extends Fragment {

@@ -47,7 +47,8 @@ import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.FragmentNewEntryBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A Fragment that displays the Water Plant page (i.e. adding a new journal entry)
+ *
  * @author Chelsea Dacones
  * @author Amanda Nguyen
  */

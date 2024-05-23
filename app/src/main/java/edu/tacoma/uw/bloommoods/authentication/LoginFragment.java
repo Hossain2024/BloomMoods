@@ -24,7 +24,10 @@ import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.databinding.FragmentLoginBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment for user login.
+ *
+ * @author Maliha Hossain
+ *
  */
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding mBinding;

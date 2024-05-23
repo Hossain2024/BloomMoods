@@ -21,6 +21,12 @@ import org.json.JSONObject;
 import java.nio.charset.Charset;
 import java.util.Objects;
 
+/**
+ * ViewModel for handling user related data and operations.
+ *
+ * @author Maliha Hossain
+ * @author Amanda Nguyen
+ */
 public class UserViewModel extends AndroidViewModel {
     final private MutableLiveData<JSONObject> mResponse;
     final private MutableLiveData<Integer> mUserId;

@@ -37,6 +37,11 @@ import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.authentication.UserViewModel;
 import edu.tacoma.uw.bloommoods.databinding.FragmentHomeBinding;
 
+/**
+ * Fragment that displays the Home page
+ *
+ * @author Amanda Nguyen
+ */
 public class HomeFragment extends Fragment {
     private String userName;
     private int userStreak;

@@ -42,6 +42,11 @@ import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.databinding.FragmentAccountBinding;
 import edu.tacoma.uw.bloommoods.waterplant.PlantViewModel;
 
+/**
+ * Fragment for managing user account settings.
+ *
+ * @author Rainie Chi
+ */
 public class AccountFragment extends Fragment {
     /**
      * API URL for updating user profile.

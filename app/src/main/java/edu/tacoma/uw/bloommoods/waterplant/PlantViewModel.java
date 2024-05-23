@@ -23,6 +23,11 @@ import org.json.JSONObject;
 import java.nio.charset.Charset;
 import java.util.Objects;
 
+/**
+ * ViewModel for handling plant growth mechanics and operations.
+ *
+ * @author Amanda Nguyen
+ */
 public class PlantViewModel extends AndroidViewModel {
     final private MutableLiveData<JSONObject> plantResponse;
     final private MutableLiveData<JSONObject> updatePlantResponse;

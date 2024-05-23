@@ -20,6 +20,11 @@ import org.json.JSONObject;
 import java.nio.charset.Charset;
 import java.util.Objects;
 
+/**
+ * ViewModel for handling user registration operations.
+ *
+ * @author Maliha Hossain
+ */
 public class RegisterViewModel extends AndroidViewModel {
 
     final private MutableLiveData<JSONObject> mResponse;

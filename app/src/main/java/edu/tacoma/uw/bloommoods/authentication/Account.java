@@ -2,6 +2,12 @@ package edu.tacoma.uw.bloommoods.authentication;
 
 import java.util.regex.Pattern;
 
+/**
+ * Represents an account with an email and password.
+ * Validates email and password.
+ *
+ * @author Maliha Hossain
+ */
 public class Account {
 
     private String myEmail;

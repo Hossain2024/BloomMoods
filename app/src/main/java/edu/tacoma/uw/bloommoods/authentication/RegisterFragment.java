@@ -23,12 +23,13 @@ import edu.tacoma.uw.bloommoods.R;
 import edu.tacoma.uw.bloommoods.databinding.FragmentRegisterBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment for user registration.
+ *
+ * @author Maliha Hossain
  */
 public class RegisterFragment extends Fragment {
     private FragmentRegisterBinding mBinding;
     private RegisterViewModel mRegisterUserViewModel;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
