@@ -301,7 +301,7 @@ public class NewEntryFragment extends Fragment {
 
         double increaseGrowth = streak >= 2 ? 5 : 2.5;
 
-        if (loggedToday) {
+        if (!loggedToday) {
             // Get current user ID
             mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
                 if (userId != null) {
