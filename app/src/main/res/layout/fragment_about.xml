@@ -25,7 +25,7 @@
 
     <ScrollView
         android:layout_width="393dp"
-        android:layout_height="400dp"
+        android:layout_height="410dp"
         android:layout_marginTop="7dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -266,19 +266,110 @@
             <TextView
                 android:id="@+id/faq5AnswerTextView"
                 android:layout_width="323dp"
-                android:layout_height="120dp"
+                android:layout_height="141dp"
                 android:layout_marginTop="7dp"
-                android:layout_marginBottom="30dp"
                 android:fontFamily="sans-serif"
                 android:text="@string/faq5Answer"
                 android:textAlignment="textStart"
                 android:textColor="@color/dark_blue"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/faq5TextView" />
+
+            <TextView
+                android:id="@+id/faq6TextView"
+                android:layout_width="323dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/faq6"
+                android:textAlignment="textStart"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/faq5AnswerTextView" />
+
+            <TextView
+                android:id="@+id/faq6AnswerTextView"
+                android:layout_width="323dp"
+                android:layout_height="105dp"
+                android:layout_marginTop="7dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/faq6Answer"
+                android:textAlignment="textStart"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/faq6TextView" />
+
+            <TextView
+                android:id="@+id/faq7TextView"
+                android:layout_width="323dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/faq7"
+                android:textAlignment="textStart"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/faq6AnswerTextView" />
+
+            <TextView
+                android:id="@+id/faq7AnswerTextView"
+                android:layout_width="323dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="7dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/faq7Answer"
+                android:textAlignment="textStart"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/faq7TextView" />
+
+            <TextView
+                android:id="@+id/faq8TextView"
+                android:layout_width="323dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/faq8"
+                android:textAlignment="textStart"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/faq7AnswerTextView" />
+
+            <TextView
+                android:id="@+id/faq8AnswerTextView"
+                android:layout_width="323dp"
+                android:layout_height="105dp"
+                android:layout_marginTop="7dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/faq8Answer"
+                android:textAlignment="textStart"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/faq8TextView" />
 
             <ImageView
                 android:id="@+id/peonyImageView"
@@ -286,21 +377,21 @@
                 android:layout_height="200dp"
                 android:layout_marginTop="31dp"
                 android:layout_marginEnd="34dp"
+                android:contentDescription="@string/peony_image"
                 android:src="@mipmap/peony100"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/plantOptionsTextView"
-                android:contentDescription="@string/peony_image" />
+                app:layout_constraintTop_toBottomOf="@+id/plantOptionsTextView" />
 
             <ImageView
                 android:id="@+id/sunflowerImageView"
                 android:layout_width="100dp"
                 android:layout_height="200dp"
                 android:layout_marginTop="31dp"
+                android:contentDescription="@string/sunflower_image"
                 android:src="@mipmap/sunflower100"
                 app:layout_constraintEnd_toStartOf="@+id/peonyImageView"
                 app:layout_constraintStart_toEndOf="@+id/tulipImageView"
-                app:layout_constraintTop_toBottomOf="@+id/plantOptionsTextView"
-                android:contentDescription="@string/sunflower_image" />
+                app:layout_constraintTop_toBottomOf="@+id/plantOptionsTextView" />
 
             <ImageView
                 android:id="@+id/tulipImageView"
@@ -308,10 +399,10 @@
                 android:layout_height="200dp"
                 android:layout_marginStart="34dp"
                 android:layout_marginTop="31dp"
+                android:contentDescription="@string/tulip_image"
                 android:src="@mipmap/tulip100"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/plantOptionsTextView"
-                android:contentDescription="@string/tulip_image" />
+                app:layout_constraintTop_toBottomOf="@+id/plantOptionsTextView" />
 
             <TextView
                 android:id="@+id/plantsTextView"

@@ -54,7 +54,7 @@
     <string name="faq4">What happens when my plant reaches full growth?</string>
     <string name="faq4Answer">Once your plant reaches 100%, it blooms, marking your achievement. You\'ll then have the option to start with a new plant or continue to maintain the current one.</string>
     <string name="faq5">What happens if I don\'t log my mood for 7 days?</string>
-    <string name="faq5Answer">Your plant\'s growth will remain at 100%, but the full bloom flower will be wilted.</string>
+    <string name="faq5Answer">Your plant\'s growth will reset to the start of the current stage. For example, if your plant\'s growth was at 25%, 7 days of inactivity will result in a digress to 21%. If your plant was at full bloom (100%), your plant\'s growth will remain at 100%, but the full bloom flower will be wilted.</string>
     <string name="plant_names">1. Tranquil Tulip\n2. Serenity Sunflower\n3. Peaceful Peony</string>
     <string name="growth_stages">Growth Stages</string>
     <string name="plant_stages">Stage 1 (0-24%): Germination\nSmall green shoots just visible above the soil surface.\n\nStage 2 (25-49%): Seedling\nA noticeable stem with a few leaves, still young.\n\nStage 3 (50-74%): Young Plant
@@ -136,4 +136,10 @@
     <string name="f">F</string>
     <string name="mood_report">Mood Report</string>
     <string name="_0">0</string>
+    <string name="faq6">How do I unlock plants?</string>
+    <string name="faq6Answer">New user\'s all start with the default plant, tulip. Once a plant reaches full bloom, you will unlock the next plant, with peony being the last plant to unlock. Once you unlock a plant, it will remain unlocked.</string>
+    <string name="faq7">What does the reset button do in the plant selection of the Water Plant page?</string>
+    <string name="faq7Answer">With the reset button, you can choose to reset the growth percentage of any plant to 0% at any time to start over.</string>
+    <string name="faq8">Will I lose my plant\'s growth progress if I switch to another plant?</string>
+    <string name="faq8Answer">No, when you switch plants, the growth percentage of each plant is saved. For example, if your sunflower is at 50% and you switch to a tulip, the sunflower will remain at 50% until you switch back to it.</string>
 </resources>
