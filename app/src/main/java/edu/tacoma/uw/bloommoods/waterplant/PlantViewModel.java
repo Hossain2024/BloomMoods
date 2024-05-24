@@ -31,6 +31,7 @@ import java.util.Objects;
 public class PlantViewModel extends AndroidViewModel {
     final private MutableLiveData<JSONObject> plantResponse;
     final private MutableLiveData<JSONObject> updatePlantResponse;
+    final private MutableLiveData<JSONObject> resetPlantResponse;
     final private MutableLiveData<JSONObject> updatePlantDetailsResponse;
     final private MutableLiveData<JSONArray> unlockedPlantResponse;
     private Observer<? super JSONObject> currentObserver;
@@ -38,11 +39,13 @@ public class PlantViewModel extends AndroidViewModel {
     public PlantViewModel(@NonNull Application application) {
         super(application);
         plantResponse = new MutableLiveData<>();
+        resetPlantResponse = new MutableLiveData<>();
         unlockedPlantResponse = new MutableLiveData<>();
         updatePlantResponse = new MutableLiveData<>();
         updatePlantResponse.setValue(new JSONObject());
         updatePlantDetailsResponse = new MutableLiveData<>();
         updatePlantDetailsResponse.setValue(new JSONObject());
+        resetPlantResponse.setValue(new JSONObject());
         plantResponse.setValue(new JSONObject());
         unlockedPlantResponse.setValue(new JSONArray());
     }
@@ -56,6 +59,16 @@ public class PlantViewModel extends AndroidViewModel {
     public void addPlantResponseObserver(@NonNull LifecycleOwner owner,
                                          @NonNull Observer<? super JSONObject> observer) {
         plantResponse.observe(owner, observer);
+    }
+    /**
+     * Adds an observer to the reset plant response LiveData.
+     *
+     * @param owner    The LifecycleOwner which controls the observer.
+     * @param observer The observer that will receive the response updates.
+     */
+    public void addResetPlantResponseObserver(@NonNull LifecycleOwner owner,
+                                         @NonNull Observer<? super JSONObject> observer) {
+        resetPlantResponse.observe(owner, observer);
     }
 
     /**
@@ -97,6 +110,7 @@ public class PlantViewModel extends AndroidViewModel {
         updatePlantResponse.observe(owner, observer);
         currentObserver = observer;
     }
+
 
     /**
      * Handles errors encountered during a Volley request.
@@ -234,7 +248,7 @@ public class PlantViewModel extends AndroidViewModel {
                 },
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl());
+        Log.i("PlantViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -265,7 +279,7 @@ public class PlantViewModel extends AndroidViewModel {
                         Log.i("Growth Level Updated", response.toString()),
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl());
+        Log.i("PlantViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -294,11 +308,10 @@ public class PlantViewModel extends AndroidViewModel {
                 Request.Method.POST,
                 url,
                 body,
-                response ->
-                        Log.i("Plant Reset Successfully", response.toString()),
+                resetPlantResponse::setValue,
                 this::handleError);
 
-        Log.i("UserViewModel", request.getUrl());
+        Log.i("PlantViewModel", request.getUrl());
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10_000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,

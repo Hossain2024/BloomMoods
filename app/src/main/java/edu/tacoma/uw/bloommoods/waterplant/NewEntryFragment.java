@@ -108,6 +108,11 @@ public class NewEntryFragment extends Fragment {
                         mPlantViewModel.getCurrentPlantDetails(userId);
                     }
                 });
+                mPlantViewModel.addResetPlantResponseObserver(getViewLifecycleOwner(), response -> {
+                    if (response.length() > 0) {
+                        mPlantViewModel.getCurrentPlantDetails(userId);
+                    }
+                });
                 mUserViewModel.getUserProfile(userId);
                 mUserViewModel.addResponseObserver(getViewLifecycleOwner(), this::observeResponseUserProfile);
                 isUnlockedPlant();
@@ -346,6 +351,7 @@ public class NewEntryFragment extends Fragment {
         }
     }
 
+
     /**
      * Observes the response for unlocked plants.
      *
@@ -582,7 +588,6 @@ public class NewEntryFragment extends Fragment {
      * @param plantId The plant ID.
      */
     private void updatePlant(int userId, int plantId){
-        Log.i("UPDATED PLANT()", "START");
         mPlantViewModel.updateCurrentPlant(userId, plantId);
         mPlantViewModel.addUpdatedPlantResponseObserver(getViewLifecycleOwner(), response -> {
             if (response.length() > 0) {
@@ -591,7 +596,6 @@ public class NewEntryFragment extends Fragment {
         });
         Toast.makeText(getContext(), "SWITCHED PLANT", Toast.LENGTH_LONG).show();
         toggleSwitchPlantOff();
-        Log.i("UPDATED PLANT()", "FINISHED");
     }
 
     /**
@@ -602,7 +606,6 @@ public class NewEntryFragment extends Fragment {
      */
     private void resetPlant(int userId, int plantId) {
         mPlantViewModel.resetCurrentPlant(userId, plantId);
-        mPlantViewModel.updateCurrentPlant(userId, plantId);
     }
 
     /**
@@ -648,14 +651,11 @@ public class NewEntryFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("All plant growth will be lost. Are you sure?")
                 .setPositiveButton("Yes", (dialog, id) -> {
-                    // User clicked Yes button
                     resetPlant(mCurrentUserId, activePlantId);
                 })
                 .setNegativeButton("No", (dialog, id) -> {
-                    // User clicked No button
                     dialog.dismiss();
                 });
-        // Create the AlertDialog object and show it
         builder.create().show();
     }
 }
