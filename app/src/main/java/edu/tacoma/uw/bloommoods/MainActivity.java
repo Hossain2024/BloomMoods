@@ -26,6 +26,12 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * Serves as the main entry point for the app.
+ *
+ * @author Amanda Nguyen
+ * @author Maliha Hossain
+ */
 public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private JournalViewModel mJournalViewModel;
@@ -45,12 +51,15 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Initialize nav controller after view is created
         findViewById(R.id.nav_host_fragment).post(() -> navController = Navigation.findNavController(this, R.id.nav_host_fragment));
 
         mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         mPlantViewModel = new ViewModelProvider(this).get(PlantViewModel.class);
         mJournalViewModel = new ViewModelProvider(this).get(JournalViewModel.class);
 
+        // Load shared preferences and check is user is remembered
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.SignIN_PREFS), Context.MODE_PRIVATE);
         Log.d("SharedPreferences", "SignIN_PREFS: " + getString(R.string.SignIN_PREFS)); // Log the value of SignIN_PREFS
         Log.d("SharedPreferences", "Context: " + this); // Log the context being used
@@ -60,8 +69,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initializes the user from shared preferences and navigates to home fragment if user is found.
+     *
+     * @param sharedPreferences The SharedPreferences from which to retrieve the user ID.
+     */
     protected void initUserFromPrefs(SharedPreferences sharedPreferences) {
-        //navigateToHomeFragment();
         int userId = sharedPreferences.getInt("userId", 0); // Retrieve user ID from shared preferences
         if (userId != 0) {
             // Set the user ID in the user view model
@@ -74,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sets up bottom navigation bar.
+     */
     public void setupBottomNavigation() {
 //        // Initialize NavController
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -104,25 +120,44 @@ public class MainActivity extends AppCompatActivity {
         return mJournalViewModel;
     }
 
+    /**
+     * Shows the bottom navigation bar.
+     */
     public void showBottomNavigation() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Hides the bottomo navigation bar.
+     */
     public void hideBottomNavigation() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setVisibility(View.GONE);
     }
 
+    /**
+     * Sets the background color of the bottom navigation bar to light pink.
+     */
     public void bottomNavBarBackground() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         int color = ContextCompat.getColor(this, R.color.light_pink);
         navBarView.setBackgroundColor(color);
     }
+
+    /**
+     * Resets the background of the bottom navigation bar to its default state.
+     */
     public void bottomNavBarResetBg() {
         BottomNavigationView navBarView = findViewById(R.id.navBarView);
         navBarView.setBackground(null);
     }
+
+    /**
+     * Sets home background image based on a condition.
+     *
+     * @param check A boolean for whether to set the home background or use the default background
+     */
     public void setHomeBg(boolean check) {
         String resourceName = "background";
         if (check) {

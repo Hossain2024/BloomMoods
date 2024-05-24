@@ -232,8 +232,9 @@ public class NewEntryFragment extends Fragment {
         mNewEntryBinding.moodTextView.setText(mSelectedMood);
     }
 
-    /** All methods below were written by Amanda, due to conflicts more difficult to resolve, Chelsea manually cut and paste the code here,
-     * resulting in Git showing Chelsea as the author.*/
+
+    /* All methods below were written by Amanda, due to conflicts more difficult to resolve, Chelsea manually cut and paste the code here,
+      resulting in Git showing Chelsea as the author.*/
 
     /**
      * Sets the text and image for the plant growth and details.

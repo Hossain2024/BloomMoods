@@ -40,7 +40,10 @@ import edu.tacoma.uw.bloommoods.journal.JournalEntry;
 import edu.tacoma.uw.bloommoods.journal.JournalViewModel;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A Fragment that displays a report of user's mood statistics for the current month.
+ *
+ * @author Maliha Hossain
+ * @author Chelsea Dacones
  */
 public class ReportFragment extends Fragment {
     private GridView mGridView;
@@ -56,8 +59,10 @@ public class ReportFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mReportBinding = FragmentReportBinding.inflate(inflater, container, false);
+
         mUserViewModel = ((MainActivity) requireActivity()).getUserViewModel();
         mJournalViewModel = ((MainActivity) requireActivity()).getJournalViewModel();
+
         mJournalEntries = new ArrayList<>();
         mDates = new ArrayList<>();
         mGridView = mReportBinding.calendarGridView;
@@ -67,17 +72,16 @@ public class ReportFragment extends Fragment {
             ((MainActivity) activity).bottomNavBarBackground();
         }
 
-           happytext = mReportBinding.happytext;
-           excitedtext= mReportBinding.excitedtext;
-           angrytext= mReportBinding.angrytext;
-           neutraltext = mReportBinding.neutraltext;
-           sadtext = mReportBinding.sadtext;
-           anxioustext = mReportBinding.anxioustext;
+       happytext = mReportBinding.happytext;
+       excitedtext= mReportBinding.excitedtext;
+       angrytext= mReportBinding.angrytext;
+       neutraltext = mReportBinding.neutraltext;
+       sadtext = mReportBinding.sadtext;
+       anxioustext = mReportBinding.anxioustext;
       
         // Initialize the PieChart
-          pieChart = mReportBinding.piechart;
-        // Set the data for the PieChart
-        mGridView = mReportBinding.calendarGridView;
+        pieChart = mReportBinding.piechart;
+
         CalendarAdapter adapter = new CalendarAdapter(getActivity(), mDates, mJournalEntries);
         mGridView.setAdapter(adapter);
 
@@ -88,30 +92,28 @@ public class ReportFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Activity activity = getActivity();
-        if (activity instanceof MainActivity) {
-            ((MainActivity) activity).bottomNavBarBackground();
-        }
-
         int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1; // January starts at 0
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
         mReportBinding.calendarDateTextView.setText(new SimpleDateFormat("MMMM yyyy", Locale.getDefault())
                 .format(Calendar.getInstance().getTime()));
 
-        mDates = generateDates(currentMonth, currentYear);
+        mDates = generateDates(currentMonth, currentYear); // Generate dates for current month/year
         CalendarAdapter adapter = new CalendarAdapter(getContext(), mDates, mJournalEntries);
         mGridView.setAdapter(adapter);
 
         // Observe userId from UserViewModel
         mUserViewModel.getUserId().observe(getViewLifecycleOwner(), userId -> {
             if (userId != null) {
+                // Fetch current month/year journal entries
                 mJournalViewModel.getEntriesByDate(userId, currentMonth, currentYear);
             }
         });
 
+        // Observe completion of journal entries request
         mJournalViewModel.getRequestCompleted().observe(getViewLifecycleOwner(), isCompleted -> {
             if (Boolean.TRUE.equals(isCompleted)) {
+                // Observe current month/year entries
                 mJournalViewModel.getDateEntries().observe(getViewLifecycleOwner(), entries -> {
                     Log.i("ReportFragment", "Observing entries " + entries);
                     if (!Objects.equals(entries, "No entries found")) {
@@ -123,7 +125,6 @@ public class ReportFragment extends Fragment {
                                 JournalEntry entry = mJournalViewModel.parseJsonObject(jsonObject);
                                 mJournalEntries.add(entry);
                             }
-                            Log.i("ReportFragment", "Journal entries length: " + mJournalEntries.size());
                             updateViews();
 
                         } catch (JSONException e) {
@@ -145,36 +146,39 @@ public class ReportFragment extends Fragment {
         if (activity instanceof MainActivity) {
             ((MainActivity) activity).bottomNavBarResetBg();
         }
-
     }
 
 
     /**
-     * Generates a list of  consecutive dates for the specific month of the year
+     * Generates a list of consecutive dates for the specific month of the year.
+     * The calendar covers a 6-week period.
+     *
      * @param month the month for which the dates are to be generated
      * @param year  the year for which the dates are to be generated
      * @return a list of Date objects covering the month and year
      */
-
     private List<Date> generateDates(int month, int year) {
         List<Date> dates = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month - 1); // month is 0-based in Calendar
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.MONTH, month - 1); // month is 0-based in Calendar, subtract 1 from from month param
+        calendar.set(Calendar.DAY_OF_MONTH, 1); // Set calendar to first day of month
 
-        int firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        calendar.add(Calendar.DAY_OF_MONTH, -firstDayOfWeek);
+        // Get day of the week for the first day of the month (1 = Sunday, ..., 7 = Saturday)
+        int firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // Convert to 0-based (0 = Sunday, ...)
+        calendar.add(Calendar.DAY_OF_MONTH, -firstDayOfWeek); // Backtrack to Sunday; beginning of week
 
         while (dates.size() < 42) { // 6 weeks * 7 days = 42 days to cover the entire grid
-            dates.add(calendar.getTime());
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            dates.add(calendar.getTime()); // Add current date
+            calendar.add(Calendar.DAY_OF_MONTH, 1); // Move to next day
         }
 
         return dates;
     }
+
     /**
      * Updates the calender with a new adapter containing the provided journal entries and dates.
+     *
      * @param entries The list of journal entries to display in the grid view.
      */
     private void updateGridView(List<JournalEntry> entries) {
@@ -183,8 +187,7 @@ public class ReportFragment extends Fragment {
     }
 
     /**
-     * sets the pieslice according to user mood data
-     *
+     * Sets the pieslice according to user mood data
      */
     private void setData() {
         Map<Integer, Integer> moodCounts = new HashMap<>();
@@ -222,6 +225,10 @@ public class ReportFragment extends Fragment {
         // Start the animation
         pieChart.startAnimation();
     }
+
+    /**
+     * Updates the calendar and pie chart with new journal entries.
+     */
     private void updateViews() {
         // Update GridView
         updateGridView(mJournalEntries);

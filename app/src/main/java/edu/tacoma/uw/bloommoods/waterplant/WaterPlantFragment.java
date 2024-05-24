@@ -51,8 +51,10 @@ public class WaterPlantFragment extends Fragment {
             }
         });
 
+        // Observe today's entry request completion
         mJournalViewModel.getRequestCompleted().observe(getViewLifecycleOwner(), isCompleted -> {
             if (Boolean.TRUE.equals(isCompleted)) {
+                // Observe today's entry
                 mJournalViewModel.getEntry().observe(getViewLifecycleOwner(), moodEntry -> {
                     Log.i("WaterPlantFragment", String.valueOf(moodEntry));
                     if (moodEntry != null) {
