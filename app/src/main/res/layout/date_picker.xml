@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:backgroundTint="@color/white">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:background="@color/medium_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--    <Button-->
+<!--        android:id="@+id/yearSelectionButton"-->
+<!--        android:layout_width="115dp"-->
+<!--        android:layout_height="55dp"-->
+<!--        android:layout_marginTop="4dp"-->
+<!--        android:layout_marginEnd="83dp"-->
+<!--        android:backgroundTint="@color/medium_blue"-->
+<!--        android:enabled="false"-->
+<!--        android:fontFamily="@font/alatsi"-->
+<!--        android:text="Year"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="24sp"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/view"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/view" />-->
+
+    <TextView
+        android:id="@+id/yearDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="116dp"
+        android:fontFamily="@font/alatsi"
+        android:text="@string/year"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view" />
+
+    <Button
+        android:id="@+id/monthSelectionButton"
+        android:layout_width="123dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@color/medium_blue"
+        android:fontFamily="@font/alatsi"
+        android:text="@string/month"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/monthsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="290dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/janButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/month_selector"
+            android:fontFamily="@font/playfair_display"
+            android:stateListAnimator="@null"
+            android:text="@string/jan"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/mayButton"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/febButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/month_selector"
+            android:fontFamily="@font/playfair_display"
+            android:stateListAnimator="@null"
+            android:text="@string/feb"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/junButton"
+            app:layout_constraintEnd_toStartOf="@+id/marButton"
+            app:layout_constraintStart_toEndOf="@+id/janButton" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/marButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/month_selector"
+            android:fontFamily="@font/playfair_display"
+            android:stateListAnimator="@null"
+            android:text="@string/mar"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/julButton"
+            app:layout_constraintEnd_toStartOf="@+id/aprButton"
+            app:layout_constraintStart_toEndOf="@+id/febButton" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/aprButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/month_selector"
+            android:fontFamily="@font/playfair_display"
+            android:stateListAnimator="@null"
+            android:text="@string/apr"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/augButton"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/mayButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/month_selector"
+            android:fontFamily="@font/playfair_display"
+            android:stateListAnimator="@null"
+            android:text="@string/may"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/sepButton"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/junButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/month_selector"
+            android:fontFamily="@font/playfair_display"
+            android:stateListAnimator="@null"
+            android:text="@string/jun"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/octButton"
+            app:layout_constraintEnd_toStartOf="@+id/julButton"
+            app:layout_constraintStart_toEndOf="@+id/mayButton" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/julButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/month_selector"
+            android:fontFamily="@font/playfair_display"
+            android:stateListAnimator="@null"
+            android:text="@string/jul"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/novButton"
+            app:layout_constraintEnd_toStartOf="@+id/augButton"
+            app:layout_constraintStart_toEndOf="@+id/junButton" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/augButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/month_selector"
+            android:fontFamily="@font/playfair_display"
+            android:stateListAnimator="@null"
+            android:text="@string/aug"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/decButton"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/decButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/month_selector"
+            android:fontFamily="@font/playfair_display"
+            android:stateListAnimator="@null"
+            android:text="@string/dec"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/sepButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/month_selector"
+            android:fontFamily="@font/playfair_display"
+            android:stateListAnimator="@null"
+            android:text="@string/sep"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/octButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/month_selector"
+            android:fontFamily="@font/playfair_display"
+            android:stateListAnimator="@null"
+            android:text="@string/oct"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/novButton"
+            app:layout_constraintStart_toEndOf="@+id/sepButton" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/novButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/month_selector"
+            android:fontFamily="@font/playfair_display"
+            android:stateListAnimator="@null"
+            android:text="@string/nov"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/decButton"
+            app:layout_constraintStart_toEndOf="@+id/octButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/selectedDateButton"
+        android:layout_width="91dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/medium_blue"
+        android:fontFamily="@font/alatsi"
+        android:text="@string/ok"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/monthsLayout"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

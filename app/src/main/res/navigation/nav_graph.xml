@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="edu.tacoma.uw.bloommoods.authentication.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment2" />
+        <action
+            android:id="@+id/action_loginFragment_to_todaysEntryFragment"
+            app:destination="@id/todaysEntryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="edu.tacoma.uw.bloommoods.waterplant.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_journalFragment"
+            app:destination="@id/nav_journal" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_water"
+            app:destination="@id/nav_water" />
+        <action
+            android:id="@+id/action_nav_home_to_todaysEntryFragment"
+            app:destination="@id/todaysEntryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_accountFragment"
+            app:destination="@id/nav_account" />
+        <action
+            android:id="@+id/action_homeFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment2"
+        android:name="edu.tacoma.uw.bloommoods.authentication.RegisterFragment"
+        android:label="Register"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_journal"
+        android:name="edu.tacoma.uw.bloommoods.journal.JournalFragment"
+        android:label="Journal"
+        tools:layout="@layout/fragment_journal">
+        <action
+            android:id="@+id/action_journalFragment_to_entryReaderFragment"
+            app:destination="@id/entryReaderFragment" />
+        <action
+            android:id="@+id/action_nav_journal_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_journal_to_nav_account"
+            app:destination="@id/nav_account" />
+        <action
+            android:id="@+id/action_nav_journal_to_nav_water"
+            app:destination="@id/nav_water" />
+        <action
+            android:id="@+id/action_nav_journal_to_todaysEntryFragment"
+            app:destination="@id/todaysEntryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/entryReaderFragment"
+        android:name="edu.tacoma.uw.bloommoods.journal.EntryReaderFragment"
+        android:label="Entry Reader"
+        tools:layout="@layout/fragment_entry_reader">
+        <action
+            android:id="@+id/action_entryReaderFragment_to_journalFragment"
+            app:destination="@id/nav_journal" />
+        <argument
+            android:name="entry"
+            app:argType="edu.tacoma.uw.bloommoods.journal.JournalEntry" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_account"
+        android:name="edu.tacoma.uw.bloommoods.authentication.AccountFragment"
+        android:label="Account"
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/action_nav_account_to_nav_water"
+            app:destination="@id/nav_water" />
+        <action
+            android:id="@+id/action_nav_account_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_account_to_nav_journal"
+            app:destination="@id/nav_journal" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_water"
+        android:name="edu.tacoma.uw.bloommoods.waterplant.WaterPlantFragment"
+        android:label="fragment_water_plant"
+        tools:layout="@layout/fragment_water_plant" >
+        <action
+            android:id="@+id/action_nav_water_to_nav_account"
+            app:destination="@id/nav_account" />
+        <action
+            android:id="@+id/action_nav_water_to_nav_journal"
+            app:destination="@id/nav_journal" />
+        <action
+            android:id="@+id/action_nav_water_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_water_to_todaysEntryFragment"
+            app:destination="@id/todaysEntryFragment" />
+        <action
+            android:id="@+id/action_nav_water_to_newEntryFragment"
+            app:destination="@id/newEntryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/todaysEntryFragment"
+        android:name="edu.tacoma.uw.bloommoods.journal.TodaysEntryFragment"
+        android:label="fragment_todays_entry"
+        tools:layout="@layout/fragment_todays_entry" >
+        <action
+            android:id="@+id/action_todaysEntryFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_todaysEntryFragment_to_nav_journal"
+            app:destination="@id/nav_journal" />
+        <argument
+            android:name="entry"
+            app:argType="edu.tacoma.uw.bloommoods.journal.JournalEntry" />
+    </fragment>
+    <fragment
+        android:id="@+id/newEntryFragment"
+        android:name="edu.tacoma.uw.bloommoods.waterplant.NewEntryFragment"
+        android:label="fragment_new_entry"
+        tools:layout="@layout/fragment_water_plant" >
+        <action
+            android:id="@+id/action_newEntryFragment_to_todaysEntryFragment"
+            app:destination="@id/todaysEntryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="edu.tacoma.uw.bloommoods.AboutFragment"
+        android:label="About"
+        tools:layout="@layout/fragment_about">
+    </fragment>
+    <fragment
+        android:id="@+id/nav_report"
+        android:name="edu.tacoma.uw.bloommoods.report.ReportFragment"
+        android:label="ReportFragment" >
+    </fragment>
+</navigation>

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hasEntryConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".journal.TodaysEntryFragment">
+
+    <TextView
+    android:id="@+id/todayEntryTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="48dp"
+    android:fontFamily="@font/playfair_display"
+    android:text="@string/todays_entry"
+    android:textColor="@color/dark_blue"
+    android:textSize="24sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/plantImageView"
+        android:layout_width="109dp"
+        android:layout_height="257dp"
+        android:layout_marginTop="64dp"
+        android:src="@mipmap/peony70"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/todayEntryTextView"
+        android:contentDescription="@string/plant_image" />
+
+<TextView
+    android:id="@+id/textView4"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:fontFamily="@font/alatsi"
+    android:text="@string/water_tmrw"
+    android:textColor="@color/medium_blue"
+    android:textSize="16sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.49"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/todaysDate" />
+
+
+    <ImageView
+        android:id="@+id/todaysMoodImageView"
+        android:layout_width="43dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="326dp"
+        android:tag="Excited"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plantImageView"
+        app:srcCompat="@mipmap/excited"
+        android:contentDescription="@string/mood_image" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plantImageView">
+
+        <ImageView
+            android:id="@+id/excitedImageView"
+            android:layout_width="43dp"
+            android:layout_height="41dp"
+            android:layout_marginEnd="4dp"
+            android:tag="Excited"
+            app:srcCompat="@mipmap/excited"
+            android:contentDescription="@string/excited_button" />
+
+        <ImageView
+            android:id="@+id/happyImageView"
+            android:layout_width="43dp"
+            android:layout_height="41dp"
+            android:layout_marginEnd="4dp"
+            android:tag="Happy"
+            app:srcCompat="@mipmap/happy"
+            android:contentDescription="@string/happy_button" />
+
+        <ImageView
+            android:id="@+id/neutralImageView"
+            android:layout_width="43dp"
+            android:layout_height="41dp"
+            android:layout_marginEnd="4dp"
+            android:tag="Neutral"
+            app:srcCompat="@mipmap/neutral"
+            android:contentDescription="@string/neutral_button" />
+
+        <ImageView
+            android:id="@+id/sadImageView"
+            android:layout_width="43dp"
+            android:layout_height="41dp"
+            android:layout_marginEnd="4dp"
+            android:tag="Sad"
+            app:srcCompat="@mipmap/sad"
+            android:contentDescription="@string/sad_button" />
+
+        <ImageView
+            android:id="@+id/anxiousImageView"
+            android:layout_width="43dp"
+            android:layout_height="41dp"
+            android:layout_marginEnd="4dp"
+            android:tag="Anxious"
+            app:srcCompat="@mipmap/anxious"
+            android:contentDescription="@string/anxious_button" />
+
+        <ImageView
+            android:id="@+id/angryImageView"
+            android:layout_width="43dp"
+            android:layout_height="41dp"
+            android:layout_marginEnd="4dp"
+            android:tag="Angry"
+            app:srcCompat="@mipmap/angry"
+            android:contentDescription="@string/angry_button" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/moodTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:fontFamily="@font/catamaran"
+        android:text="@string/mood"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <EditText
+        android:id="@+id/todaysTitleEditText"
+        android:layout_width="346dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="72dp"
+        android:backgroundTint="#00FFFFFF"
+        android:clickable="false"
+        android:editable="false"
+        android:ems="10"
+        android:fontFamily="@font/alatsi"
+        android:inputType="text"
+        android:linksClickable="false"
+        android:longClickable="false"
+        android:text="@string/title"
+        android:hint="@string/title"
+        android:textColor="@color/dark_blue"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plantImageView" />
+
+    <EditText
+        android:id="@+id/todaysEntryEditText"
+        android:layout_width="346dp"
+        android:layout_height="156dp"
+        android:layout_marginTop="1dp"
+        android:backgroundTint="#00FFFFFF"
+        android:clickable="false"
+        android:editable="false"
+        android:ems="10"
+        android:fontFamily="@font/catamaran"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:linksClickable="false"
+        android:longClickable="false"
+        android:text="@string/journal_entry"
+        android:hint="@string/journal_entry"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/todaysTitleEditText" />
+
+<TextView
+    android:id="@+id/todaysDate"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:fontFamily="@font/catamaran"
+    android:text="@string/today_s_date"
+    android:textColor="@color/dark_blue"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.5"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/todayEntryTextView" />
+
+<android.widget.Button
+    android:id="@+id/editButton"
+    android:layout_width="88dp"
+    android:layout_height="42dp"
+    android:layout_marginEnd="24dp"
+    android:layout_marginBottom="72dp"
+    android:background="@drawable/rounded_rect"
+    android:fontFamily="@font/playfair_display"
+    android:text="@string/edit_entry"
+    android:textColor="@color/dark_blue"
+    android:textSize="16sp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
+
+<android.widget.Button
+    android:id="@+id/updateButton"
+    android:layout_width="88dp"
+    android:layout_height="42dp"
+    android:layout_marginEnd="24dp"
+    android:layout_marginBottom="72dp"
+    android:background="@drawable/rounded_rect"
+    android:fontFamily="@font/playfair_display"
+    android:text="@string/save_entry"
+    android:textColor="@color/dark_blue"
+    android:textSize="16sp"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    tools:ignore="DuplicateIds" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,4 +2,31 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="dark_blue">#17223E</color>
+    <color name="medium_blue">#5E709E</color>
+    <color name="theme_blue">#CFDCED</color>
+    <color name="dark_green">#3D5239</color>
+    <color name="light_blue">#9DACD1</color>
+    <color name="light_pink">#FFEEE7</color>
+    <color name="red">#853F3A</color>
+
+<!--    comment out later-->
+
+        <color name="colorPrimary">#024265</color>
+        <color name="colorPrimaryDark">#024265</color>
+        <color name="colorAccent">#05af9b</color>
+
+        <color name="color_one">#fb7268</color>
+        <color name="color_white">#ededf2</color>
+        <color name="color_two">#E3E0E0</color>
+
+        <color name="excited">#F8F1D7</color>
+        <color name="happy">#D1EFC6</color>
+        <color name="anxious">#C9C3EA</color>
+        <color name="angry">#F4C7CA</color>
+        <color name="neutral">#DCDCDC</color>
+        <color name="sad">#CFDCED</color>
+
+
+
 </resources>

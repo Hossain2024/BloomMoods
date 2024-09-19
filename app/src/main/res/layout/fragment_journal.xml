@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/entriesList"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".journal.JournalFragment">
+
+    <TextView
+        android:id="@+id/journalTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/playfair_display"
+        android:text="@string/journal"
+        android:textColor="@color/dark_blue"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/entriesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="511dp"
+        android:layout_marginTop="45dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/monthYearTextView" />
+
+    <TextView
+        android:id="@+id/monthYearTextView"
+        android:layout_width="244dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/alatsi"
+        android:textColor="@color/dark_blue"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/journalTextView" />
+
+<!--    <Button-->
+<!--        android:id="@+id/allEntriesButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="102dp"-->
+<!--        android:layout_marginEnd="6dp"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:fontFamily="@font/catamaran"-->
+<!--        android:text="@string/see_all"-->
+<!--        android:textAlignment="viewEnd"-->
+<!--        android:textColor="@color/medium_blue"-->
+<!--        android:textSize="15sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <TextView
+        android:id="@+id/noEntriesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:fontFamily="@font/alatsi"
+        android:text="@string/no_entries"
+        android:textColor="@color/medium_blue"
+        android:textSize="24sp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/monthYearTextView" />
+</androidx.constraintlayout.widget.ConstraintLayout>

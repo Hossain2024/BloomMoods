@@ -1,3 +1,145 @@
 <resources>
     <string name="app_name">BloomMoods</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="email_hint">Enter your email</string>
+    <string name="pwd_hint">Enter your password</string>
+    <string name="Signin">Sign in</string>
+    <string name="Signup">Sign up</string>
+    <string name="Welcome">Welcome</string>
+    <string name="Create_Account">Create Account</string>
+    <string name="username_hint">Enter username</string>
+    <string name="SignIN_PREFS">edu.tacoma.uw.bloommoods.PREFS</string>
+    <string name="SignedIN">signedin</string>
+    <string name="Home">Home</string>
+    <string name="Water_plant">Water Plant</string>
+    <string name="Journal">Journal</string>
+    <string name="Report">Report</string>
+    <string name="Account">Account</string>
+
+
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="journal">Journal</string>
+    <string name="see_all">See All</string>
+    <string name="about">About</string>
+    <string name="journal_entry">Journal Entry</string>
+    <string name="edit_entry">Edit</string>
+    <string name="title">Title</string>
+    <string name="date">Date</string>
+    <string name="lt_previous"><![CDATA[< Previous]]></string>
+    <string name="next_gt"><![CDATA[Next >]]></string>
+    <string name="about_app">Elevate your emotional well being with our intuitive mood tracker and journaling app. Easily track your mood and journal your thoughts and experiences to gain deeper insights into your emotions. With a virtual plant to visually represent your progress, our app empowers you to understand and nurture your mental health.</string>
+    <string name="faqs">FAQs</string>
+    <string name="faq1">How do I grow my plant?</string>
+    <string name="faq2">How much does my plant grow with each mood log?</string>
+    <string name="faq1Answer">Choose a plant and start logging your mood and journal entries daily. Each entry will water your plant, contributing to its growth. The more consistent you are, the faster your plant grows.</string>
+    <string name="faq2Answer">If you’re on a streak (logging for 2 or more consecutive days), your plant grows by 5% each day. Without a streak, it grows by 2.5% per day.</string>
+    <string name="faq3">What if I miss a day of logging?</string>
+    <string name="faq3Answer">You cannot make up days. However, missing one day won\'t ruin your progress, but your plant’s growth rate will halve until you build up another streak.</string>
+    <string name="faq4">What happens when my plant reaches full growth?</string>
+    <string name="faq4Answer">Once your plant reaches 100%, it blooms, marking your achievement. You\'ll then have the option to start with a new plant or continue to maintain the current one.</string>
+    <string name="faq5">What happens if I don\'t log my mood for 7 days?</string>
+    <string name="faq5Answer">Your plant\'s growth will reset to the start of the current stage. For example, if your plant\'s growth was at 25%, 7 days of inactivity will result in a digress to 21%. If your plant was at full bloom (100%), your plant\'s growth will remain at 100%, but the full bloom flower will be wilted.</string>
+    <string name="plant_names">1. Tranquil Tulip\n2. Serenity Sunflower\n3. Peaceful Peony</string>
+    <string name="growth_stages">Growth Stages</string>
+    <string name="plant_stages">Stage 1 (0-24%): Germination\nSmall green shoots just visible above the soil surface.\n\nStage 2 (25-49%): Seedling\nA noticeable stem with a few leaves, still young.\n\nStage 3 (50-74%): Young Plant
+        \nA taller stem, more robust with a fuller arrangement of leaves, and potential bud formation.\n\nStage 4 (75-99%): Maturing Plant\nLarger buds, some starting to show color, and a lush body of leaves.\n\nStage 5 (100%): Full Bloom\nFully opened flowers or a fully developed, lush plant.</string>
+    <string name="today_s_date">Today\'s Date</string>
+    <string name="water_your_plant">Water Your Plant</string>
+    <string name="current_growth">Current Growth: 80%</string>
+    <string name="journal_entry_hint">Journal entry</string>
+    <string name="save_entry">Save</string>
+    <string name="title_hint">Title</string>
+    <string name="plant_options">Plant Options</string>
+    <string name="developers">Rainie Chi: nchi22@uw.edu\nChelsea Dacones: chelsjd@uw.edu\nMaliha Hossain: hossainmaliha18@uw.edu\nAmanda Nguyen: amanda65@uw.edu</string>
+    <string name="developers_title">Developers</string>
+    <string name="no_entries">No entries found</string>
+    <string name="todays_entry">Today\'s Entry</string>
+    <string name="water_tmrw">Come back tomorrow to water your plant!</string>
+    <string name="account">Account</string>
+    <string name="email">Email</string>
+    <string name="sample_email">flora@gmail.com</string>
+    <string name="name">Name</string>
+    <string name="name_sample">Flora</string>
+    <string name="password">Password</string>
+    <string name="sample_password">*********</string>
+    <string name="plants_unlocked">Plants Unlocked</string>
+    <string name="nothing_yet">Nothing yet…</string>
+    <string name="logout">Logout</string>
+    <string name="refer_a_friend">Refer A Friend</string>
+    <string name="calender">Calender</string>
+    <string name="reset">Reset Plant</string>
+    <string name="peony_image">Peony Image</string>
+    <string name="sunflower_image">Sunflower Image</string>
+    <string name="tulip_image">Tulip Image</string>
+    <string name="bloommoods">BloomMoods Icon</string>
+    <string name="close_button">Close Button</string>
+    <string name="mood_image">Mood Image</string>
+    <string name="edit_button">Edit Button</string>
+    <string name="plant_image">Plant Image</string>
+    <string name="tooltip">About Tooltip</string>
+    <string name="auth_button">Authentication button</string>
+    <string name="switch_button">Switch plants button</string>
+    <string name="right_arrow">Right arrow button</string>
+    <string name="left_arrow">Left arrow button</string>
+    <string name="excited_button">Excited Image</string>
+    <string name="happy_button">Happy image</string>
+    <string name="neutral_button">Neutral image</string>
+    <string name="sad_button">Sad image</string>
+    <string name="anxious_button">Anxious image</string>
+    <string name="angry_button">Angry image</string>
+    <string name="select_plant">Select plant button</string>
+    <string name="day">Day</string>
+    <string name="year">Year</string>
+    <string name="month">Month</string>
+    <string name="jan">Jan</string>
+    <string name="feb">Feb</string>
+    <string name="mar">Mar</string>
+    <string name="apr">Apr</string>
+    <string name="may">May</string>
+    <string name="jun">Jun</string>
+    <string name="jul">Jul</string>
+    <string name="aug">Aug</string>
+    <string name="dec">Dec</string>
+    <string name="sep">Sep</string>
+    <string name="oct">Oct</string>
+    <string name="nov">Nov</string>
+    <string name="ok">OK</string>
+    <string name="entryExample">The city of southern California, san diego is locally known as \"America\'s Finest City\"</string>
+    <string name="_25">25</string>
+    <string name="_2024">2024</string>
+    <string name="titleExample">Hike in the Mountains</string>
+    <string name="arrow">➜</string>
+    <string name="plant_growth">Plant Growth:</string>
+    <string name="total_entries">Total Entries</string>
+    <string name="streak">Streak</string>
+    <string name="mood">Mood</string>
+    <string name="s">S</string>
+    <string name="m">M</string>
+    <string name="t">T</string>
+    <string name="w">W</string>
+    <string name="f">F</string>
+    <string name="mood_report">Mood Report</string>
+    <string name="_0">0</string>
+    <string name="faq6">How do I unlock plants?</string>
+    <string name="faq6Answer">New user\'s all start with the default plant, tulip. Once a plant reaches full bloom, you will unlock the next plant, with peony being the last plant to unlock. Once you unlock a plant, it will remain unlocked.</string>
+    <string name="faq7">What does the reset button do in the plant selection of the Water Plant page?</string>
+    <string name="faq7Answer">With the reset button, you can choose to reset the growth percentage of any plant to 0% at any time to start over.</string>
+    <string name="faq8">Will I lose my plant\'s growth progress if I switch to another plant?</string>
+    <string name="faq8Answer">No, when you switch plants, the growth percentage of each plant is saved. For example, if your sunflower is at 50% and you switch to a tulip, the sunflower will remain at 50% until you switch back to it.</string>
 </resources>
