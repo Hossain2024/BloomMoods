@@ -21,13 +21,6 @@ Changes made from Sprint 1 that have been implemented:
 Where to find content sharing:
 Content sharing can be found on the account page. Users can share their achievements/badges unlocked and our app, BloomMoods. Upon clicking the Google Drive link, the APK for BloomMoods can be downloaded.
 
-Link to APIs:
-https://canvas.uw.edu/groups/1098380/pages/api
-Can be found in pages under Group 1
 
-Accounts to use with all 3 plants unlocked (specifically for switching plants):
-Note: Please do not save an entry, this account is just to be used to view switching between plants.
 
-Email: finaltesting@gmail.com
-Pw: Amanda1!
 
